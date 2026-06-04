@@ -1,0 +1,167 @@
+:root {
+  --bg: #070b14;
+  --panel: rgba(14, 20, 34, .86);
+  --line: rgba(148, 163, 184, .18);
+  --text: #e5edf7;
+  --muted: #94a3b8;
+  --blue: #38bdf8;
+  --violet: #8b5cf6;
+  --green: #22c55e;
+}
+
+* { box-sizing: border-box; }
+html, body, #gameRoot {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+#gameCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 50% 30%, rgba(56, 189, 248, .16), transparent 32%), rgba(7, 11, 20, .72);
+  backdrop-filter: blur(14px);
+  z-index: 20;
+}
+
+.hidden { display: none !important; }
+
+.menu-card {
+  width: min(560px, calc(100vw - 32px));
+  padding: 34px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, .38);
+}
+
+.menu-card.compact { width: min(380px, calc(100vw - 32px)); }
+.eyebrow { margin: 0 0 10px; color: var(--blue); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: 12px; }
+h1, h2 { margin: 0 0 12px; line-height: 1; letter-spacing: 0; }
+h1 { font-size: clamp(42px, 7vw, 76px); }
+h2 { font-size: 34px; }
+.copy { color: var(--muted); line-height: 1.6; margin: 0 0 24px; }
+
+button {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: rgba(15, 23, 42, .92);
+  color: var(--text);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  border-color: var(--blue);
+  box-shadow: 0 0 26px rgba(56, 189, 248, .2);
+}
+
+button.primary {
+  width: 100%;
+  background: linear-gradient(135deg, var(--blue), var(--violet));
+  border-color: transparent;
+}
+
+.menu-card button + button { margin-top: 10px; width: 100%; }
+label { display: flex; justify-content: space-between; gap: 12px; margin: 18px 0 8px; color: var(--muted); font-weight: 800; }
+input[type="range"] { width: 100%; accent-color: var(--blue); }
+
+.hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.top-left {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  padding: 10px 12px;
+  background: rgba(7, 11, 20, .76);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-weight: 900;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+}
+
+.crosshair {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+}
+.crosshair:before,
+.crosshair:after {
+  content: "";
+  position: absolute;
+  background: rgba(229, 237, 247, .86);
+  box-shadow: 0 0 10px rgba(56, 189, 248, .45);
+}
+.crosshair:before { left: 8px; top: 0; width: 2px; height: 18px; }
+.crosshair:after { top: 8px; left: 0; width: 18px; height: 2px; }
+
+.piece-panel {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(86px, 1fr));
+  gap: 8px;
+  width: min(520px, calc(100vw - 32px));
+  pointer-events: auto;
+}
+
+.piece {
+  padding: 12px 8px;
+  background: rgba(7, 11, 20, .82);
+}
+
+.piece.active {
+  background: rgba(56, 189, 248, .22);
+  border-color: var(--blue);
+  box-shadow: inset 0 0 0 1px rgba(56, 189, 248, .35), 0 0 24px rgba(56, 189, 248, .2);
+}
+
+.help {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  max-width: 420px;
+  padding: 10px 12px;
+  color: var(--muted);
+  background: rgba(7, 11, 20, .68);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+@media (max-width: 720px) {
+  .piece-panel { grid-template-columns: repeat(2, 1fr); bottom: 74px; }
+  .help { top: auto; left: 18px; right: 18px; bottom: 12px; max-width: none; }
+}

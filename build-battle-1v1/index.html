@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build Battle 1v1 - Free Build Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="gameRoot">
+    <canvas id="gameCanvas"></canvas>
+
+    <div id="mainMenu" class="screen">
+      <div class="menu-card">
+        <p class="eyebrow">Free Build Prototype</p>
+        <h1>Build Battle 1v1</h1>
+        <p class="copy">Move, jump, sprint, and snap low-poly build pieces into a clean 3D arena.</p>
+        <button id="freeBuildBtn" class="primary">Free Build</button>
+      </div>
+    </div>
+
+    <div id="pauseMenu" class="screen hidden">
+      <div class="menu-card compact">
+        <h2>Paused</h2>
+        <button id="resumeBtn" class="primary">Resume</button>
+        <button id="settingsBtn">Settings</button>
+        <button id="menuBtn">Main Menu</button>
+      </div>
+    </div>
+
+    <div id="settingsMenu" class="screen hidden">
+      <div class="menu-card compact">
+        <h2>Settings</h2>
+        <label>Sensitivity <span id="sensValue"></span></label>
+        <input id="sensitivity" type="range" min="0.35" max="2.5" step="0.05">
+        <label>Field of View <span id="fovValue"></span></label>
+        <input id="fov" type="range" min="60" max="95" step="1">
+        <button id="settingsBack" class="primary">Back</button>
+      </div>
+    </div>
+
+    <div id="hud" class="hud hidden">
+      <div class="top-left">
+        <div class="pill" id="modePill">Build: Off</div>
+        <div class="pill">Materials: <span id="materials">500</span></div>
+      </div>
+      <div class="crosshair"></div>
+      <div class="piece-panel">
+        <button data-piece="wall" class="piece active">Z Wall</button>
+        <button data-piece="floor" class="piece">X Floor</button>
+        <button data-piece="ramp" class="piece">C Ramp</button>
+        <button data-piece="cone" class="piece">V Cone</button>
+      </div>
+      <div class="help">
+        WASD move · Mouse look · Space jump · Shift sprint · Q build · R rotate · Left click place · Esc pause
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="main.js"></script>
+</body>
+</html>
