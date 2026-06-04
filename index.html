@@ -307,6 +307,82 @@
       font-family: "JetBrains Mono", monospace;
       font-weight: 800;
     }
+    .lucky-wrap {
+      display: grid;
+      grid-template-columns: minmax(320px, 1.1fr) minmax(300px, .9fr);
+      gap: 1rem;
+      min-height: min(720px, calc(100vh - 120px));
+    }
+    .lucky-scene {
+      position: relative;
+      min-height: 520px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #07101f, #0f172a 58%, #13251b);
+      border: 1px solid rgba(124,58,237,.28);
+      border-radius: 8px;
+    }
+    .lucky-scene canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    .lucky-scene.shake { animation: luckyShake .42s linear; }
+    @keyframes luckyShake {
+      20% { transform: translate(-8px, 5px); }
+      40% { transform: translate(7px, -6px); }
+      60% { transform: translate(-5px, -3px); }
+      80% { transform: translate(4px, 5px); }
+    }
+    .lucky-hud {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      display: grid;
+      gap: .65rem;
+      pointer-events: none;
+    }
+    .reward-pop {
+      justify-self: center;
+      max-width: min(520px, 100%);
+      padding: .75rem 1rem;
+      background: rgba(2,6,23,.86);
+      border: 1px solid rgba(226,232,240,.16);
+      border-radius: 8px;
+      box-shadow: 0 0 34px rgba(124,58,237,.35);
+      font-family: "JetBrains Mono", monospace;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .reward-pop.show { opacity: 1; transform: translateY(0); }
+    .lucky-panel { display: grid; gap: .8rem; align-content: start; }
+    .lucky-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; }
+    .lucky-tab.active { background: var(--violet); border-color: var(--violet); }
+    .lucky-list { display: grid; gap: .5rem; max-height: 280px; overflow: auto; padding-right: .2rem; }
+    .lucky-item {
+      display: flex;
+      justify-content: space-between;
+      gap: .75rem;
+      align-items: center;
+      padding: .65rem;
+      background: rgba(15,23,42,.88);
+      border: 1px solid rgba(226,232,240,.09);
+      border-radius: 8px;
+    }
+    .rarity-chip {
+      border-radius: 999px;
+      padding: .2rem .45rem;
+      color: #020617;
+      font: 800 .72rem "JetBrains Mono", monospace;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .lucky-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
+    .lucky-open { grid-column: 1 / -1; font-size: 1.05rem; padding: .9rem 1rem; }
+    .lucky-meter { display: grid; gap: .35rem; }
+    .lucky-import { display: none; }
     @media (max-width: 760px) {
       .hero-inner { grid-template-columns: 1fr; text-align: center; }
       .ctas { justify-content: center; }
@@ -317,6 +393,9 @@
       .gamebar { height: auto; align-items: flex-start; }
       .gamebar-actions { flex-wrap: wrap; justify-content: flex-end; }
       .game-stage { height: calc(100vh - 96px); }
+      .lucky-wrap { grid-template-columns: 1fr; }
+      .lucky-scene { min-height: 420px; }
+      .lucky-tabs { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -336,7 +415,7 @@
       <div>
         <h1>Play. Compete. Repeat.</h1>
         <div class="type" id="typewriter"></div>
-        <p>33 free games. No login. No downloads.</p>
+        <p>34 free games. No login. No downloads.</p>
         <div class="ctas">
           <a class="btn primary" href="#games">Browse Games</a>
           <button class="btn" id="randomGame">Random Game</button>
@@ -409,6 +488,7 @@
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
   <script>
     const $ = (q, root = document) => root.querySelector(q);
     const $$ = (q, root = document) => [...root.querySelectorAll(q)];
@@ -446,7 +526,8 @@
       ["arg","ARG Mystery Game","mystery","Solve hidden chapters in a fake dark-web browser.",3],
       ["cards","Card Collector","classic","Open packs, fill a 60-card binder, trade, and earn achievements.",2],
       ["backrooms","Backrooms Explorer","mystery","Explore procedural rooms, keys, sanity, entities, and floors.",3],
-      ["blocks","Minecraft-Inspired 2D Block World","mystery","Mine, place, craft, survive night, and save a 2D world.",3]
+      ["blocks","Minecraft-Inspired 2D Block World","mystery","Mine, place, craft, survive night, and save a 2D world.",3],
+      ["lucky","Minecraft Lucky Block Simulator","sim","Open voxel Lucky Blocks, chase rare drops, upgrade luck, and complete collections.",3]
     ].map(([id,name,category,desc,difficulty]) => ({ id, name, category, desc, difficulty }));
     const secretGame = { id:"secret", name:"Developer Console", category:"mystery", desc:"A hidden diagnostic game unlocked by solving the ARG.", difficulty:3 };
     const state = { active: null, cleanup: null, filter: "all" };
@@ -551,7 +632,7 @@
       })();
     }
     function bootType() {
-      const lines = ["Insert coin. Keep the save file.", "Neon classics for quiet browser tabs.", "Thirty-three worlds in one static page."];
+      const lines = ["Insert coin. Keep the save file.", "Neon classics for quiet browser tabs.", "Thirty-four worlds in one static page."];
       let li=0, ci=0, del=false;
       setInterval(() => {
         const s = lines[li];
@@ -713,6 +794,249 @@
     function terminalGame(game,mount,script,label){let step=readSave(game)?.step||0; mount.innerHTML=`<div class="terminal game-panel"><pre id="term">ARCADIA SECURE TERMINAL\nType commands. Current ${label}: ${step+1}\nExpected: ${script[step]||"complete"}\n</pre><div class="row"><span>&gt;</span><input id="cmd" style="flex:1;background:#020403;color:#7cff9b;border:1px solid #166534;padding:.7rem;font-family:JetBrains Mono"></div></div>`; const term=$("#term",mount),cmd=$("#cmd",mount);cmd.focus();cmd.onkeydown=e=>{if(e.key==="Enter"){const v=cmd.value.trim().toLowerCase();term.textContent+=`\n> ${v}`; if(v===script[step]){term.textContent+="\nACCESS GRANTED";step++;writeSave(game,{step,best:step,progress:`${label} ${step}/${script.length}`}); if(game.id==="arg"&&step>=script.length){term.textContent+="\nDEVELOPER MESSAGE: you found the static heart of ARCADIA.\nSECRET GAME CARD UNLOCKED";renderFilters();renderGrid();}} else term.textContent+="\nDENIED - scan logs and try again"; if(step>=script.length)term.textContent+="\nSECRET ENDING UNLOCKED";cmd.value="";setScore(`${label} ${step}/${script.length}`);}}; setScore(`${label} ${step}/${script.length}`); return()=>writeSave(game,{step,best:step,progress:`${label} ${step}/${script.length}`});}
     launchers.backrooms=(g,m)=>{let p={x:400,y:300},rooms=0,sanity=100,floor=readSave(g)?.best||1,raf;return canvasShell(g,m,{help:"WASD moves. Collect keys, avoid entities, descend nine flickering levels.", reset(){p={x:400,y:300};rooms=0;sanity=100;}, step({ctx,keys,t,end}){if(keys.w)p.y-=3;if(keys.s)p.y+=3;if(keys.a)p.x-=3;if(keys.d)p.x+=3;p.x=Math.max(10,Math.min(790,p.x));p.y=Math.max(10,Math.min(490,p.y));if(t%100===0)rooms++;if(t%420===0){floor=Math.min(9,floor+1);saveScore(g,floor,{progress:`Floor ${floor}, ${rooms} rooms`});}sanity-=.01*floor;if(sanity<=0)end(floor*100+rooms);ctx.fillStyle=`rgba(245,158,11,.${.12+floor*.025})`;ctx.fillRect(0,0,800,500);ctx.strokeStyle="#f59e0b";for(let x=0;x<800;x+=80)for(let y=0;y<500;y+=70)ctx.strokeRect(x,y,80,70);ctx.fillStyle="#06b6d4";ctx.beginPath();ctx.arc(p.x,p.y,8,0,7);ctx.fill();ctx.fillStyle="rgba(0,0,0,.35)";ctx.fillRect(0,0,800,500);return floor*100+rooms;}});};
     launchers.blocks=(g,m)=>{let world,px=100,py=150,inv=0;const cleanup=canvasShell(g,m,{help:"A/D move, W jumps, click mines, right-click places blocks, E opens inventory count.", reset(){world=Array.from({length:60},(_,y)=>Array.from({length:200},(_,x)=>y<25?0:y===25?1:y<38?2:3));}, step({ctx,keys,t}){if(keys.a)px-=3;if(keys.d)px+=3;if(keys.w||keys[" "])py-=4;py=Math.min(360,py+2);const cam=Math.max(0,px-400);for(let y=0;y<60;y++)for(let x=Math.floor(cam/16);x<Math.floor(cam/16)+52;x++){const v=world[y]?.[x]; if(v){ctx.fillStyle=["","#22c55e","#854d0e","#64748b"][v];ctx.fillRect(x*16-cam,y*16,16,16);}}ctx.fillStyle="#7c3aed";ctx.fillRect(100,py,18,28);ctx.fillStyle="rgba(10,14,26,"+(t%900>600?.5:0)+")";ctx.fillRect(0,0,800,500);setScore(`Blocks ${inv} X ${Math.floor(px/16)}`);return inv+Math.floor(px/16);}}); const c=$("canvas",m);c.onclick=e=>{if(!world)return;const r=c.getBoundingClientRect(),x=Math.floor(((e.clientX-r.left)/r.width*800+Math.max(0,px-400))/16),y=Math.floor((e.clientY-r.top)/r.height*500/16); if(world[y]?.[x]){world[y][x]=0;inv++;saveScore(g,inv,{progress:`${inv} blocks mined`});}};c.oncontextmenu=e=>{e.preventDefault();if(!world||inv<=0)return;const r=c.getBoundingClientRect(),x=Math.floor(((e.clientX-r.left)/r.width*800+Math.max(0,px-400))/16),y=Math.floor((e.clientY-r.top)/r.height*500/16);world[y][x]=2;inv--;};return cleanup;};
+    launchers.lucky=(game,mount)=>{
+      const rarityMeta={
+        Common:{color:"#94a3b8",chance:.50,freq:220,score:1},
+        Uncommon:{color:"#22c55e",chance:.24,freq:277,score:2},
+        Rare:{color:"#06b6d4",chance:.12,freq:330,score:4},
+        Epic:{color:"#a855f7",chance:.07,freq:392,score:7},
+        Legendary:{color:"#f59e0b",chance:.035,freq:523,score:12},
+        Mythic:{color:"#fb7185",chance:.018,freq:659,score:20},
+        Divine:{color:"#fef08a",chance:.007,freq:880,score:35}
+      };
+      const items=[
+        ["Diamond","Common"],["Emerald","Common"],["Lucky Coin Cache","Common"],["Oak Cosmetic Block","Common"],["Iron Pet Collar","Common"],
+        ["Redstone Title","Uncommon"],["Enchanted Book: Fortune","Uncommon"],["Golden Apple","Uncommon"],["Amethyst Block Skin","Uncommon"],["Village Cat Pet","Uncommon"],
+        ["Netherite Scrap","Rare"],["Totem Fragment","Rare"],["Axolotl Pet","Rare"],["Prismarine Cosmetic Block","Rare"],["Title: Block Breaker","Rare"],
+        ["Netherite Ingot","Epic"],["Totem of Saving","Epic"],["Foxfire Pet","Epic"],["Ancient Debris Block","Epic"],["Title: Luck Smith","Epic"],
+        ["Dragon Egg Shard","Legendary"],["Enchanted Book: Infinity Luck","Legendary"],["Golden Creeper Pet","Legendary"],["Beacon Core","Legendary"],
+        ["Mythic Nether Star","Mythic"],["Wither Rose Crown","Mythic"],["Void Wolf Pet","Mythic"],["Secret Collectible: Herobrine Sigil","Mythic"],
+        ["Divine Lucky Relic","Divine"],["Celestial Block Skin","Divine"],["Title: Chosen By Luck","Divine"],["Secret Collectible: Notch Apple Core","Divine"]
+      ].map(([name,rarity])=>({name,rarity}));
+      const negatives=["Creeper Explosion","Lightning Strike","TNT Rain","Lava Flood","Zombie Horde","Skeleton Ambush","Item Loss","Bad Luck Curse"];
+      const blockTypes={
+        Basic:{cost:1,mult:1,neg:.18,color:"#facc15"},
+        Super:{cost:5,mult:1.45,neg:.15,color:"#22c55e"},
+        Mythic:{cost:18,mult:2.2,neg:.12,color:"#fb7185"},
+        Chaos:{cost:30,mult:3.0,neg:.30,color:"#f97316"},
+        Nether:{cost:42,mult:3.8,neg:.20,color:"#dc2626"},
+        End:{cost:64,mult:5.0,neg:.10,color:"#a855f7"}
+      };
+      const upgradeDefs=[
+        ["luck","Increase luck",120,"Raises all rare drop weights."],
+        ["rare","Increase rare drop rates",180,"Boosts Epic, Legendary, Mythic, and Divine rolls."],
+        ["shield","Reduce negative outcomes",160,"Adds bad-luck protection."],
+        ["coins","Increase coin gain",140,"Multiplies Lucky Coin payouts."],
+        ["unlock","Unlock new Lucky Block types",300,"Opens the next block type tier."]
+      ];
+      const fresh=()=>({coins:25,totalCoins:25,blocks:0,bestItem:"None",rarestItem:"None",luck:1,rare:1,shield:0,coinsUp:1,unlock:0,selected:"Basic",collection:{},achievements:{},events:[],mute:false,playTime:0,lastSeen:Date.now()});
+      let data={...fresh(),...(readSave(game)||{})};
+      data.collection=data.collection||{}; data.achievements=data.achievements||{}; data.events=data.events||[];
+      let activeTab="stats", opening=false, audio, scene, camera, renderer, blockGroup, glow, particles=[], raf=0, resizeObs, saveTimer, playTimer, orbit={x:.7,y:.55,d:6,drag:false,lx:0,ly:0};
+      mount.innerHTML=`<div class="lucky-wrap">
+        <div class="lucky-scene" id="luckyScene"><div class="lucky-hud"><div class="reward-pop" id="rewardPop">Ready</div></div></div>
+        <aside class="lucky-panel">
+          <div class="stat-grid">
+            <div class="stat"><span class="mono">COINS</span><h3 id="lCoins">0</h3></div>
+            <div class="stat"><span class="mono">BLOCKS</span><h3 id="lBlocks">0</h3></div>
+            <div class="stat"><span class="mono">COLLECTION</span><h3 id="lComplete">0%</h3></div>
+            <div class="stat"><span class="mono">LUCK</span><h3 id="lLuck">1</h3></div>
+          </div>
+          <div class="mini-card">
+            <label class="mono" for="blockType">Lucky Block Type</label>
+            <select id="blockType" style="width:100%;margin-top:.45rem;padding:.65rem;background:#0f172a;color:#e2e8f0;border:1px solid rgba(124,58,237,.35);border-radius:8px"></select>
+          </div>
+          <div class="lucky-actions">
+            <button class="btn primary lucky-open" id="openLucky">Open Lucky Block</button>
+            <button class="btn small" id="saveLucky">Save</button>
+            <button class="btn small" id="muteLucky">Mute</button>
+            <button class="btn small" id="exportLucky">Export</button>
+            <button class="btn small" id="importLucky">Import</button>
+          </div>
+          <textarea id="saveBox" class="mini-card mono" rows="4" placeholder="Exported save JSON appears here. Paste JSON here before Import." style="width:100%;background:#020617;color:#e2e8f0"></textarea>
+          <div class="lucky-tabs">${["stats","collection","upgrades","log"].map(t=>`<button class="btn small lucky-tab" data-tab="${t}">${t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
+          <div class="mini-card" id="luckyContent"></div>
+        </aside>
+      </div>`;
+      const sceneEl=$("#luckyScene",mount), pop=$("#rewardPop",mount), content=$("#luckyContent",mount), saveBox=$("#saveBox",mount);
+      function score(){return data.blocks*10+Math.floor(data.totalCoins/10)+(rarityMeta[data.rarestItem]?.score||0)*100;}
+      function persist(){data.lastSeen=Date.now();writeSave(game,{...data,best:score(),progress:`${data.blocks} blocks, ${Math.floor(data.coins)} coins`});}
+      function unlockedTypes(){return Object.keys(blockTypes).slice(0,1+Math.min(data.unlock,5));}
+      function completion(){return Math.round(Object.keys(data.collection).length/items.length*100);}
+      function rarityRank(r){return Object.keys(rarityMeta).indexOf(r);}
+      function canAffordSelected(){return data.coins>=blockTypes[data.selected].cost;}
+      function sound(kind,rarity="Common"){
+        if(data.mute)return;
+        audio=audio||new AudioContext();
+        const base=rarityMeta[rarity]?.freq||220, gain=audio.createGain();
+        gain.connect(audio.destination); gain.gain.value=.08;
+        [0,kind==="negative"?6:kind==="ui"?12:19].forEach((off,i)=>{
+          const o=audio.createOscillator(); o.type=kind==="negative"?"sawtooth":"square"; o.frequency.value=base*Math.pow(2,off/12); o.connect(gain); o.start(audio.currentTime+i*.05); o.stop(audio.currentTime+.16+i*.05);
+        });
+        gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.34);
+      }
+      function notify(text, rarity="Common"){
+        pop.innerHTML=text; pop.style.borderColor=rarityMeta[rarity]?.color||"#e2e8f0"; pop.style.boxShadow=`0 0 40px ${rarityMeta[rarity]?.color||"#7c3aed"}`;
+        pop.classList.add("show"); setTimeout(()=>pop.classList.remove("show"),2600);
+      }
+      function awardAchievement(id,label){
+        if(data.achievements[id])return;
+        data.achievements[id]={label,date:nowDate()}; data.coins+=75; data.totalCoins+=75;
+        notify(`Achievement unlocked: ${label}<br><span class="muted">+75 Lucky Coins</span>`,"Legendary"); sound("rare","Legendary");
+      }
+      function checkAchievements(lastRarity){
+        if(data.blocks>=1)awardAchievement("first","First Block Opened");
+        if(data.blocks>=100)awardAchievement("hundred","100 Blocks Opened");
+        if(lastRarity==="Legendary")awardAchievement("legendary","First Legendary");
+        if(lastRarity==="Mythic")awardAchievement("mythic","First Mythic");
+        if(completion()>=25)awardAchievement("coll25","Collection Milestone 25%");
+        if(completion()>=50)awardAchievement("coll50","Collection Milestone 50%");
+        if(completion()>=100)awardAchievement("coll100","Secret Achievement: Complete Collection");
+      }
+      function weightedRarity(type){
+        const mult=blockTypes[type].mult, luck=1+data.luck*.06, rare=1+data.rare*.08;
+        const weights=Object.entries(rarityMeta).map(([r,v])=>{
+          let w=v.chance;
+          if(rarityRank(r)>=2)w*=mult*luck;
+          if(rarityRank(r)>=3)w*=rare;
+          if(r==="Divine")w*=1+data.blocks/3000;
+          return [r,w];
+        });
+        const total=weights.reduce((a,x)=>a+x[1],0); let roll=Math.random()*total;
+        for(const [r,w] of weights){roll-=w;if(roll<=0)return r;} return "Common";
+      }
+      function chooseReward(rarity){
+        const pool=items.filter(i=>i.rarity===rarity);
+        return pool[Math.floor(Math.random()*pool.length)]||items[0];
+      }
+      function openBlock(){
+        if(opening)return;
+        const type=data.selected;
+        const cfg=blockTypes[type];
+        if(!canAffordSelected()){notify(`Need ${cfg.cost} coins for ${type}`,"Common");sound("ui");return;}
+        opening=true; data.coins-=cfg.cost; data.blocks++;
+        const negChance=Math.max(.02,cfg.neg-data.shield*.018);
+        const negative=Math.random()<negChance;
+        animateOpen(negative?"negative":"reward");
+        setTimeout(()=>{
+          if(negative){
+            const event=negatives[Math.floor(Math.random()*negatives.length)];
+            const loss=event==="Item Loss"?Math.min(data.coins,Math.ceil(20+Math.random()*80)):Math.ceil(cfg.cost*2);
+            if(event==="Item Loss"||event==="Bad Luck Curse")data.coins=Math.max(0,data.coins-loss);
+            data.events.unshift(`${event}: lost ${loss} coins`);
+            data.events=data.events.slice(0,24);
+            notify(`${event}<br><span class="muted">-${loss} coins</span>`,"Epic");
+            sceneEl.classList.add("shake"); setTimeout(()=>sceneEl.classList.remove("shake"),450);
+            sound("negative","Epic"); spawnParticles("#ef4444",70,true);
+          } else {
+            const rarity=weightedRarity(type), reward=chooseReward(rarity);
+            const coins=Math.ceil((12+Math.random()*35)*rarityMeta[rarity].score*data.coinsUp*cfg.mult);
+            data.coins+=coins; data.totalCoins+=coins; data.collection[reward.name]=(data.collection[reward.name]||0)+1;
+            data.bestItem=reward.name;
+            if(rarityRank(rarity)>rarityRank(data.rarestItem||"Common"))data.rarestItem=rarity;
+            data.events.unshift(`${rarity}: ${reward.name} +${coins} coins`);
+            data.events=data.events.slice(0,24);
+            notify(`<span style="color:${rarityMeta[rarity].color}">${rarity} reward</span><br>${reward.name}<br><span class="muted">+${coins} coins</span>`,rarity);
+            sound(rarityRank(rarity)>=4?"rare":"reward",rarity); spawnParticles(rarityMeta[rarity].color,rarityRank(rarity)>=4?110:55,rarityRank(rarity)>=4);
+            checkAchievements(rarity);
+          }
+          opening=false; renderUI(); persist();
+        },760);
+      }
+      function buyUpgrade(k){
+        const map={luck:"luck",rare:"rare",shield:"shield",coins:"coinsUp",unlock:"unlock"}, prop=map[k], level=data[prop]||0, cost=Math.floor((upgradeDefs.find(u=>u[0]===k)[2])*(1+level*.75));
+        if(k==="unlock"&&data.unlock>=5){notify("All Lucky Block types unlocked.","Rare");return;}
+        if(data.coins<cost){notify(`Need ${cost} coins for that upgrade.`,"Common");sound("ui");return;}
+        data.coins-=cost; data[prop]=level+1; sound("ui","Rare"); renderUI(); persist();
+      }
+      function renderUI(){
+        $("#lCoins",mount).textContent=Math.floor(data.coins); $("#lBlocks",mount).textContent=data.blocks; $("#lComplete",mount).textContent=completion()+"%"; $("#lLuck",mount).textContent=data.luck;
+        setScore(`Blocks ${data.blocks} | Coins ${Math.floor(data.coins)} | Best ${data.rarestItem||"None"}`);
+        const select=$("#blockType",mount), current=data.selected;
+        select.innerHTML=unlockedTypes().map(t=>`<option value="${t}">${t} - ${blockTypes[t].cost} coins</option>`).join("");
+        data.selected=unlockedTypes().includes(current)?current:"Basic"; select.value=data.selected; select.onchange=e=>{data.selected=e.target.value; updateBlockMaterial(); renderUI();};
+        $("#muteLucky",mount).textContent=data.mute?"Unmute":"Mute";
+        $$(".lucky-tab",mount).forEach(b=>b.classList.toggle("active",b.dataset.tab===activeTab));
+        const discovered=Object.keys(data.collection).length;
+        if(activeTab==="stats"){
+          content.innerHTML=`<div class="stat-grid"><div><b>Total Blocks Opened</b><p class="mono">${data.blocks}</p></div><div><b>Total Coins Earned</b><p class="mono">${Math.floor(data.totalCoins)}</p></div><div><b>Best Item Found</b><p>${data.bestItem}</p></div><div><b>Rarest Item Found</b><p>${data.rarestItem}</p></div><div><b>Luck Level</b><p class="mono">${data.luck}</p></div><div><b>Play Time</b><p class="mono">${Math.floor(data.playTime/60)}m ${data.playTime%60}s</p></div></div>`;
+        } else if(activeTab==="collection"){
+          content.innerHTML=`<div class="lucky-meter"><b>Collection ${discovered}/${items.length}</b><div class="bar"><span style="width:${completion()}%"></span></div></div><div class="lucky-list">${items.map(it=>`<div class="lucky-item" style="opacity:${data.collection[it.name]?1:.45}"><span>${data.collection[it.name]?it.name:"Undiscovered Item"}</span><span class="rarity-chip" style="background:${rarityMeta[it.rarity].color}">${it.rarity}${data.collection[it.name]?` x${data.collection[it.name]}`:""}</span></div>`).join("")}</div>`;
+        } else if(activeTab==="upgrades"){
+          content.innerHTML=`<div class="lucky-list">${upgradeDefs.map(([k,n,base,desc])=>{const prop={luck:"luck",rare:"rare",shield:"shield",coins:"coinsUp",unlock:"unlock"}[k],lvl=data[prop]||0,cost=Math.floor(base*(1+lvl*.75));return `<div class="lucky-item"><div><b>${n}</b><p class="muted">${desc}</p><span class="mono">Level ${lvl}</span></div><button class="btn small" data-up="${k}">${k==="unlock"&&lvl>=5?"Max":cost+" coins"}</button></div>`}).join("")}</div>`;
+          $$("[data-up]",content).forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.up));
+        } else {
+          content.innerHTML=`<div class="lucky-list">${Object.values(data.achievements).map(a=>`<div class="lucky-item"><b>${a.label}</b><span class="muted">${a.date}</span></div>`).join("")||"<p class='muted'>No achievements yet.</p>"}${data.events.map(e=>`<div class="lucky-item"><span>${e}</span></div>`).join("")}</div>`;
+        }
+      }
+      function makeTexture(color){
+        const cn=document.createElement("canvas"); cn.width=128; cn.height=128; const c=cn.getContext("2d");
+        c.fillStyle=color; c.fillRect(0,0,128,128); c.fillStyle="rgba(255,255,255,.18)"; for(let y=0;y<128;y+=16)for(let x=0;x<128;x+=16)if((x+y)%32===0)c.fillRect(x,y,16,16);
+        c.fillStyle="#281500"; c.font="900 86px JetBrains Mono, monospace"; c.textAlign="center"; c.textBaseline="middle"; c.fillText("?",64,66);
+        const tex=new THREE.CanvasTexture(cn); tex.magFilter=THREE.NearestFilter; return tex;
+      }
+      function cube(size,color,x,y,z,group=scene){
+        const mesh=new THREE.Mesh(new THREE.BoxGeometry(size,size,size),new THREE.MeshStandardMaterial({color,roughness:.55,metalness:.05}));
+        mesh.position.set(x,y,z); mesh.castShadow=true; mesh.receiveShadow=true; group.add(mesh); return mesh;
+      }
+      function init3d(){
+        if(!window.THREE){sceneEl.innerHTML="<div class='mini-card'>Three.js did not load. Check your internet connection and reload.</div>";return;}
+        scene=new THREE.Scene(); scene.fog=new THREE.Fog(0x07101f,8,24);
+        camera=new THREE.PerspectiveCamera(50,1,.1,100);
+        renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.shadowMap.enabled=true; sceneEl.prepend(renderer.domElement);
+        const hemi=new THREE.HemisphereLight(0xdbeafe,0x14532d,1.5); scene.add(hemi);
+        const sun=new THREE.DirectionalLight(0xffffff,2.2); sun.position.set(4,7,5); sun.castShadow=true; scene.add(sun);
+        glow=new THREE.PointLight(0xfacc15,1.5,8); glow.position.set(0,1.5,1.5); scene.add(glow);
+        const ground=new THREE.Mesh(new THREE.BoxGeometry(18,.35,18),new THREE.MeshStandardMaterial({color:0x1f7a35,roughness:.9})); ground.position.y=-1.3; ground.receiveShadow=true; scene.add(ground);
+        for(let i=0;i<70;i++)cube(.25,Math.random()<.55?0x166534:0x854d0e,(Math.random()-.5)*16,-1.05,(Math.random()-.5)*16);
+        for(let i=0;i<8;i++){const x=(Math.random()-.5)*14,z=(Math.random()-.5)*14;cube(.42,0x7c4a20,x,-.55,z);cube(.85,0x166534,x,.1,z);cube(.65,0x15803d,x,.7,z);}
+        blockGroup=new THREE.Group(); scene.add(blockGroup); updateBlockMaterial();
+        resizeObs=new ResizeObserver(()=>{const r=sceneEl.getBoundingClientRect(); renderer.setSize(Math.max(320,r.width),Math.max(320,r.height),false); camera.aspect=r.width/r.height; camera.updateProjectionMatrix();}); resizeObs.observe(sceneEl);
+        sceneEl.onpointerdown=e=>{orbit.drag=true; orbit.lx=e.clientX; orbit.ly=e.clientY;};
+        window.addEventListener("pointerup",stopDrag); window.addEventListener("pointermove",dragCam);
+        renderer.domElement.onwheel=e=>{e.preventDefault(); orbit.d=Math.max(3.6,Math.min(9,orbit.d+e.deltaY*.006));};
+        animate();
+      }
+      function updateBlockMaterial(){
+        if(!blockGroup||!window.THREE)return;
+        blockGroup.clear();
+        const mat=new THREE.MeshStandardMaterial({map:makeTexture(blockTypes[data.selected]?.color||"#facc15"),emissive:new THREE.Color(blockTypes[data.selected]?.color||"#facc15"),emissiveIntensity:.12,roughness:.45});
+        const block=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.8,1.8),mat); block.castShadow=true; block.receiveShadow=true; blockGroup.add(block);
+        for(let i=0;i<14;i++){const s=.18+Math.random()*.08;cube(s,0x3b2600,(Math.random()-.5)*2.4,(Math.random()-.5)*2.4,(Math.random()-.5)*2.4,blockGroup);}
+      }
+      function stopDrag(){orbit.drag=false;}
+      function dragCam(e){if(!orbit.drag)return; orbit.x+=(e.clientX-orbit.lx)*.008; orbit.y=Math.max(.18,Math.min(1.18,orbit.y+(e.clientY-orbit.ly)*.006)); orbit.lx=e.clientX; orbit.ly=e.clientY;}
+      function animateOpen(kind){
+        const start=performance.now(), base=blockGroup.rotation.y;
+        const spin=()=>{const p=Math.min(1,(performance.now()-start)/720); blockGroup.rotation.y=base+p*Math.PI*2.7; blockGroup.scale.setScalar(1+Math.sin(p*Math.PI)*.32); glow.intensity=kind==="negative"?5:3.5; if(p<1)requestAnimationFrame(spin); else {blockGroup.scale.setScalar(1);glow.intensity=1.5;}};
+        spin();
+      }
+      function spawnParticles(color,count,big){
+        if(!window.THREE)return;
+        for(let i=0;i<count;i++){
+          const mesh=new THREE.Mesh(new THREE.BoxGeometry(big?.12:.08,big?.12:.08,big?.12:.08),new THREE.MeshBasicMaterial({color}));
+          mesh.position.set(0,0,0); mesh.userData={v:new THREE.Vector3((Math.random()-.5)*.16,Math.random()*.12+.04,(Math.random()-.5)*.16),life:70+Math.random()*35};
+          particles.push(mesh); scene.add(mesh);
+        }
+      }
+      function animate(){
+        raf=requestAnimationFrame(animate);
+        if(blockGroup&&!opening)blockGroup.rotation.y+=.009;
+        if(glow){glow.color.set(blockTypes[data.selected]?.color||"#facc15"); glow.intensity+=Math.sin(Date.now()/230)*.015;}
+        particles=particles.filter(p=>{p.position.add(p.userData.v); p.userData.v.y-=.003; p.userData.life--; if(p.userData.life<=0){scene.remove(p);return false;} return true;});
+        const cy=Math.sin(orbit.y)*orbit.d, flat=Math.cos(orbit.y)*orbit.d; camera.position.set(Math.sin(orbit.x)*flat,cy,Math.cos(orbit.x)*flat); camera.lookAt(0,0,0);
+        renderer&&renderer.render(scene,camera);
+      }
+      $("#openLucky",mount).onclick=openBlock;
+      $("#saveLucky",mount).onclick=()=>{persist();notify("Manual save complete.","Rare");sound("ui","Rare");};
+      $("#muteLucky",mount).onclick=()=>{data.mute=!data.mute;renderUI();persist();};
+      $("#exportLucky",mount).onclick=()=>{saveBox.value=JSON.stringify(data,null,2);saveBox.select();notify("Save exported to the text box.","Uncommon");};
+      $("#importLucky",mount).onclick=()=>{try{const incoming=JSON.parse(saveBox.value);data={...fresh(),...incoming};data.collection=data.collection||{};data.achievements=data.achievements||{};data.events=data.events||[];renderUI();updateBlockMaterial();persist();notify("Save imported.","Rare");}catch{notify("Import failed: invalid JSON.","Epic");}};
+      $$(".lucky-tab",mount).forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderUI();sound("ui");});
+      saveTimer=setInterval(persist,5000); playTimer=setInterval(()=>{data.playTime++; if(activeTab==="stats")renderUI();},1000);
+      init3d(); renderUI(); persist();
+      return()=>{clearInterval(saveTimer);clearInterval(playTimer);persist();cancelAnimationFrame(raf);resizeObs&&resizeObs.disconnect();window.removeEventListener("pointerup",stopDrag);window.removeEventListener("pointermove",dragCam);renderer&&renderer.dispose();};
+    };
     launchers.secret=(g,m)=>canvasShell(g,m,{help:"Hidden diagnostic mode. Move with arrows and collect amber packets.", reset(){}, step:({ctx,keys,t})=>{const x=400+Math.sin(t/18)*220,y=250+Math.cos(t/22)*120;ctx.strokeStyle="#06b6d4";ctx.strokeRect(80,70,640,360);ctx.fillStyle="#f59e0b";ctx.beginPath();ctx.arc(x,y,18,0,7);ctx.fill();ctx.fillStyle="#7c3aed";ctx.fillRect(380,235,40,40);ctx.fillStyle="#e2e8f0";ctx.fillText("STATIC CORE ONLINE",270,40);return t;}});
     launchers.generic=(g,m)=>canvasShell(g,m,{help:"Prototype arcade mode.",step:({ctx,t})=>{ctx.fillStyle="#7c3aed";ctx.fillRect(350+Math.sin(t/20)*120,220,60,60);return t;}});
 
