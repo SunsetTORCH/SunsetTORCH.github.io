@@ -3,1048 +3,1891 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ARCADIA - Retro-Futurist Browser Games Hub</title>
+  <title>TabbyBet - Simulated Casino and Sportsbook Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0e1a;
-      --card: #111827;
-      --violet: #7c3aed;
-      --cyan: #06b6d4;
-      --amber: #f59e0b;
-      --text: #e2e8f0;
-      --muted: #64748b;
-      --line: rgba(124,58,237,.25);
-      --green: #22c55e;
-      --red: #ef4444;
+      --bg: #070b12;
+      --bg-soft: #0b111d;
+      --panel: rgba(13, 20, 33, .88);
+      --panel-strong: rgba(18, 27, 43, .96);
+      --line: rgba(142, 165, 194, .18);
+      --line-strong: rgba(70, 245, 165, .34);
+      --text: #ecf4ff;
+      --muted: #91a1b8;
+      --green: #46f5a5;
+      --cyan: #35d5ff;
+      --gold: #f5c84c;
+      --pink: #ff5fa3;
+      --purple: #9b7cff;
+      --red: #ff6262;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .36);
     }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
+      min-height: 100vh;
       margin: 0;
-      background: var(--bg);
       color: var(--text);
-      font-family: Inter, system-ui, sans-serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    button, input, select { font: inherit; }
-    button { cursor: pointer; }
-    a { color: inherit; text-decoration: none; }
-    .mono { font-family: "JetBrains Mono", monospace; }
-    .nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem clamp(1rem, 4vw, 3rem);
-      background: rgba(10,14,26,.42);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(226,232,240,.08);
-      transition: background .25s ease;
-    }
-    .nav.scrolled { background: rgba(10,14,26,.88); }
-    .logo {
-      color: var(--violet);
-      font-family: "JetBrains Mono", monospace;
-      font-weight: 800;
+      background:
+        linear-gradient(115deg, rgba(70, 245, 165, .06), transparent 24%),
+        linear-gradient(250deg, rgba(53, 213, 255, .08), transparent 26%),
+        var(--bg);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       letter-spacing: 0;
-      font-size: 1.35rem;
-      text-shadow: 0 0 22px rgba(124,58,237,.75);
     }
-    .nav-links { display: flex; gap: clamp(.8rem, 3vw, 2rem); color: #cbd5e1; font-weight: 700; }
-    .nav-links a:hover { color: var(--cyan); }
-    .hero {
-      position: relative;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      padding: 6rem 1rem 3rem;
-      isolation: isolate;
-    }
-    #particles {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-    }
-    .hero:after {
+
+    body:before {
       content: "";
-      position: absolute;
+      position: fixed;
       inset: 0;
       z-index: -1;
-      background: radial-gradient(circle at 70% 35%, rgba(6,182,212,.16), transparent 30%),
-                  radial-gradient(circle at 28% 65%, rgba(124,58,237,.20), transparent 34%),
-                  linear-gradient(to bottom, rgba(10,14,26,.2), #0a0e1a 92%);
+      background:
+        linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .018) 1px, transparent 1px),
+        repeating-linear-gradient(118deg, transparent 0 18px, rgba(245, 200, 76, .035) 18px 20px);
+      background-size: 42px 42px, 42px 42px, auto;
+      mask-image: linear-gradient(to bottom, #000 0%, transparent 92%);
+      pointer-events: none;
     }
-    .hero-inner {
-      width: min(1080px, 100%);
-      display: grid;
-      grid-template-columns: 1.1fr .9fr;
-      align-items: center;
-      gap: 2rem;
-    }
-    .hero h1 {
-      margin: 0;
-      font-size: clamp(3rem, 8vw, 6.8rem);
-      line-height: .92;
-      letter-spacing: 0;
-      font-weight: 900;
-      max-width: 780px;
-    }
-    .type {
-      color: var(--cyan);
-      min-height: 1.7rem;
-      font: 700 clamp(1rem, 2vw, 1.35rem) "JetBrains Mono", monospace;
-      margin: 1.2rem 0 0;
-    }
-    .hero p { color: #aebbd0; font-size: clamp(1.05rem, 2vw, 1.35rem); margin: 1.2rem 0 0; }
-    .ctas { display: flex; flex-wrap: wrap; gap: .85rem; margin-top: 2rem; }
-    .btn {
+
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .56; }
+    a { color: inherit; text-decoration: none; }
+    label { display: grid; gap: .42rem; color: #c8d5e6; font-size: .88rem; font-weight: 800; }
+    input, select {
+      width: 100%;
       border: 1px solid var(--line);
-      color: var(--text);
-      background: rgba(17,24,39,.76);
       border-radius: 8px;
-      padding: .82rem 1.05rem;
-      font-weight: 800;
-      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+      background: rgba(4, 8, 15, .72);
+      color: var(--text);
+      padding: .75rem .78rem;
+      outline: none;
     }
-    .btn:hover { transform: translateY(-2px); border-color: var(--violet); box-shadow: 0 0 24px rgba(124,58,237,.35); }
-    .btn.primary { background: var(--violet); border-color: var(--violet); }
-    .btn.small { padding: .55rem .75rem; font-size: .9rem; }
-    .controller {
-      justify-self: center;
-      width: min(380px, 82vw);
-      animation: float 4.8s ease-in-out infinite;
-      filter: drop-shadow(0 22px 50px rgba(124,58,237,.5));
+    input:focus, select:focus, button:focus-visible, a:focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: 2px;
     }
-    @keyframes float { 50% { transform: translateY(-18px) rotate(2deg); } }
-    @keyframes blink { 50% { opacity: .2; } }
-    .section { padding: 4.5rem clamp(1rem, 4vw, 3rem); }
-    .section-inner { width: min(1180px, 100%); margin: 0 auto; }
-    .section-title { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: 1.3rem; }
-    h2 { margin: 0; font-size: clamp(1.9rem, 4vw, 3rem); }
-    .muted { color: var(--muted); }
-    .filters {
+
+    .mono { font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace; }
+    .topbar {
       position: sticky;
-      top: 73px;
-      z-index: 20;
+      top: 0;
+      z-index: 40;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 1rem;
+      padding: .9rem clamp(1rem, 3vw, 2.4rem);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      background: rgba(7, 11, 18, .84);
+      backdrop-filter: blur(20px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      font-weight: 900;
+      font-size: 1.25rem;
+    }
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      color: #08110e;
+      background:
+        repeating-linear-gradient(135deg, rgba(0, 0, 0, .16) 0 4px, transparent 4px 9px),
+        linear-gradient(135deg, var(--green), var(--gold));
+      box-shadow: 0 0 28px rgba(70, 245, 165, .28);
+      font-family: "JetBrains Mono", monospace;
+      font-size: .95rem;
+    }
+    .brand-name { display: grid; line-height: 1; }
+    .brand-name small { color: var(--muted); font-size: .68rem; font-weight: 800; margin-top: .24rem; }
+
+    .nav-links {
       display: flex;
+      justify-content: center;
       flex-wrap: wrap;
-      gap: .65rem;
-      padding: 1rem;
-      margin: 0 0 1.4rem;
-      background: rgba(10,14,26,.78);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(226,232,240,.08);
-      border-radius: 8px;
+      gap: .35rem;
     }
-    .pill {
-      border: 1px solid rgba(226,232,240,.12);
-      background: rgba(17,24,39,.8);
-      color: #cbd5e1;
-      border-radius: 999px;
-      padding: .56rem .85rem;
+    .nav-links a {
+      border-radius: 8px;
+      padding: .58rem .72rem;
+      color: #cbd7e7;
       font-weight: 800;
+      font-size: .9rem;
     }
-    .pill.active { background: var(--violet); border-color: var(--violet); color: white; }
-    .count-badge { margin-left: auto; align-self: center; color: var(--cyan); font-family: "JetBrains Mono", monospace; font-weight: 800; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-    .card {
-      position: relative;
-      min-height: 230px;
-      display: flex;
-      flex-direction: column;
-      gap: .85rem;
-      padding: 1.2rem;
-      background: linear-gradient(180deg, rgba(17,24,39,.96), rgba(15,23,42,.94));
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      opacity: 0;
-      transform: translateY(24px);
-      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease, opacity .5s ease;
-    }
-    .card.visible { opacity: 1; transform: translateY(0); }
-    .card:hover { transform: translateY(-6px); border-color: var(--violet); box-shadow: 0 18px 48px rgba(124,58,237,.24); }
-    .badge { width: fit-content; border-radius: 999px; padding: .25rem .55rem; font-size: .72rem; font-weight: 900; text-transform: uppercase; color: #08111f; }
-    .badge.arcade { background: var(--violet); color: white; }
-    .badge.puzzle { background: var(--cyan); }
-    .badge.classic { background: var(--amber); }
-    .badge.skill { background: #22c55e; }
-    .badge.rpg { background: #fb7185; }
-    .badge.idle { background: #a3e635; }
-    .badge.sim { background: #38bdf8; }
-    .badge.mystery { background: #d946ef; color: white; }
-    .card h3 { margin: .15rem 0 0; font: 800 1.12rem "JetBrains Mono", monospace; }
-    .card p { margin: 0; color: #94a3b8; line-height: 1.45; flex: 1; }
-    .dots { display: flex; gap: .32rem; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; background: #334155; }
-    .dot.on { background: var(--amber); box-shadow: 0 0 12px rgba(245,158,11,.7); }
-    .card-meta { display: flex; justify-content: space-between; align-items: center; gap: .75rem; font-size: .83rem; color: #94a3b8; }
-    .leader {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(17,24,39,.7);
-    }
-    .leader th, .leader td { padding: .9rem; border-bottom: 1px solid rgba(226,232,240,.08); text-align: left; }
-    .leader th { color: var(--cyan); font-family: "JetBrains Mono", monospace; }
-    .leader tr:first-child td:first-child { color: var(--amber); }
-    .leader tr:nth-child(2) td:first-child { color: var(--violet); }
-    .leader tr:nth-child(3) td:first-child { color: var(--cyan); }
-    footer { padding: 2rem; text-align: center; color: var(--muted); border-top: 1px solid rgba(226,232,240,.08); }
-    .overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: none;
-      background: rgba(3,7,18,.94);
-      opacity: 0;
-      transition: opacity .18s ease;
-    }
-    .overlay.open { display: block; opacity: 1; }
-    .gamebar {
-      height: 68px;
-      display: flex;
+    .nav-links a:hover { background: rgba(255, 255, 255, .07); color: var(--green); }
+
+    .top-actions { display: flex; align-items: center; justify-content: flex-end; gap: .55rem; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: .8rem clamp(.8rem, 2vw, 1.4rem);
-      border-bottom: 1px solid rgba(124,58,237,.3);
-      background: rgba(10,14,26,.92);
-    }
-    .gamebar h2 { font: 800 clamp(1rem, 3vw, 1.45rem) "JetBrains Mono", monospace; }
-    .gamebar-actions { display: flex; gap: .55rem; align-items: center; }
-    #scoreLine { color: var(--cyan); font-family: "JetBrains Mono", monospace; font-size: .9rem; }
-    .game-stage {
-      height: calc(100vh - 68px);
-      display: grid;
-      place-items: center;
-      padding: 1rem;
-      overflow: auto;
-    }
-    .game-panel {
-      width: min(1040px, 100%);
-      min-height: min(720px, calc(100vh - 100px));
-      background: #0b1220;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      box-shadow: 0 0 40px rgba(124,58,237,.22);
-      padding: 1rem;
-    }
-    canvas.game-canvas {
-      width: 100%;
-      max-width: 860px;
-      aspect-ratio: 16 / 10;
-      display: block;
-      margin: 0 auto;
-      background: #050816;
-      border: 1px solid rgba(226,232,240,.1);
-      border-radius: 8px;
-      image-rendering: pixelated;
-    }
-    .game-ui { display: grid; gap: 1rem; }
-    .row { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; }
-    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .7rem; }
-    .stat, .mini-card {
-      background: rgba(17,24,39,.82);
-      border: 1px solid rgba(124,58,237,.22);
-      border-radius: 8px;
-      padding: .8rem;
-    }
-    .bar { height: 10px; background: #1e293b; border-radius: 999px; overflow: hidden; }
-    .bar > span { display: block; height: 100%; width: 50%; background: linear-gradient(90deg, var(--violet), var(--cyan)); }
-    .board-grid { display: grid; gap: .35rem; justify-content: center; }
-    .tile {
-      width: 54px;
-      height: 54px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(226,232,240,.1);
-      border-radius: 6px;
-      background: #1f2937;
-      color: var(--text);
-      font: 800 1rem "JetBrains Mono", monospace;
-      user-select: none;
-    }
-    .terminal {
-      background: #020403;
-      color: #7cff9b;
-      font-family: "JetBrains Mono", monospace;
-      text-shadow: 0 0 10px rgba(34,197,94,.45);
-      border-color: rgba(34,197,94,.35);
-      position: relative;
-      overflow: hidden;
-    }
-    .terminal:before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background: repeating-linear-gradient(to bottom, rgba(255,255,255,.035), rgba(255,255,255,.035) 1px, transparent 1px, transparent 6px);
-      opacity: .35;
-    }
-    .kbd {
-      min-width: 34px;
-      padding: .35rem .5rem;
-      border-radius: 6px;
-      border: 1px solid rgba(226,232,240,.14);
-      background: #1e293b;
-      color: var(--text);
-      font-family: "JetBrains Mono", monospace;
-      font-weight: 800;
-    }
-    .lucky-wrap {
-      display: grid;
-      grid-template-columns: minmax(320px, 1.1fr) minmax(300px, .9fr);
-      gap: 1rem;
-      min-height: min(720px, calc(100vh - 120px));
-    }
-    .lucky-scene {
-      position: relative;
-      min-height: 520px;
-      overflow: hidden;
-      background: linear-gradient(180deg, #07101f, #0f172a 58%, #13251b);
-      border: 1px solid rgba(124,58,237,.28);
-      border-radius: 8px;
-    }
-    .lucky-scene canvas {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-    .lucky-scene.shake { animation: luckyShake .42s linear; }
-    @keyframes luckyShake {
-      20% { transform: translate(-8px, 5px); }
-      40% { transform: translate(7px, -6px); }
-      60% { transform: translate(-5px, -3px); }
-      80% { transform: translate(4px, 5px); }
-    }
-    .lucky-hud {
-      position: absolute;
-      left: 1rem;
-      right: 1rem;
-      bottom: 1rem;
-      display: grid;
-      gap: .65rem;
-      pointer-events: none;
-    }
-    .reward-pop {
-      justify-self: center;
-      max-width: min(520px, 100%);
-      padding: .75rem 1rem;
-      background: rgba(2,6,23,.86);
-      border: 1px solid rgba(226,232,240,.16);
-      border-radius: 8px;
-      box-shadow: 0 0 34px rgba(124,58,237,.35);
-      font-family: "JetBrains Mono", monospace;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity .2s ease, transform .2s ease;
-    }
-    .reward-pop.show { opacity: 1; transform: translateY(0); }
-    .lucky-panel { display: grid; gap: .8rem; align-content: start; }
-    .lucky-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: .4rem; }
-    .lucky-tab.active { background: var(--violet); border-color: var(--violet); }
-    .lucky-list { display: grid; gap: .5rem; max-height: 280px; overflow: auto; padding-right: .2rem; }
-    .lucky-item {
-      display: flex;
-      justify-content: space-between;
-      gap: .75rem;
-      align-items: center;
-      padding: .65rem;
-      background: rgba(15,23,42,.88);
-      border: 1px solid rgba(226,232,240,.09);
-      border-radius: 8px;
-    }
-    .rarity-chip {
+      gap: .35rem;
+      width: fit-content;
+      border: 1px solid rgba(70, 245, 165, .36);
       border-radius: 999px;
-      padding: .2rem .45rem;
-      color: #020617;
-      font: 800 .72rem "JetBrains Mono", monospace;
+      background: rgba(70, 245, 165, .1);
+      color: var(--green);
+      padding: .34rem .58rem;
+      font-size: .72rem;
+      font-weight: 900;
       text-transform: uppercase;
       white-space: nowrap;
     }
-    .lucky-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; }
-    .lucky-open { grid-column: 1 / -1; font-size: 1.05rem; padding: .9rem 1rem; }
-    .lucky-meter { display: grid; gap: .35rem; }
-    .lucky-import { display: none; }
+    .badge.demo { border-color: rgba(245, 200, 76, .42); color: var(--gold); background: rgba(245, 200, 76, .11); }
+    .badge.soft { border-color: rgba(255, 255, 255, .14); color: #c8d5e6; background: rgba(255, 255, 255, .06); }
+    .badge.loss { border-color: rgba(255, 98, 98, .35); color: #ffb4b4; background: rgba(255, 98, 98, .1); }
+    .badge.win { border-color: rgba(70, 245, 165, .35); color: var(--green); background: rgba(70, 245, 165, .1); }
+
+    .btn {
+      min-height: 40px;
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(255, 255, 255, .06);
+      padding: .65rem .86rem;
+      font-weight: 900;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      border-color: rgba(70, 245, 165, .55);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, .28);
+    }
+    .btn.primary {
+      border-color: rgba(70, 245, 165, .65);
+      background: linear-gradient(135deg, rgba(70, 245, 165, .96), rgba(53, 213, 255, .82));
+      color: #06100d;
+    }
+    .btn.gold {
+      border-color: rgba(245, 200, 76, .68);
+      background: linear-gradient(135deg, rgba(245, 200, 76, .94), rgba(255, 164, 75, .86));
+      color: #151006;
+    }
+    .btn.danger { border-color: rgba(255, 98, 98, .52); color: #ffd0d0; background: rgba(255, 98, 98, .1); }
+    .btn.small { min-height: 34px; padding: .5rem .62rem; font-size: .83rem; }
+    .btn.icon { width: 42px; padding: 0; }
+
+    .app {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: clamp(1rem, 3vw, 2rem);
+    }
+    .section { scroll-margin-top: 92px; margin-bottom: 1.4rem; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: .95rem;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: .35rem;
+      font-size: clamp(1.8rem, 4vw, 3.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    h2 { margin-bottom: .1rem; font-size: clamp(1.35rem, 2.8vw, 2.15rem); letter-spacing: 0; }
+    h3 { margin-bottom: .35rem; font-size: 1.02rem; letter-spacing: 0; }
+    .muted { color: var(--muted); line-height: 1.55; }
+    .tight { margin: 0; }
+
+    .notice {
+      display: grid;
+      gap: .4rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(245, 200, 76, .28);
+      border-radius: 8px;
+      background:
+        repeating-linear-gradient(135deg, rgba(245, 200, 76, .075) 0 8px, transparent 8px 18px),
+        rgba(16, 19, 24, .92);
+      padding: .9rem 1rem;
+      box-shadow: var(--shadow);
+    }
+    .notice strong { color: var(--gold); }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, .95fr) minmax(280px, 1fr) minmax(300px, 1.15fr);
+      gap: 1rem;
+      align-items: stretch;
+      margin-bottom: 1rem;
+    }
+    .panel, .card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(18, 27, 43, .86), rgba(10, 16, 27, .86));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .panel { padding: 1rem; }
+
+    .balance-list, .stat-grid {
+      display: grid;
+      gap: .7rem;
+    }
+    .balance-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: .8rem;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .045);
+      padding: .78rem;
+    }
+    .balance-card.bump { animation: balancePulse .55s ease; }
+    @keyframes balancePulse {
+      35% { transform: translateY(-2px); border-color: rgba(70, 245, 165, .72); box-shadow: 0 0 24px rgba(70, 245, 165, .18); }
+    }
+    .balance-label { color: #c7d2e4; font-weight: 900; }
+    .balance-help { color: var(--muted); font-size: .78rem; margin-top: .2rem; }
+    .balance-value {
+      color: var(--green);
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .balance-value.dd { color: var(--cyan); }
+    .balance-value.bp { color: var(--gold); }
+
+    .action-stack { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-top: .85rem; }
+    .stats-mini {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .65rem;
+    }
+    .stat-tile {
+      min-height: 86px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 8px;
+      background: rgba(4, 8, 15, .42);
+      padding: .75rem;
+    }
+    .stat-tile span { color: var(--muted); font-size: .76rem; font-weight: 900; text-transform: uppercase; }
+    .stat-tile strong { display: block; margin-top: .35rem; font: 900 1.15rem "JetBrains Mono", monospace; overflow-wrap: anywhere; }
+
+    .tabs {
+      display: flex;
+      gap: .5rem;
+      max-width: 100%;
+      overflow-x: auto;
+      padding-bottom: .2rem;
+      scrollbar-width: thin;
+    }
+    .tab {
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .055);
+      color: #d9e5f5;
+      padding: .58rem .78rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .tab.active { border-color: rgba(70, 245, 165, .62); color: #07100e; background: var(--green); }
+
+    .game-grid, .promo-grid, .live-grid, .package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: .9rem;
+    }
+    .card {
+      position: relative;
+      overflow: hidden;
+      padding: 1rem;
+    }
+    .card:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(70, 245, 165, .09), transparent 38%, rgba(245, 200, 76, .06));
+      pointer-events: none;
+    }
+    .card > * { position: relative; }
+    .card:hover { border-color: rgba(70, 245, 165, .38); }
+    .card-row { display: flex; align-items: center; justify-content: space-between; gap: .7rem; }
+    .card-row > * { min-width: 0; }
+    .visual {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      background:
+        repeating-linear-gradient(135deg, rgba(0, 0, 0, .18) 0 5px, transparent 5px 11px),
+        linear-gradient(145deg, rgba(70, 245, 165, .92), rgba(53, 213, 255, .66));
+      color: #06100d;
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 900;
+      font-size: 1.1rem;
+    }
+    .card p { color: #a7b6ca; line-height: 1.5; min-height: 3.2em; }
+    .card-actions { display: flex; justify-content: space-between; align-items: center; gap: .7rem; margin-top: .8rem; }
+
+    .sports-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 1rem;
+      align-items: start;
+    }
+    .sports-layout > *, .dashboard-grid > * { min-width: 0; }
+    .match-list { display: grid; gap: .8rem; }
+    .match-card {
+      display: grid;
+      gap: .78rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(18, 27, 43, .84);
+      padding: .9rem;
+    }
+    .odds-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
+    .odds-btn {
+      display: grid;
+      gap: .25rem;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .055);
+      color: var(--text);
+      padding: .72rem;
+      font-weight: 900;
+    }
+    .odds-btn:hover { border-color: rgba(53, 213, 255, .5); }
+    .odds-btn small { color: var(--gold); font-family: "JetBrains Mono", monospace; }
+    .slip-list, .history-list { display: grid; gap: .55rem; max-height: 360px; overflow: auto; padding-right: .2rem; }
+    .slip-item, .history-item, .ticket {
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .045);
+      padding: .68rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: grid;
+      place-items: center;
+      background: rgba(2, 5, 10, .78);
+      backdrop-filter: blur(16px);
+      padding: 1rem;
+    }
+    .modal {
+      width: min(1050px, 100%);
+      max-height: min(92vh, 900px);
+      display: grid;
+      grid-template-rows: auto minmax(0, 1fr);
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(14, 21, 35, .98), rgba(6, 10, 18, .98));
+      box-shadow: 0 30px 120px rgba(0, 0, 0, .62);
+      overflow: hidden;
+    }
+    .modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, .1);
+      padding: .9rem 1rem;
+    }
+    .modal-body { overflow: auto; padding: 1rem; }
+
+    .game-layout {
+      display: grid;
+      grid-template-columns: 310px minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    .control-card {
+      display: grid;
+      gap: .75rem;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .045);
+      padding: .85rem;
+    }
+    .game-stage {
+      min-height: 410px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 8px;
+      background:
+        linear-gradient(rgba(255, 255, 255, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .025) 1px, transparent 1px),
+        rgba(2, 6, 14, .62);
+      background-size: 28px 28px;
+      padding: 1rem;
+    }
+    .status {
+      min-height: 48px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .045);
+      padding: .72rem;
+      color: #dbe7f6;
+      line-height: 1.45;
+    }
+    .status.win { border-color: rgba(70, 245, 165, .4); color: var(--green); }
+    .status.loss { border-color: rgba(255, 98, 98, .4); color: #ffb4b4; }
+
+    .meter {
+      display: grid;
+      place-items: center;
+      min-height: 190px;
+      border-radius: 8px;
+      border: 1px solid rgba(70, 245, 165, .2);
+      background: linear-gradient(145deg, rgba(70, 245, 165, .08), rgba(53, 213, 255, .055));
+      font: 900 clamp(2.4rem, 8vw, 5.4rem) "JetBrains Mono", monospace;
+      color: var(--green);
+      text-shadow: 0 0 24px rgba(70, 245, 165, .34);
+    }
+    .meter.danger { color: var(--red); border-color: rgba(255, 98, 98, .38); text-shadow: 0 0 24px rgba(255, 98, 98, .26); }
+    .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: .55rem; }
+    .result-chip {
+      border: 1px solid rgba(255, 255, 255, .11);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, .045);
+      padding: .58rem;
+      font-family: "JetBrains Mono", monospace;
+      text-align: center;
+    }
+
+    .wheel {
+      display: grid;
+      place-items: center;
+      width: min(320px, 100%);
+      aspect-ratio: 1;
+      margin: 0 auto;
+      border: 14px solid rgba(255, 255, 255, .1);
+      border-radius: 50%;
+      background:
+        conic-gradient(#121b2b 0 10deg, #d43f52 10deg 20deg, #101820 20deg 30deg, #46f5a5 30deg 40deg, #d43f52 40deg 50deg, #101820 50deg 60deg, #d43f52 60deg 70deg, #101820 70deg 80deg, #d43f52 80deg 90deg, #101820 90deg 100deg, #46f5a5 100deg 110deg, #d43f52 110deg 120deg, #101820 120deg 130deg, #d43f52 130deg 140deg, #101820 140deg 150deg, #d43f52 150deg 160deg, #101820 160deg 170deg, #46f5a5 170deg 180deg, #d43f52 180deg 190deg, #101820 190deg 200deg, #d43f52 200deg 210deg, #101820 210deg 220deg, #d43f52 220deg 230deg, #101820 230deg 240deg, #46f5a5 240deg 250deg, #d43f52 250deg 260deg, #101820 260deg 270deg, #d43f52 270deg 280deg, #101820 280deg 290deg, #d43f52 290deg 300deg, #101820 300deg 310deg, #46f5a5 310deg 320deg, #d43f52 320deg 330deg, #101820 330deg 340deg, #d43f52 340deg 350deg, #101820 350deg 360deg);
+      box-shadow: inset 0 0 36px rgba(0, 0, 0, .45), 0 0 34px rgba(70, 245, 165, .13);
+    }
+    .wheel.spin { animation: wheelSpin .8s ease-in-out infinite; }
+    @keyframes wheelSpin { to { transform: rotate(360deg); } }
+    .wheel-number {
+      display: grid;
+      place-items: center;
+      width: 116px;
+      height: 116px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, .22);
+      background: rgba(5, 8, 14, .92);
+      font: 900 2.4rem "JetBrains Mono", monospace;
+    }
+
+    .cards { display: flex; flex-wrap: wrap; gap: .45rem; }
+    .playing-card {
+      min-width: 54px;
+      min-height: 74px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #f6fbff, #d7e3ef);
+      color: #101722;
+      font: 900 1rem "JetBrains Mono", monospace;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .2);
+    }
+    .playing-card.hidden { background: linear-gradient(135deg, var(--green), var(--gold)); color: #06100d; }
+
+    .reels {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(48px, 1fr));
+      gap: .65rem;
+      margin: 1rem 0;
+    }
+    .reel {
+      display: grid;
+      place-items: center;
+      min-height: 112px;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .035));
+      font: 900 clamp(1.05rem, 3vw, 1.55rem) "JetBrains Mono", monospace;
+      text-align: center;
+    }
+    .reel.spin { animation: reelPulse .14s linear infinite; }
+    @keyframes reelPulse { 50% { transform: translateY(4px); filter: brightness(1.35); } }
+
+    .mine-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(44px, 76px));
+      gap: .55rem;
+      justify-content: center;
+      margin: 1rem auto;
+    }
+    .mine-tile {
+      aspect-ratio: 1;
+      border: 1px solid rgba(255, 255, 255, .12);
+      border-radius: 8px;
+      background: linear-gradient(145deg, rgba(70, 245, 165, .16), rgba(53, 213, 255, .08));
+      color: var(--text);
+      font: 900 .9rem "JetBrains Mono", monospace;
+    }
+    .mine-tile.safe { background: rgba(70, 245, 165, .22); border-color: rgba(70, 245, 165, .48); color: var(--green); }
+    .mine-tile.mine { background: rgba(255, 98, 98, .22); border-color: rgba(255, 98, 98, .48); color: #ffb4b4; }
+
+    .toast-stack {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 100;
+      display: grid;
+      gap: .55rem;
+      width: min(360px, calc(100vw - 2rem));
+    }
+    .toast {
+      border: 1px solid rgba(255, 255, 255, .14);
+      border-radius: 8px;
+      background: rgba(10, 16, 27, .96);
+      box-shadow: var(--shadow);
+      padding: .78rem .86rem;
+      color: #dce8f7;
+      animation: toastIn .2s ease;
+    }
+    @keyframes toastIn { from { transform: translateY(8px); opacity: 0; } }
+
+    .empty {
+      border: 1px dashed rgba(255, 255, 255, .16);
+      border-radius: 8px;
+      color: var(--muted);
+      padding: .8rem;
+      text-align: center;
+    }
+
+    footer {
+      color: var(--muted);
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    @media (max-width: 1100px) {
+      .topbar { grid-template-columns: 1fr; }
+      .nav-links { justify-content: flex-start; }
+      .top-actions { justify-content: flex-start; }
+      .dashboard-grid, .sports-layout { grid-template-columns: 1fr; }
+    }
     @media (max-width: 760px) {
-      .hero-inner { grid-template-columns: 1fr; text-align: center; }
-      .ctas { justify-content: center; }
-      .controller { width: min(280px, 70vw); }
-      .nav-links { font-size: .9rem; }
-      .count-badge { width: 100%; }
-      .tile { width: 42px; height: 42px; }
-      .gamebar { height: auto; align-items: flex-start; }
-      .gamebar-actions { flex-wrap: wrap; justify-content: flex-end; }
-      .game-stage { height: calc(100vh - 96px); }
-      .lucky-wrap { grid-template-columns: 1fr; }
-      .lucky-scene { min-height: 420px; }
-      .lucky-tabs { grid-template-columns: repeat(2, 1fr); }
+      .app { padding: .8rem; }
+      .section-head { align-items: start; flex-direction: column; }
+      .stats-mini, .action-stack, .odds-row, .game-layout { grid-template-columns: 1fr; }
+      .modal-backdrop { padding: .5rem; }
+      .modal-body { padding: .8rem; }
+      .reels { gap: .38rem; }
+      .reel { min-height: 82px; }
     }
   </style>
 </head>
 <body>
-  <nav class="nav" id="nav">
-    <a href="#" class="logo">ARCADIA</a>
-    <div class="nav-links">
+  <header class="topbar">
+    <a class="brand" href="#dashboard" aria-label="Open TabbyBet dashboard">
+      <span class="brand-mark">TB</span>
+      <span class="brand-name">TabbyBet <small>Play the odds. Keep it pretend.</small></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#dashboard">Dashboard</a>
       <a href="#games">Games</a>
-      <a href="#leaderboard">Leaderboard</a>
-      <a href="#about">About</a>
-    </div>
-  </nav>
-
-  <header class="hero">
-    <canvas id="particles" aria-hidden="true"></canvas>
-    <div class="hero-inner">
-      <div>
-        <h1>Play. Compete. Repeat.</h1>
-        <div class="type" id="typewriter"></div>
-        <p>34 free games. No login. No downloads.</p>
-        <div class="ctas">
-          <a class="btn primary" href="#games">Browse Games</a>
-          <button class="btn" id="randomGame">Random Game</button>
-        </div>
-      </div>
-      <svg class="controller" viewBox="0 0 520 360" role="img" aria-label="Floating game controller illustration">
-        <defs>
-          <linearGradient id="g" x1="0" x2="1"><stop stop-color="#7c3aed"/><stop offset="1" stop-color="#06b6d4"/></linearGradient>
-        </defs>
-        <path d="M111 123c30-34 89-29 143-25 55 4 120-9 156 25 35 34 61 123 30 157-26 29-67 1-95-35-18-24-62-24-85-23-23-1-67-1-85 23-28 36-69 64-95 35-31-34-5-123 31-157Z" fill="#111827" stroke="url(#g)" stroke-width="8"/>
-        <path d="M141 191h79M181 151v79" stroke="#e2e8f0" stroke-width="18" stroke-linecap="round"/>
-        <circle cx="344" cy="176" r="19" fill="#f59e0b"/><circle cx="393" cy="205" r="19" fill="#06b6d4"/><circle cx="393" cy="151" r="14" fill="#7c3aed"/>
-        <path d="M241 139h62" stroke="#64748b" stroke-width="10" stroke-linecap="round"/>
-      </svg>
+      <a href="#sports">Sports Picks</a>
+      <a href="#promotions">Promotions</a>
+      <a href="#live">Live Demo</a>
+    </nav>
+    <div class="top-actions">
+      <span class="badge demo">Demo Mode</span>
+      <button class="btn primary small" id="topAddBalance">Add Balance</button>
+      <button class="btn small" id="topHistory">History</button>
     </div>
   </header>
 
-  <main>
+  <main class="app">
+    <section class="section" id="dashboard">
+      <div class="notice" role="note" aria-label="Demo-only disclaimers">
+        <strong>Demo only — no real money, no real gambling, no cash value.</strong>
+        <span>All balances, purchases, bets, and winnings are simulated.</span>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="panel" aria-labelledby="balanceTitle">
+          <div class="section-head">
+            <div>
+              <h1 id="balanceTitle">TabbyBet</h1>
+              <p class="muted tight">Simulated balances for a fake-money casino and sportsbook dashboard.</p>
+            </div>
+            <span class="badge soft">Static client</span>
+          </div>
+          <div class="balance-list" id="balanceList"></div>
+          <div class="action-stack">
+            <button class="btn primary" id="addBalance">Add Balance</button>
+            <button class="btn" id="openHistory">Transactions</button>
+            <button class="btn danger" id="resetBalances">Reset Balance</button>
+            <button class="btn danger" id="fullReset">Full Reset</button>
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="quickTitle">
+          <div class="section-head">
+            <div>
+              <h2 id="quickTitle">Demo Desk</h2>
+              <p class="muted tight">Every control uses local browser storage and simulated points only.</p>
+            </div>
+          </div>
+          <div class="stats-mini" id="statsMini"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="featuredTitle">
+          <div class="section-head">
+            <div>
+              <h2 id="featuredTitle">Featured Tables</h2>
+              <p class="muted tight">Jump into the core playable demos.</p>
+            </div>
+          </div>
+          <div class="mini-grid">
+            <button class="btn gold" data-open-game="crash">Crash</button>
+            <button class="btn gold" data-open-game="roulette">Roulette</button>
+            <button class="btn gold" data-open-game="blackjack">Blackjack</button>
+            <button class="btn gold" data-open-game="slots">Slots</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
     <section class="section" id="games">
-      <div class="section-inner">
-        <div class="section-title">
-          <h2>Games</h2>
-          <span class="muted">Local saves, instant play.</span>
+      <div class="section-head">
+        <div>
+          <h2>Game Lobby</h2>
+          <p class="muted tight">Fake wagers, fake winnings, real UI state.</p>
         </div>
-        <div class="filters" id="filters"></div>
-        <div class="grid" id="gameGrid"></div>
+        <span class="badge demo">Demo Only</span>
+      </div>
+      <div class="tabs" id="categoryTabs" aria-label="Game categories"></div>
+      <div class="game-grid" id="gameGrid" style="margin-top:.9rem"></div>
+    </section>
+
+    <section class="section" id="sports">
+      <div class="section-head">
+        <div>
+          <h2>Sports Picks Demo</h2>
+          <p class="muted tight">Fictional matchups, fake odds, random simulated results.</p>
+        </div>
+        <span class="badge demo">No real teams</span>
+      </div>
+      <div class="sports-layout">
+        <section class="panel">
+          <div class="tabs" id="sportsTabs" aria-label="Sports categories"></div>
+          <div class="match-list" id="matchList" style="margin-top:.9rem"></div>
+        </section>
+        <aside class="panel" aria-labelledby="slipTitle">
+          <div class="section-head">
+            <div>
+              <h3 id="slipTitle">Bet Slip</h3>
+              <p class="muted tight">Uses D$ only.</p>
+            </div>
+          </div>
+          <div class="slip-list" id="slipList"></div>
+          <label style="margin-top:.75rem">D$ Stake
+            <input id="slipStake" type="number" min="1" step="1" value="25">
+          </label>
+          <p class="muted" id="slipPayout" style="margin:.65rem 0 0">Potential simulated payout: D$0.00</p>
+          <div class="action-stack">
+            <button class="btn primary" id="placeSlip">Place Fake Bet</button>
+            <button class="btn danger" id="clearSlip">Clear Slip</button>
+          </div>
+          <h3 style="margin-top:1rem">Open Tickets</h3>
+          <div class="slip-list" id="ticketList"></div>
+        </aside>
       </div>
     </section>
 
-    <section class="section" id="leaderboard">
-      <div class="section-inner">
-        <div class="section-title">
-          <h2>Leaderboard</h2>
-          <button class="btn small" id="refreshBoard">Refresh</button>
+    <section class="section" id="promotions">
+      <div class="section-head">
+        <div>
+          <h2>Promotions</h2>
+          <p class="muted tight">Fake rewards with once-per-day local limits.</p>
         </div>
-        <table class="leader">
-          <thead><tr><th>Rank</th><th>Game</th><th>Best Score</th><th>Date Set</th></tr></thead>
-          <tbody id="leaderRows"></tbody>
-        </table>
+        <span class="badge demo">Simulated rewards</span>
       </div>
+      <div class="promo-grid" id="promoGrid"></div>
     </section>
 
-    <section class="section" id="about">
-      <div class="section-inner">
-        <h2>About</h2>
-        <p class="muted">ARCADIA is a single-file vanilla JavaScript arcade. Every score, save file, creature, dungeon, card binder, and simulated civilization lives in your browser storage.</p>
+    <section class="section" id="live">
+      <div class="section-head">
+        <div>
+          <h2>Live Casino Demo</h2>
+          <p class="muted tight">Fake dealer cards and viewer counts. No streams are loaded.</p>
+        </div>
+        <span class="badge demo">Preview only</span>
       </div>
+      <div class="live-grid" id="liveGrid"></div>
     </section>
   </main>
 
   <footer>
-    <span>Built with vanilla JS. No backend.</span>
-    <span class="mono"> | ARCADIA://static</span>
+    <span class="mono">TabbyBet://demo-static</span>
+    <span> | No backend, no payment collection, no cash value.</span>
   </footer>
 
-  <div class="overlay" id="overlay" aria-modal="true" role="dialog">
-    <div class="gamebar">
-      <div>
-        <h2 id="gameTitle">Game</h2>
-        <div id="scoreLine">Score: 0</div>
-      </div>
-      <div class="gamebar-actions">
-        <button class="btn small" id="newGame">New Game</button>
-        <button class="btn small" id="saveExit">Save & Exit</button>
-        <button class="btn small" id="closeGame">Back</button>
-      </div>
-    </div>
-    <div class="game-stage">
-      <div class="game-panel" id="gameMount"></div>
-    </div>
-  </div>
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+  <div id="modalRoot"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
   <script>
-    const $ = (q, root = document) => root.querySelector(q);
-    const $$ = (q, root = document) => [...root.querySelectorAll(q)];
-    const categories = ["all","arcade","puzzle","classic","skill","rpg","idle","sim","mystery"];
+    const $ = (selector, root = document) => root.querySelector(selector);
+    const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+    const KEYS = {
+      balances: "tabbybet_balances",
+      history: "tabbybet_history",
+      stats: "tabbybet_stats",
+      daily: "tabbybet_daily_bonus"
+    };
+    const DEFAULT_BALANCES = { tc: 25000, dd: 1000, bp: 250 };
+    const DEFAULT_STATS = {
+      totalBets: 0,
+      demoWins: 0,
+      demoLosses: 0,
+      biggestWin: { amount: 0, currency: "tc" },
+      simulatedPurchases: 0,
+      favoriteCounts: {}
+    };
+
+    const categories = [
+      "All",
+      "Originals",
+      "Slots",
+      "Table Games",
+      "Crash Games",
+      "Dice Games",
+      "Card Games",
+      "Sports Picks Demo",
+      "Live Casino Demo",
+      "Promotions"
+    ];
     const games = [
-      ["snake","Snake","arcade","Classic grid serpent with food, walls, and self-collision.",2],
-      ["space","Space Invaders","arcade","Alien rows descend while your cannon fights through waves.",3],
-      ["breakout","Breakout","arcade","Mouse paddle, bouncing ball, brick colors, and level speedups.",2],
-      ["mole","Whack-a-Mole","arcade","Whack random moles in a 3x3 board before the clock runs out.",1],
-      ["flappy","Flappy Bird Clone","arcade","Tap through moving pipe gaps and chase a new high score.",2],
-      ["runner","Infinite Runner","arcade","Jump obstacles on an accelerating neon track.",2],
-      ["tetris","Tetris","puzzle","Seven tetrominoes, ghost piece, line clears, and rising speed.",3],
-      ["2048","2048","puzzle","Merge numbered tiles to reach 2048 and keep going.",2],
-      ["mines","Minesweeper","puzzle","Beginner 9x9 mines, first-click safe, flags, and timer.",2],
-      ["slide","Sliding Puzzle","puzzle","Shuffle a 4x4 board and solve it in as few moves as possible.",2],
-      ["sudoku","Sudoku","puzzle","Five built-in puzzles, validation, number pad, and hints.",3],
-      ["memory","Memory Card Match","classic","Flip 4x4 emoji pairs and race the timer for stars.",1],
-      ["wordle","Wordle Clone","classic","Six attempts, daily words, feedback, and on-screen keyboard.",2],
-      ["simon","Simon Says","classic","Repeat longer color sequences with AudioContext tones.",2],
-      ["pong","Pong","classic","Two paddles, solo CPU option, and first to seven wins.",2],
-      ["reaction","Reaction Time Test","skill","Wait for green over five rounds and measure average reflexes.",1],
-      ["flood","Color Flood Fill","skill","Flood an 8x8 color board in thirty moves or fewer.",2],
-      ["aim","Aim Trainer","skill","Click shrinking targets for thirty seconds and score accuracy.",2],
-      ["clicker","Infinite Clicker RPG","rpg","Attack monsters, buy upgrades, level up, and prestige.",2],
-      ["dungeon","ASCII Dungeon Crawler","rpg","Procedural rooms, monsters, loot, stairs, and permadeath.",3],
-      ["breeder","Pokemon-Style Creature Breeder","rpg","Breed, catch, and collect procedural elemental creatures.",2],
-      ["kingdom","Idle Kingdom Builder","idle","Build farms, mills, quarries, markets, and castles offline.",2],
-      ["fish","Digital Fish Tank","idle","Breed colorful fish, feed daily, and fill a species log.",2],
-      ["youtuber","Incremental YouTuber Simulator","idle","Film, edit, upload, find sponsors, and grow a channel.",2],
-      ["scp","SCP Containment Simulator","idle","Contain anomalies in a green government terminal.",3],
-      ["pet","Browser Pet Simulator","sim","Raise, train, accessorize, and evolve a browser pet.",1],
-      ["football","Football GM Simulator","sim","Manage roster, season, playoffs, draft, trades, and cap.",3],
-      ["civ","AI Civilization Simulator","sim","Watch canvas civilizations expand, trade, collapse, and war.",3],
-      ["hacker","Hacker Simulator","mystery","Terminal missions with ciphers, files, tracing, and endings.",3],
-      ["arg","ARG Mystery Game","mystery","Solve hidden chapters in a fake dark-web browser.",3],
-      ["cards","Card Collector","classic","Open packs, fill a 60-card binder, trade, and earn achievements.",2],
-      ["backrooms","Backrooms Explorer","mystery","Explore procedural rooms, keys, sanity, entities, and floors.",3],
-      ["blocks","Minecraft-Inspired 2D Block World","mystery","Mine, place, craft, survive night, and save a 2D world.",3],
-      ["lucky","Minecraft Lucky Block Simulator","sim","Open voxel Lucky Blocks, chase rare drops, upgrade luck, and complete collections.",3]
-    ].map(([id,name,category,desc,difficulty]) => ({ id, name, category, desc, difficulty }));
-    const secretGame = { id:"secret", name:"Developer Console", category:"mystery", desc:"A hidden diagnostic game unlocked by solving the ARG.", difficulty:3 };
-    const state = { active: null, cleanup: null, filter: "all" };
-    const keyFor = game => "arcadia_" + game.name;
-    const nowDate = () => new Date().toLocaleDateString(undefined, { month:"short", day:"numeric", year:"numeric" });
-    function readSave(game) {
-      try { return JSON.parse(localStorage.getItem(keyFor(game))) || null; } catch { return null; }
-    }
-    function writeSave(game, data) {
-      const prev = readSave(game) || {};
-      const out = { ...prev, ...data, date: data.date || nowDate() };
-      localStorage.setItem(keyFor(game), JSON.stringify(out));
-      renderLeaderboard();
-      updateCards();
-    }
-    function bestText(game) {
-      const s = readSave(game);
-      if (!s) return "No save";
-      if (s.best !== undefined) return "Best " + s.best;
-      if (s.progress) return s.progress;
-      return "Saved";
-    }
-    function setScore(text) { $("#scoreLine").textContent = text; }
-    function saveScore(game, score, extra = {}) {
-      const prev = readSave(game);
-      if (!prev || Number(score) >= Number(prev.best || 0)) writeSave(game, { best: Math.floor(score), ...extra });
-      else writeSave(game, extra);
-    }
-    function renderFilters() {
-      const f = $("#filters");
-      f.innerHTML = categories.map(c => `<button class="pill ${c === state.filter ? "active" : ""}" data-filter="${c}">${c[0].toUpperCase()+c.slice(1)}</button>`).join("") + `<span class="count-badge" id="countBadge"></span>`;
-      $$(".pill", f).forEach(btn => btn.onclick = () => { state.filter = btn.dataset.filter; renderFilters(); renderGrid(); });
-      $("#countBadge").textContent = visibleGames().length + " games";
-    }
-    function allGames() {
-      const argSave = readSave(games.find(g => g.id === "arg"));
-      return argSave && argSave.step >= 6 ? [...games, secretGame] : games;
-    }
-    function visibleGames() { return allGames().filter(g => state.filter === "all" || g.category === state.filter); }
-    function renderGrid() {
-      const grid = $("#gameGrid");
-      grid.innerHTML = visibleGames().map((g, i) => `
-        <article class="card" data-category="${g.category}" style="transition-delay:${Math.min(i * 28, 520)}ms">
-          <span class="badge ${g.category}">${g.category}</span>
-          <h3>${g.name}</h3>
-          <p>${g.desc}</p>
-          <div class="dots">${[1,2,3].map(n => `<span class="dot ${n <= g.difficulty ? "on" : ""}"></span>`).join("")}</div>
-          <div class="card-meta"><span class="mono save">${bestText(g)}</span><button class="btn small primary" data-play="${g.id}">Play</button></div>
-        </article>`).join("");
-      $$("[data-play]").forEach(b => b.onclick = () => openGame(allGames().find(g => g.id === b.dataset.play)));
-      observeCards();
-      const badge = $("#countBadge"); if (badge) badge.textContent = visibleGames().length + " games";
-    }
-    function updateCards() { $$(".card").forEach(card => { const g = allGames().find(x => x.name === $("h3", card).textContent); $(".save", card).textContent = bestText(g); }); }
-    function observeCards() {
-      const io = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add("visible")), { threshold: .12 });
-      $$(".card").forEach(c => io.observe(c));
-    }
-    function renderLeaderboard() {
-      const rows = allGames().map(g => ({ game: g, save: readSave(g) })).filter(x => x.save && x.save.best !== undefined).sort((a,b) => (b.save.best || 0) - (a.save.best || 0));
-      $("#leaderRows").innerHTML = rows.length ? rows.map((r,i) => `<tr><td class="mono">#${i+1}</td><td>${r.game.name}</td><td class="mono">${r.save.best}</td><td>${r.save.date || "Unknown"}</td></tr>`).join("") : `<tr><td colspan="4" class="muted">No scores yet. Open a game and make the board blink.</td></tr>`;
-    }
-    function openGame(game) {
-      closeGame(false);
-      state.active = game;
-      $("#gameTitle").textContent = game.name;
-      $("#gameMount").innerHTML = "";
-      $("#overlay").classList.add("open");
-      setScore("Loading...");
-      state.cleanup = (launchers[game.id] || launchers.generic)(game, $("#gameMount")) || null;
-    }
-    function closeGame(hide = true) {
-      if (typeof state.cleanup === "function") state.cleanup();
-      state.cleanup = null;
-      if (hide) $("#overlay").classList.remove("open");
-    }
-    $("#closeGame").onclick = () => closeGame(true);
-    $("#saveExit").onclick = () => { if (state.active) writeSave(state.active, { progress: "Saved run" }); closeGame(true); };
-    $("#newGame").onclick = () => state.active && openGame(state.active);
-    $("#refreshBoard").onclick = renderLeaderboard;
-    $("#randomGame").onclick = () => { const pool = allGames(); openGame(pool[Math.floor(Math.random() * pool.length)]); };
-    window.addEventListener("keydown", e => { if (e.key === "Escape") closeGame(true); });
-    window.addEventListener("scroll", () => $("#nav").classList.toggle("scrolled", scrollY > 40));
+      { id: "crash", category: "Crash Games", title: "Turbo Tabby Crash", icon: "1X", desc: "Multiplier climbs until the demo round crashes." },
+      { id: "dice", category: "Dice Games", title: "Over Under Dice", icon: "D6", desc: "Pick a side, set a target, and roll 1 to 100." },
+      { id: "roulette", category: "Table Games", title: "Neon Roulette", icon: "00", desc: "Red, black, green, odd, even, or exact number." },
+      { id: "blackjack", category: "Card Games", title: "Blackjack Room", icon: "21", desc: "Player versus dealer with simulated payouts." },
+      { id: "slots", category: "Slots", title: "Tabby Reels", icon: "777", desc: "Five reel slot demo with premium tabby styling." },
+      { id: "mines", category: "Originals", title: "Catwalk Mines", icon: "5x5", desc: "Reveal safe tiles and lock a fake cash out before a mine." },
+      { id: "sports", category: "Sports Picks Demo", title: "Sports Picks Desk", icon: "D$", desc: "Build a fake slip from fictional matchups." },
+      { id: "live-blackjack", category: "Live Casino Demo", title: "Demo Live Blackjack", icon: "LB", desc: "A staged live-table card for the blackjack demo." },
+      { id: "live-roulette", category: "Live Casino Demo", title: "Demo Live Roulette", icon: "LR", desc: "A fake live-table card for roulette." },
+      { id: "promo", category: "Promotions", title: "Daily Bonus Board", icon: "BP", desc: "Claim fake rewards with local daily limits." },
+      { id: "baccarat-preview", category: "Table Games", title: "Demo Baccarat", icon: "BC", desc: "Preview card for a simulated table game." },
+      { id: "game-show-preview", category: "Originals", title: "Demo Game Show", icon: "GS", desc: "Prize-wheel style preview with no real stakes." }
+    ];
 
-    function bootParticles() {
-      const canvas = $("#particles"), ctx = canvas.getContext("2d");
-      let dots = [];
-      const resize = () => {
-        canvas.width = innerWidth * devicePixelRatio; canvas.height = innerHeight * devicePixelRatio;
-        dots = Array.from({ length: Math.min(95, Math.floor(innerWidth / 16)) }, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx:(Math.random()-.5)*.45*devicePixelRatio, vy:(Math.random()-.5)*.45*devicePixelRatio }));
-      };
-      addEventListener("resize", resize); resize();
-      (function tick(){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-        dots.forEach(d => { d.x += d.vx; d.y += d.vy; if (d.x<0||d.x>canvas.width) d.vx*=-1; if (d.y<0||d.y>canvas.height) d.vy*=-1; });
-        for (let i=0;i<dots.length;i++) for (let j=i+1;j<dots.length;j++) {
-          const a=dots[i], b=dots[j], dx=a.x-b.x, dy=a.y-b.y, dist=Math.hypot(dx,dy);
-          if (dist < 150*devicePixelRatio) { ctx.strokeStyle = `rgba(124,58,237,${(1-dist/(150*devicePixelRatio))*.26})`; ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
-        }
-        dots.forEach(d => { ctx.fillStyle = "rgba(6,182,212,.85)"; ctx.beginPath(); ctx.arc(d.x,d.y,2.2*devicePixelRatio,0,7); ctx.fill(); });
-        requestAnimationFrame(tick);
-      })();
-    }
-    function bootType() {
-      const lines = ["Insert coin. Keep the save file.", "Neon classics for quiet browser tabs.", "Thirty-four worlds in one static page."];
-      let li=0, ci=0, del=false;
-      setInterval(() => {
-        const s = lines[li];
-        $("#typewriter").textContent = s.slice(0, ci) + (Date.now()%800<400 ? "_" : "");
-        ci += del ? -1 : 1;
-        if (ci > s.length + 14) del = true;
-        if (ci < 0) { del = false; li = (li+1)%lines.length; ci = 0; }
-      }, 60);
+    const packages = [
+      { name: "Kitten Pack", currency: "tc", amount: 5000, price: "$4.99", label: "5,000 TC" },
+      { name: "Tabby Pack", currency: "tc", amount: 25000, price: "$19.99", label: "25,000 TC" },
+      { name: "High Roller Cat Pack", currency: "tc", amount: 100000, price: "$49.99", label: "100,000 TC" },
+      { name: "Demo Dollars Pack", currency: "dd", amount: 1000, price: "$9.99", label: "D$1,000" },
+      { name: "Bonus Points Pack", currency: "bp", amount: 500, price: "$2.99", label: "500 BP" }
+    ];
+
+    const promos = [
+      { id: "daily", title: "Daily Login Bonus", reward: { tc: 1500, bp: 25 }, desc: "A small fake stack for checking in." },
+      { id: "spins", title: "Free Demo Spins", reward: { tc: 3000 }, desc: "Adds simulated TC for slot spins." },
+      { id: "points", title: "Bonus Points Drop", reward: { bp: 100 }, desc: "A local BP reward with no cash value." },
+      { id: "weekend", title: "Weekend Demo Boost", reward: { tc: 2500, dd: 75 }, desc: "A fake boost package for the dashboard." },
+      { id: "sports", title: "Sports Pick Bonus", reward: { dd: 100, bp: 40 }, desc: "Adds pretend D$ for fictional picks." }
+    ];
+
+    const sports = ["All", "Football", "Basketball", "Soccer", "Esports"];
+    const matches = [
+      { id: "fb-1", sport: "Football", league: "Metro Bowl Demo", teams: ["Miami Sharks", "Dallas Bulls"], odds: [-120, 105] },
+      { id: "bb-1", sport: "Basketball", league: "Night Court Demo", teams: ["Los Angeles Stars", "New York Knights"], odds: [135, -155] },
+      { id: "sc-1", sport: "Soccer", league: "Continental Demo", teams: ["London United", "Paris Royals"], odds: [118, -132] },
+      { id: "es-1", sport: "Esports", league: "Pixel Cup Demo", teams: ["Neon Panthers", "Cyber Wolves"], odds: [-105, -115] },
+      { id: "es-2", sport: "Esports", league: "Dragon Circuit Demo", teams: ["Tokyo Dragons", "Seoul Tigers"], odds: [142, -164] }
+    ];
+
+    const state = {
+      balances: loadJSON(KEYS.balances, DEFAULT_BALANCES),
+      history: loadJSON(KEYS.history, []),
+      stats: loadJSON(KEYS.stats, DEFAULT_STATS),
+      daily: loadJSON(KEYS.daily, {}),
+      category: "All",
+      sportsFilter: "All",
+      slip: [],
+      tickets: [],
+      crashHistory: [],
+      rouletteHistory: [],
+      activeCleanup: null
+    };
+
+    function loadJSON(key, fallback) {
+      try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(fallback));
+      } catch {
+        return JSON.parse(JSON.stringify(fallback));
+      }
     }
 
-    const launchers = {};
-    function canvasShell(game, mount, opts = {}) {
-      mount.innerHTML = `<canvas class="game-canvas" width="${opts.w||800}" height="${opts.h||500}"></canvas><div class="row" style="justify-content:center;margin-top:1rem"><button class="btn small primary" id="startBtn">Start</button><span class="muted">${opts.help||"Arrow keys / WASD / mouse / tap depending on the game."}</span></div>`;
-      const canvas = $("canvas", mount), ctx = canvas.getContext("2d");
-      const keys = {};
-      let raf = 0, running = false, score = 0, t = 0;
-      const onKey = e => { keys[e.key.toLowerCase()] = e.type === "keydown"; if ([" ","arrowup","arrowdown","arrowleft","arrowright"].includes(e.key.toLowerCase())) e.preventDefault(); };
-      addEventListener("keydown", onKey); addEventListener("keyup", onKey);
-      $("#startBtn").onclick = () => { running = true; score = 0; t = 0; if (opts.reset) opts.reset(); };
-      const loop = () => {
-        raf = requestAnimationFrame(loop);
-        ctx.fillStyle = "#050816"; ctx.fillRect(0,0,canvas.width,canvas.height);
-        if (!running) { ctx.fillStyle="#e2e8f0"; ctx.font="26px JetBrains Mono"; ctx.fillText("Press Start", 310, 245); return; }
-        t++;
-        score = opts.step ? opts.step({ctx, canvas, keys, t, score, end}) : score + 1;
-        setScore("Score: " + Math.floor(score));
+    function save(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function saveAll() {
+      save(KEYS.balances, state.balances);
+      save(KEYS.history, state.history);
+      save(KEYS.stats, state.stats);
+      save(KEYS.daily, state.daily);
+    }
+
+    function formatCurrency(currency, value) {
+      const amount = Number(value) || 0;
+      if (currency === "tc") return amount.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " TC";
+      if (currency === "dd") return "D$" + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return amount.toLocaleString(undefined, { maximumFractionDigits: 0 }) + " BP";
+    }
+
+    function normalizeAmount(currency, amount) {
+      const n = Number(amount);
+      if (!Number.isFinite(n)) return 0;
+      return currency === "dd" ? Math.round(n * 100) / 100 : Math.floor(n);
+    }
+
+    function adjustBalance(currency, amount) {
+      const next = normalizeAmount(currency, (Number(state.balances[currency]) || 0) + Number(amount));
+      state.balances[currency] = Math.max(0, next);
+      save(KEYS.balances, state.balances);
+      renderBalances(currency);
+    }
+
+    function addHistory(kind, title, detail, amount = "", currency = "") {
+      state.history.unshift({
+        id: String(Date.now() + Math.random()),
+        time: new Date().toISOString(),
+        kind,
+        title,
+        detail,
+        amount,
+        currency
+      });
+      state.history = state.history.slice(0, 90);
+      save(KEYS.history, state.history);
+    }
+
+    function setFavorite(game) {
+      state.stats.favoriteCounts[game] = (state.stats.favoriteCounts[game] || 0) + 1;
+    }
+
+    function favoriteGame() {
+      const entries = Object.entries(state.stats.favoriteCounts || {});
+      if (!entries.length) return "None yet";
+      entries.sort((a, b) => b[1] - a[1]);
+      return entries[0][0];
+    }
+
+    function noteWin(amount, currency) {
+      state.stats.demoWins += 1;
+      const biggest = state.stats.biggestWin || { amount: 0, currency };
+      if (Number(amount) > Number(biggest.amount || 0)) {
+        state.stats.biggestWin = { amount: normalizeAmount(currency, amount), currency };
+      }
+    }
+
+    function noteLoss() {
+      state.stats.demoLosses += 1;
+    }
+
+    function placeBet(game, currency, amount) {
+      const bet = normalizeAmount(currency, amount);
+      if (bet <= 0) {
+        toast("Enter a positive simulated bet.", "loss");
+        return null;
+      }
+      if (bet > Number(state.balances[currency] || 0)) {
+        toast("Demo balance is too low for that fake bet.", "loss");
+        return null;
+      }
+      adjustBalance(currency, -bet);
+      state.stats.totalBets += 1;
+      setFavorite(game);
+      save(KEYS.stats, state.stats);
+      renderStats();
+      addHistory("Bet", game + " bet placed", "Fake wager accepted using " + formatCurrency(currency, bet) + ".", bet, currency);
+      return bet;
+    }
+
+    function settleBet(game, didWin, payout, currency, detail) {
+      const normalized = normalizeAmount(currency, payout);
+      if (didWin) {
+        adjustBalance(currency, normalized);
+        noteWin(normalized, currency);
+        addHistory("Win", game + " demo win", detail + " Payout " + formatCurrency(currency, normalized) + ".", normalized, currency);
+      } else {
+        noteLoss();
+        addHistory("Loss", game + " demo loss", detail, 0, currency);
+      }
+      save(KEYS.stats, state.stats);
+      renderStats();
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    }
+
+    function todayKey() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function toast(message) {
+      const stack = $("#toastStack");
+      const item = document.createElement("div");
+      item.className = "toast";
+      item.textContent = message;
+      stack.appendChild(item);
+      setTimeout(() => item.remove(), 4200);
+    }
+
+    function openModal(title, body, afterOpen) {
+      clearActiveCleanup();
+      $("#modalRoot").innerHTML = `
+        <div class="modal-backdrop" role="presentation">
+          <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <div class="modal-head">
+              <div>
+                <h2 id="modalTitle" class="tight">${title}</h2>
+                <p class="muted tight">Demo only — no real money, no real gambling, no cash value.</p>
+              </div>
+              <button class="btn icon" id="closeModal" aria-label="Close modal">X</button>
+            </div>
+            <div class="modal-body">${body}</div>
+          </section>
+        </div>`;
+      $("#closeModal").onclick = closeModal;
+      $(".modal-backdrop").onclick = event => {
+        if (event.target.classList.contains("modal-backdrop")) closeModal();
       };
-      function end(finalScore = score) { running = false; saveScore(game, finalScore); }
-      loop();
-      return () => { cancelAnimationFrame(raf); removeEventListener("keydown", onKey); removeEventListener("keyup", onKey); };
+      if (afterOpen) afterOpen($(".modal-body"));
+      const focusable = $(".modal button, .modal input, .modal select");
+      if (focusable) focusable.focus();
     }
-    launchers.snake = (game,mount) => {
-      let snake, food, dir, next, tick;
-      const cell=20, cols=40, rows=25;
-      return canvasShell(game,mount,{help:"Arrow keys. Eat cyan food. Walls and yourself end the run.", reset(){snake=[{x:20,y:12}]; food={x:5,y:5}; dir={x:1,y:0}; next=dir; tick=0;}, step({ctx,keys,t,end}) {
-        if(keys.arrowup&&dir.y!==1)next={x:0,y:-1}; if(keys.arrowdown&&dir.y!==-1)next={x:0,y:1}; if(keys.arrowleft&&dir.x!==1)next={x:-1,y:0}; if(keys.arrowright&&dir.x!==-1)next={x:1,y:0};
-        if(t%7===0){dir=next; const h={x:snake[0].x+dir.x,y:snake[0].y+dir.y}; if(h.x<0||h.y<0||h.x>=cols||h.y>=rows||snake.some(s=>s.x===h.x&&s.y===h.y)){end(snake.length-1); return snake.length-1;} snake.unshift(h); if(h.x===food.x&&h.y===food.y) food={x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)}; else snake.pop();}
-        ctx.fillStyle="#06b6d4"; ctx.fillRect(food.x*cell,food.y*cell,cell,cell); ctx.fillStyle="#7c3aed"; snake.forEach(s=>ctx.fillRect(s.x*cell+1,s.y*cell+1,cell-2,cell-2)); return snake.length-1;
-      }});
-    };
-    launchers.space = (game,mount) => {
-      let p, aliens, bullets, lives, wave;
-      return canvasShell(game,mount,{help:"Arrow keys move, space fires. Clear waves before aliens descend.", reset(){p={x:380}; bullets=[]; lives=3; wave=1; aliens=Array.from({length:32},(_,i)=>({x:80+(i%8)*70,y:55+Math.floor(i/8)*42,alive:true}));}, step({ctx,keys,t,end}) {
-        if(keys.arrowleft)p.x-=6; if(keys.arrowright)p.x+=6; p.x=Math.max(20,Math.min(760,p.x)); if(keys[" "]&&t%12===0)bullets.push({x:p.x,y:430});
-        const dir=Math.sin(t/(60-wave*4))>0?1:-1; aliens.forEach(a=>{if(a.alive){a.x+=dir*(1+wave*.12); if(t%180===0)a.y+=18; if(a.y>400){lives--; a.y=80; if(lives<=0)end(wave*100);}}});
-        bullets.forEach(b=>b.y-=8); bullets=bullets.filter(b=>b.y>0);
-        bullets.forEach(b=>aliens.forEach(a=>{if(a.alive&&Math.abs(a.x-b.x)<20&&Math.abs(a.y-b.y)<20){a.alive=false;b.y=-9;}}));
-        if(!aliens.some(a=>a.alive)){wave++; aliens.forEach((a,i)=>{a.alive=true;a.x=80+(i%8)*70;a.y=55+Math.floor(i/8)*42;});}
-        ctx.fillStyle="#06b6d4"; ctx.fillRect(p.x-24,442,48,12); bullets.forEach(b=>ctx.fillRect(b.x-2,b.y,4,12)); ctx.fillStyle="#7c3aed"; aliens.forEach(a=>a.alive&&ctx.fillRect(a.x-17,a.y-12,34,24)); ctx.fillStyle="#f59e0b"; ctx.fillText("Lives "+lives+" Wave "+wave,20,30); return wave*100 + aliens.filter(a=>!a.alive).length*10;
-      }});
-    };
-    launchers.breakout = (game,mount) => {
-      let ball,paddle,bricks,lives,level;
-      const resetBricks=()=>Array.from({length:50},(_,i)=>({x:70+(i%10)*64,y:45+Math.floor(i/10)*28,hit:false,c:i%5}));
-      const cleanup = canvasShell(game,mount,{help:"Move the mouse/touch to steer the paddle.", reset(){ball={x:400,y:320,vx:4,vy:-4};paddle=350;bricks=resetBricks();lives=3;level=1;}, step({ctx,canvas,t,end}) {
-        ball.x+=ball.vx; ball.y+=ball.vy; if(ball.x<8||ball.x>792)ball.vx*=-1; if(ball.y<8)ball.vy*=-1; if(ball.y>500){lives--; ball={x:400,y:320,vx:4+level*.4,vy:-4-level*.4}; if(lives<1)end(level*1000-bricks.filter(b=>!b.hit).length*10);}
-        if(ball.y>430&&Math.abs(ball.x-(paddle+50))<60) ball.vy=-Math.abs(ball.vy);
-        bricks.forEach(b=>{if(!b.hit&&ball.x>b.x&&ball.x<b.x+54&&ball.y>b.y&&ball.y<b.y+20){b.hit=true; ball.vy*=-1;}});
-        if(bricks.every(b=>b.hit)){level++; bricks=resetBricks(); ball.vx*=1.15; ball.vy*=1.15;}
-        ctx.fillStyle="#06b6d4"; ctx.fillRect(paddle,452,100,12); ctx.fillStyle="#e2e8f0"; ctx.beginPath(); ctx.arc(ball.x,ball.y,8,0,7);ctx.fill(); bricks.forEach(b=>{if(!b.hit){ctx.fillStyle=["#7c3aed","#06b6d4","#f59e0b","#22c55e","#fb7185"][b.c];ctx.fillRect(b.x,b.y,54,20);}}); ctx.fillText("Lives "+lives+" Level "+level,20,28); return level*500 + bricks.filter(b=>b.hit).length*20;
-      }});
-      const canvas=$("canvas",mount); canvas.onmousemove=e=>{const r=canvas.getBoundingClientRect(); paddle=(e.clientX-r.left)/r.width*800-50;}; canvas.ontouchmove=e=>{const r=canvas.getBoundingClientRect(); paddle=(e.touches[0].clientX-r.left)/r.width*800-50;};
-      return cleanup;
-    };
-    launchers.mole = (game,mount) => gridClickGame(game,mount,{title:"Whack-a-Mole",cells:9,seconds:30,icon:"●",miss:true});
-    launchers.flappy = (game,mount) => {
-      let bird,pipes;
-      return canvasShell(game,mount,{help:"Space/tap to flap through pipe gaps.", reset(){bird={y:250,v:0};pipes=[{x:850,g:180+Math.random()*150}];}, step({ctx,keys,t,end}) {
-        if(keys[" "]||keys.arrowup) bird.v=-7; bird.v+=.45; bird.y+=bird.v; if(t%95===0)pipes.push({x:850,g:110+Math.random()*250}); pipes.forEach(p=>p.x-=3.2); pipes=pipes.filter(p=>p.x>-70);
-        pipes.forEach(p=>{if(p.x<115&&p.x>65&&(bird.y<p.g-65||bird.y>p.g+65))end(Math.floor(t/95));});
-        if(bird.y<0||bird.y>500)end(Math.floor(t/95));
-        ctx.fillStyle="#f59e0b";ctx.beginPath();ctx.arc(90,bird.y,14,0,7);ctx.fill(); ctx.fillStyle="#06b6d4"; pipes.forEach(p=>{ctx.fillRect(p.x,0,52,p.g-65);ctx.fillRect(p.x,p.g+65,52,500);}); return Math.floor(t/95);
-      }});
-    };
-    launchers.runner = (game,mount) => {
-      let y,v,obs,speed;
-      return canvasShell(game,mount,{help:"Space/tap jumps over obstacles. Distance is score.", reset(){y=392;v=0;obs=[];speed=5;}, step({ctx,keys,t,end}) {
-        if((keys[" "]||keys.arrowup)&&y>=392)v=-13; v+=.7; y=Math.min(392,y+v); speed+=.002; if(t%72===0)obs.push({x:830,w:28+Math.random()*22}); obs.forEach(o=>o.x-=speed); obs=obs.filter(o=>o.x>-60);
-        obs.forEach(o=>{if(o.x<100&&o.x+o.w>60&&y>360)end(t/10);}); ctx.fillStyle="#334155";ctx.fillRect(0,430,800,4); ctx.fillStyle="#7c3aed";ctx.fillRect(62,y,34,38); ctx.fillStyle="#f59e0b";obs.forEach(o=>ctx.fillRect(o.x,398,o.w,32)); return t/10;
-      }});
-    };
-    function gridClickGame(game,mount,{cells=16,seconds=30,icon="★",miss=false}) {
-      let score=0,time=seconds,active=0,timer;
-      mount.innerHTML = `<div class="game-ui"><div class="row"><button class="btn primary" id="go">Start</button><span class="mono" id="clock">${seconds}s</span></div><div class="board-grid" style="grid-template-columns:repeat(${Math.sqrt(cells)},54px)" id="board"></div></div>`;
-      const board=$("#board",mount);
-      board.innerHTML=Array.from({length:cells},(_,i)=>`<button class="tile" data-i="${i}"></button>`).join("");
-      function pop(){ $$(".tile",board).forEach(t=>t.textContent=""); active=Math.floor(Math.random()*cells); $(`[data-i="${active}"]`,board).textContent=icon; }
-      $("#go",mount).onclick=()=>{score=0;time=seconds;pop();clearInterval(timer);timer=setInterval(()=>{time--;$("#clock",mount).textContent=time+"s";if(time<=0){clearInterval(timer);saveScore(game,score);}},1000);};
-      $$(".tile",board).forEach(t=>t.onclick=()=>{ if(time<=0)return; if(+t.dataset.i===active){score+=10;pop();} else if(miss)score=Math.max(0,score-2); setScore("Score: "+score);});
-      return ()=>clearInterval(timer);
+
+    function closeModal() {
+      clearActiveCleanup();
+      $("#modalRoot").innerHTML = "";
     }
-    function tilePuzzle(game,mount, kind) {
-      mount.innerHTML = `<div class="game-ui"><div class="row"><button class="btn primary" id="start">New Board</button><span id="info" class="mono"></span></div><div id="puzzle"></div><div class="row" id="pad"></div></div>`;
-      if(kind==="2048") return game2048(game,mount);
-      if(kind==="mines") return mines(game,mount);
-      if(kind==="slide") return slide(game,mount);
-      return sudoku(game,mount);
+
+    function clearActiveCleanup() {
+      if (typeof state.activeCleanup === "function") state.activeCleanup();
+      state.activeCleanup = null;
     }
-    launchers["2048"] = (g,m) => tilePuzzle(g,m,"2048");
-    function game2048(game,mount){
-      let grid, won=false;
-      const draw=()=>{$("#puzzle",mount).innerHTML=`<div class="board-grid" style="grid-template-columns:repeat(4,64px)">${grid.flat().map(v=>`<div class="tile" style="background:${v?`hsl(${210-Math.log2(v)*12},70%,32%)`:"#1f2937"}">${v||""}</div>`).join("")}</div>`; setScore("Score: "+grid.flat().reduce((a,b)=>a+b,0));};
-      const add=()=>{const e=[];grid.forEach((r,y)=>r.forEach((v,x)=>!v&&e.push([x,y]))); if(e.length){const [x,y]=e[Math.floor(Math.random()*e.length)];grid[y][x]=Math.random()<.9?2:4;}};
-      const start=()=>{grid=Array.from({length:4},()=>Array(4).fill(0));add();add();draw();};
-      const move=dir=>{let changed=false; const line=a=>{const b=a.filter(Boolean); for(let i=0;i<b.length-1;i++)if(b[i]===b[i+1]){b[i]*=2;b.splice(i+1,1); if(b[i]===2048)won=true;} while(b.length<4)b.push(0); return b;};
-        for(let i=0;i<4;i++){let a=dir<2?grid[i].slice():grid.map(r=>r[i]); if(dir===1||dir===3)a.reverse(); let b=line(a); if(dir===1||dir===3)b.reverse(); for(let j=0;j<4;j++){const y=dir<2?i:j,x=dir<2?j:i; if(grid[y][x]!==b[j])changed=true; grid[y][x]=b[j];}}
-        if(changed){add();draw(); const score=grid.flat().reduce((a,b)=>a+b,0); if(won)saveScore(game,score,{progress:"2048 reached"});}
-      };
-      $("#start",mount).onclick=start; const on=e=>{const m={ArrowLeft:0,ArrowRight:1,ArrowUp:2,ArrowDown:3}[e.key]; if(m!==undefined){e.preventDefault();move(m);}}; addEventListener("keydown",on); start(); return()=>removeEventListener("keydown",on);
+
+    function renderBalances(changed) {
+      $("#balanceList").innerHTML = `
+        <div class="balance-card ${changed === "tc" ? "bump" : ""}">
+          <div><div class="balance-label">Tabby Coins</div><div class="balance-help">Casino demos</div></div>
+          <div class="balance-value">${formatCurrency("tc", state.balances.tc)}</div>
+        </div>
+        <div class="balance-card ${changed === "dd" ? "bump" : ""}">
+          <div><div class="balance-label">Demo Dollars</div><div class="balance-help">Sports picks and tables, fake only</div></div>
+          <div class="balance-value dd">${formatCurrency("dd", state.balances.dd)}</div>
+        </div>
+        <div class="balance-card ${changed === "bp" ? "bump" : ""}">
+          <div><div class="balance-label">Bonus Points</div><div class="balance-help">Promos and rewards</div></div>
+          <div class="balance-value bp">${formatCurrency("bp", state.balances.bp)}</div>
+        </div>`;
     }
-    launchers.tetris = (game,mount) => {
-      let board,piece,px,py,score,drop;
-      const shapes=[[[1,1,1,1]],[[1,1],[1,1]],[[0,1,0],[1,1,1]],[[1,0,0],[1,1,1]],[[0,0,1],[1,1,1]],[[1,1,0],[0,1,1]],[[0,1,1],[1,1,0]]];
-      const spawn=()=>{piece=shapes[Math.floor(Math.random()*7)].map(r=>r.slice());px=3;py=0;};
-      const hit=(nx=px,ny=py,p=piece)=>p.some((r,y)=>r.some((v,x)=>v&&(ny+y>=20||nx+x<0||nx+x>=10||board[ny+y]?.[nx+x])));
-      const merge=()=>{piece.forEach((r,y)=>r.forEach((v,x)=>{if(v)board[py+y][px+x]=v;})); let lines=0; board=board.filter(r=>r.some(v=>!v)||(++lines,false)); while(board.length<20)board.unshift(Array(10).fill(0)); score+=lines*lines*100; spawn(); if(hit()) {saveScore(game,score); score=0; board=Array.from({length:20},()=>Array(10).fill(0));}};
-      mount.innerHTML=`<canvas class="game-canvas" width="300" height="600"></canvas><div class="row" style="justify-content:center;margin-top:1rem"><span class="muted">Arrows move, up rotates. Ghost piece shown in cyan.</span></div>`;
-      const ctx=$("canvas",mount).getContext("2d"); board=Array.from({length:20},()=>Array(10).fill(0));score=0;spawn();
-      const draw=()=>{ctx.fillStyle="#050816";ctx.fillRect(0,0,300,600); const ghostY=(()=>{let y=py; while(!hit(px,y+1))y++; return y;})(); const cell=(x,y,c)=>{ctx.fillStyle=c;ctx.fillRect(x*30+1,y*30+1,28,28);}; board.forEach((r,y)=>r.forEach((v,x)=>v&&cell(x,y,"#7c3aed"))); piece.forEach((r,y)=>r.forEach((v,x)=>v&&cell(px+x,ghostY+y,"rgba(6,182,212,.25)"))); piece.forEach((r,y)=>r.forEach((v,x)=>v&&cell(px+x,py+y,"#f59e0b"))); setScore("Score: "+score);};
-      const key=e=>{if(e.key==="ArrowLeft"&&!hit(px-1))px--; if(e.key==="ArrowRight"&&!hit(px+1))px++; if(e.key==="ArrowDown"){if(!hit(px,py+1))py++;else merge();} if(e.key==="ArrowUp"){const rot=piece[0].map((_,i)=>piece.map(r=>r[i]).reverse()); if(!hit(px,py,rot))piece=rot;} draw();};
-      addEventListener("keydown",key); drop=setInterval(()=>{if(!hit(px,py+1))py++;else merge();draw();},650); draw(); return()=>{removeEventListener("keydown",key);clearInterval(drop);};
-    };
-    function mines(game,mount){let cells,first=true,time=0,timer; const draw=()=>{$("#puzzle",mount).innerHTML=`<div class="board-grid" style="grid-template-columns:repeat(9,42px)">${cells.map((c,i)=>`<button class="tile" data-i="${i}" style="width:42px;height:42px">${c.open?(c.mine?"*":c.n||""):c.flag?"⚑":""}</button>`).join("")}</div>`; $$(".tile",mount).forEach(b=>{b.onclick=()=>open(+b.dataset.i);b.oncontextmenu=e=>{e.preventDefault();cells[+b.dataset.i].flag=!cells[+b.dataset.i].flag;draw();};});};
-      const start=()=>{clearInterval(timer);time=0;first=true;cells=Array.from({length:81},()=>({mine:false,open:false,flag:false,n:0}));timer=setInterval(()=>{time++;$("#info",mount).textContent=time+"s";},1000);draw();};
-      const plant=safe=>{let m=0;while(m<10){let i=Math.floor(Math.random()*81); if(i!==safe&&!cells[i].mine){cells[i].mine=true;m++;}} cells.forEach((c,i)=>{const x=i%9,y=Math.floor(i/9); c.n=[-1,0,1].flatMap(dx=>[-1,0,1].map(dy=>[x+dx,y+dy])).filter(([a,b])=>a>=0&&b>=0&&a<9&&b<9&&cells[b*9+a].mine).length;});};
-      const open=i=>{if(first){plant(i);first=false;} const c=cells[i]; if(c.flag||c.open)return; c.open=true; if(c.mine){clearInterval(timer);saveScore(game,Math.max(1,999-time));} if(!c.n&&!c.mine){const x=i%9,y=Math.floor(i/9);[-1,0,1].forEach(dx=>[-1,0,1].forEach(dy=>{const a=x+dx,b=y+dy;if(a>=0&&b>=0&&a<9&&b<9)open(b*9+a);}));} if(cells.filter(c=>!c.mine&&c.open).length===71){clearInterval(timer);saveScore(game,999-time);} draw();};
-      $("#start",mount).onclick=start; start(); return()=>clearInterval(timer);}
-    function slide(game,mount){let arr,moves=0; const draw=()=>{$("#info",mount).textContent=moves+" moves";$("#puzzle",mount).innerHTML=`<div class="board-grid" style="grid-template-columns:repeat(4,58px)">${arr.map((v,i)=>`<button class="tile" data-i="${i}">${v||""}</button>`).join("")}</div>`;$$(".tile",mount).forEach(b=>b.onclick=()=>move(+b.dataset.i));}; const start=()=>{arr=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0];moves=0;for(let i=0;i<250;i++)move([arr.indexOf(0)-1,arr.indexOf(0)+1,arr.indexOf(0)-4,arr.indexOf(0)+4].filter(n=>n>=0&&n<16)[0],true);draw();}; const move=(i,shuf=false)=>{const e=arr.indexOf(0),ok=[e-1,e+1,e-4,e+4].includes(i)&&!(e%4===0&&i===e-1)&&!(e%4===3&&i===e+1); if(ok){[arr[e],arr[i]]=[arr[i],arr[e]]; if(!shuf)moves++; if(!shuf&&arr.join(",")==="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0")saveScore(game,1000-moves); if(!shuf)draw();}}; $("#start",mount).onclick=start; start(); return()=>{};}
-    function sudoku(game,mount){const puzzles=["530070000600195000098000060800060003400803001700020006060000280000419005000080079","000260701680070090190004500820100040004602900050003028009300074040050036703018000","302609000000400000000000704400008000000070000000500006509000000000006000000901302","000000907000420180000705026100904000050000040000507009920108000034059000507000000","005300000800000020070010500400005300010070006003200080060500009004000030000009700"]; const solves=["534678912672195348198342567859761423426853791713924856961537284287419635345286179","435269781682571493197834562826195347374682915951743628519326874248957136763418259","342689175715423698968157234431268957256974813897531426589712346173846529624935781","462831957795426183381795426173984265659312748248567319926178534834259671517643892","145327698839654127672918543486195372219873456753246981367581249594762831821439765"];let idx=Math.floor(Math.random()*puzzles.length),vals=puzzles[idx].split("").map(Number),fixed=vals.map(Boolean); const draw=()=>{$("#puzzle",mount).innerHTML=`<div class="board-grid" style="grid-template-columns:repeat(9,42px)">${vals.map((v,i)=>`<button class="tile" data-i="${i}" style="width:42px;height:42px;background:${fixed[i]?"#111827":"#1f2937"}">${v||""}</button>`).join("")}</div>`;$$(".tile",mount).forEach(b=>b.onclick=()=>selected=+b.dataset.i);};let selected=0; $("#pad",mount).innerHTML=[1,2,3,4,5,6,7,8,9,"Hint"].map(n=>`<button class="btn small" data-n="${n}">${n}</button>`).join("");$$("[data-n]",mount).forEach(b=>b.onclick=()=>{if(b.dataset.n==="Hint"){const i=vals.findIndex((v,i)=>!v&&!fixed[i]); if(i>=0){vals[i]=+solves[idx][i];fixed[i]=true;}} else if(!fixed[selected]) vals[selected]=+b.dataset.n; draw(); if(vals.join("")===solves[idx])saveScore(game,1000);}); $("#start",mount).onclick=()=>{idx=(idx+1)%puzzles.length;vals=puzzles[idx].split("").map(Number);fixed=vals.map(Boolean);draw();};draw();return()=>{};}
-    launchers.slide=(g,m)=>tilePuzzle(g,m,"slide"); launchers.mines=(g,m)=>tilePuzzle(g,m,"mines"); launchers.sudoku=(g,m)=>tilePuzzle(g,m,"sudoku");
-    launchers.memory=(game,mount)=>{const icons=["⌁","◈","☼","◇","✦","◆","⬡","✶"], deck=[...icons,...icons].sort(()=>Math.random()-.5); let open=[],matched=[],moves=0,start=Date.now(); mount.innerHTML=`<div class="board-grid" style="grid-template-columns:repeat(4,64px)">${deck.map((_,i)=>`<button class="tile" data-i="${i}" style="font-size:1.5rem">?</button>`).join("")}</div>`; $$(".tile",mount).forEach(b=>b.onclick=()=>{const i=+b.dataset.i;if(open.includes(i)||matched.includes(i))return; b.textContent=deck[i];open.push(i); if(open.length===2){moves++; if(deck[open[0]]===deck[open[1]])matched.push(...open); setTimeout(()=>{open.forEach(j=>{if(!matched.includes(j))$$(".tile",mount)[j].textContent="?";});open=[]; if(matched.length===16)saveScore(game,Math.max(1,1000-moves*20-Math.floor((Date.now()-start)/1000)));},550);} setScore("Moves: "+moves+" Matches: "+matched.length/2);});return()=>{};};
-    launchers.wordle=(game,mount)=>{const words=("cable laser pixel orbit level rover ghost flame ember cyber delta query vivid slate crane brisk alloy charm logic prism stack trace input badge token vault").split(" "); const word=words[Math.floor(Date.now()/86400000)%words.length].toUpperCase(); let row=0,col=0,grid=Array.from({length:6},()=>Array(5).fill("")); mount.innerHTML=`<div id="wordgrid" class="game-ui"></div><div class="row" id="keys"></div>`; const draw=()=>{$("#wordgrid",mount).innerHTML=grid.map((r,y)=>`<div class="row" style="justify-content:center">${r.map((c,x)=>`<div class="tile" style="${y<row?`background:${c===word[x]?"#16a34a":word.includes(c)?"#ca8a04":"#334155"}`:""}">${c}</div>`).join("")}</div>`).join("");}; const press=k=>{if(/^[A-Z]$/.test(k)&&col<5)grid[row][col++]=k; if(k==="Backspace"&&col>0)grid[row][--col]=""; if(k==="Enter"&&col===5){if(grid[row].join("")===word)saveScore(game,600-row*80); row++; col=0; if(row===6)writeSave(game,{progress:"Word was "+word});} draw();}; $("#keys",mount).innerHTML="QWERTYUIOPASDFGHJKLZXCVBNM".split("").map(k=>`<button class="kbd">${k}</button>`).join("")+`<button class="kbd">Enter</button><button class="kbd">Backspace</button>`; $$(".kbd",mount).forEach(b=>b.onclick=()=>press(b.textContent)); const on=e=>press(e.key.length===1?e.key.toUpperCase():e.key); addEventListener("keydown",on); draw(); return()=>removeEventListener("keydown",on);};
-    launchers.simon=(game,mount)=>{let seq=[],pos=0,ctxAudio; mount.innerHTML=`<div class="board-grid" style="grid-template-columns:repeat(2,110px)">${["#7c3aed","#06b6d4","#f59e0b","#22c55e"].map((c,i)=>`<button class="tile" data-i="${i}" style="width:110px;height:110px;background:${c}"></button>`).join("")}</div><div class="row" style="justify-content:center;margin-top:1rem"><button class="btn primary" id="go">Start</button></div>`; const tone=i=>{ctxAudio=ctxAudio||new AudioContext(); const o=ctxAudio.createOscillator(),g=ctxAudio.createGain();o.frequency.value=[220,330,440,550][i];o.connect(g);g.connect(ctxAudio.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,ctxAudio.currentTime+.22);o.stop(ctxAudio.currentTime+.24);}; const play=()=>{pos=0;seq.push(Math.floor(Math.random()*4));seq.forEach((n,i)=>setTimeout(()=>tone(n),i*430));setScore("Level: "+seq.length);}; $("#go",mount).onclick=play; $$(".tile",mount).forEach(b=>b.onclick=()=>{const n=+b.dataset.i;tone(n); if(n!==seq[pos]){saveScore(game,seq.length-1);seq=[];} else if(++pos===seq.length)setTimeout(play,500);});return()=>{};};
-    launchers.pong=(game,mount)=>{let p1=220,p2=220,b={x:400,y:250,vx:5,vy:3},s1=0,s2=0;return canvasShell(game,mount,{help:"W/S and Up/Down. CPU nudges the right paddle too.", reset(){s1=s2=0;b={x:400,y:250,vx:5,vy:3};}, step({ctx,keys,end}){if(keys.w)p1-=6;if(keys.s)p1+=6;if(keys.arrowup)p2-=6;if(keys.arrowdown)p2+=6; p2 += (b.y-p2-40)*.035; [p1,p2]=[p1,p2].map(v=>Math.max(0,Math.min(420,v))); b.x+=b.vx;b.y+=b.vy;if(b.y<0||b.y>500)b.vy*=-1;if(b.x<34&&b.y>p1&&b.y<p1+80)b.vx=Math.abs(b.vx);if(b.x>766&&b.y>p2&&b.y<p2+80)b.vx=-Math.abs(b.vx);if(b.x<0){s2++;b.x=400;}if(b.x>800){s1++;b.x=400;} if(s1>=7||s2>=7){saveScore(game,s1*100-s2*80);end(s1*100);} ctx.fillStyle="#7c3aed";ctx.fillRect(20,p1,12,80);ctx.fillStyle="#06b6d4";ctx.fillRect(768,p2,12,80);ctx.fillStyle="#e2e8f0";ctx.beginPath();ctx.arc(b.x,b.y,8,0,7);ctx.fill();ctx.fillText(`${s1} : ${s2}`,370,35);return s1*100+s2*20;}});};
-    launchers.reaction=(game,mount)=>{let rounds=[],armed=false,start; mount.innerHTML=`<button class="btn primary" id="box" style="width:100%;height:360px;font-size:2rem">Start</button>`; const box=$("#box",mount); box.onclick=()=>{if(!armed){box.textContent="Wait...";box.style.background="#7c3aed";setTimeout(()=>{armed=true;start=performance.now();box.textContent="CLICK";box.style.background="#22c55e";},900+Math.random()*2500);}else{rounds.push(performance.now()-start);armed=false; const avg=Math.round(rounds.reduce((a,b)=>a+b,0)/rounds.length);setScore(`Average: ${avg}ms ${avg<220?"Ninja Reflexes":avg<320?"Sharp":"Warming Up"}`); if(rounds.length===5)saveScore(game,Math.max(1,1000-avg)); box.textContent=rounds.length===5?"Done - Start Again":"Next";box.style.background="#7c3aed"; if(rounds.length===5)rounds=[];}}; return()=>{};};
-    launchers.flood=(game,mount)=>{let colors=["#7c3aed","#06b6d4","#f59e0b","#22c55e","#fb7185","#e2e8f0"],grid,moves; const draw=()=>{$("#puzzle",mount).innerHTML=`<div class="board-grid" style="grid-template-columns:repeat(8,34px)">${grid.flat().map(c=>`<div class="tile" style="width:34px;height:34px;background:${c}"></div>`).join("")}</div>`;setScore(`Moves: ${moves}/30`);}; const flood=c=>{const old=grid[0][0]; if(c===old)return; const q=[[0,0]],seen=new Set; while(q.length){const [x,y]=q.pop(),k=x+","+y;if(seen.has(k)||x<0||y<0||x>7||y>7||grid[y][x]!==old)continue;seen.add(k);grid[y][x]=c;[[1,0],[-1,0],[0,1],[0,-1]].forEach(([dx,dy])=>q.push([x+dx,y+dy]));} moves++; draw(); if(grid.flat().every(v=>v===c))saveScore(game,1000-moves*20);}; mount.innerHTML=`<div id="puzzle"></div><div class="row" id="pad"></div>`; $("#pad",mount).innerHTML=colors.map(c=>`<button class="tile" style="background:${c}" data-c="${c}"></button>`).join("");$$("[data-c]",mount).forEach(b=>b.onclick=()=>flood(b.dataset.c)); grid=Array.from({length:8},()=>Array.from({length:8},()=>colors[Math.floor(Math.random()*colors.length)]));moves=0;draw();return()=>{};};
-    launchers.aim=(game,mount)=>{let hits=0,shots=0,end=Date.now()+30000,target={x:200,y:200,r:45}; const cleanup=canvasShell(game,mount,{help:"Click shrinking circles before they vanish.", reset(){hits=0;shots=0;end=Date.now()+30000;}, step({ctx,canvas,t}){if(Date.now()>end){saveScore(game,Math.round(hits/Math.max(1,shots)*100+hits*5));end=Date.now()+999999;} target.r=Math.max(8,45-(t%90)/2); ctx.fillStyle="#06b6d4";ctx.beginPath();ctx.arc(target.x,target.y,target.r,0,7);ctx.fill(); ctx.fillStyle="#e2e8f0";ctx.fillText(`Hits ${hits} Shots ${shots}`,20,28);return Math.round(hits/Math.max(1,shots)*100+hits*5);}}); $("canvas",mount).onclick=e=>{const r=e.target.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*800,y=(e.clientY-r.top)/r.height*500;shots++;if(Math.hypot(x-target.x,y-target.y)<target.r){hits++;target={x:50+Math.random()*700,y:55+Math.random()*390,r:45};}};return cleanup;};
-    function simScreen(game,mount, config) {
-      const save=readSave(game)||config.seed();
-      let data={...save};
-      const persist=()=>writeSave(game,{...data,best:config.score(data),progress:config.progress?config.progress(data):"Saved"});
-      const draw=()=>{mount.innerHTML=config.render(data); setScore(config.progress?config.progress(data):"Score: "+config.score(data)); config.bind && config.bind(mount,data,draw,persist);};
-      draw(); const timer=config.tick?setInterval(()=>{config.tick(data);persist();draw();},config.interval||10000):0; return()=>{clearInterval(timer);persist();};
+
+    function renderStats() {
+      const biggest = state.stats.biggestWin || { amount: 0, currency: "tc" };
+      $("#statsMini").innerHTML = `
+        <div class="stat-tile"><span>Total demo bets</span><strong>${state.stats.totalBets}</strong></div>
+        <div class="stat-tile"><span>Demo wins</span><strong>${state.stats.demoWins}</strong></div>
+        <div class="stat-tile"><span>Demo losses</span><strong>${state.stats.demoLosses}</strong></div>
+        <div class="stat-tile"><span>Biggest demo win</span><strong>${formatCurrency(biggest.currency, biggest.amount)}</strong></div>
+        <div class="stat-tile"><span>Simulated purchases</span><strong>${state.stats.simulatedPurchases}</strong></div>
+        <div class="stat-tile"><span>Favorite game</span><strong>${escapeHTML(favoriteGame())}</strong></div>`;
     }
-    launchers.clicker=(g,m)=>simScreen(g,m,{seed:()=>({gold:0,level:1,xp:0,dmg:1,auto:0,crit:0,prestige:0,hp:25,mhp:25,monster:1}),score:d=>d.level*100+d.prestige*5000,progress:d=>`Lvl ${d.level} Gold ${Math.floor(d.gold)} Prestige ${d.prestige}`,render:d=>`<div class="stat-grid"><div class="mini-card"><h3 class="mono">Monster Lv ${d.monster}</h3><div class="bar"><span style="width:${d.hp/d.mhp*100}%"></span></div><p>HP ${Math.ceil(d.hp)}/${d.mhp}</p><button class="btn primary" id="atk">Attack</button></div><div class="mini-card"><h3 class="mono">Hero</h3><p>Damage ${d.dmg} | XP ${d.xp}/100 | Gold ${Math.floor(d.gold)}</p><p>Prestige multiplier x${1+d.prestige*.5}</p><button class="btn" id="prest">Prestige at level 50</button></div><div class="mini-card"><h3 class="mono">Gold Shop</h3><button class="btn small" id="dmg">Damage Boost 25g</button><button class="btn small" id="auto">Auto-Clicker 50g</button><button class="btn small" id="crit">Crit Chance 75g</button><button class="btn small" id="regen">HP Regen 100g</button></div></div>`,bind:(m,d,draw,p)=>{const kill=()=>{d.gold+=10*d.monster;d.xp+=25;if(d.xp>=100){d.xp-=100;d.level++;d.dmg+=1;}d.monster++;d.mhp=20+d.monster*8;d.hp=d.mhp;};$("#atk",m).onclick=()=>{d.hp-=d.dmg*(1+d.prestige*.5)*(Math.random()<d.crit*.05?2:1);if(d.hp<=0)kill();p();draw();};["dmg","auto","crit","regen"].forEach((id,i)=>{$("#"+id,m).onclick=()=>{const cost=[25,50,75,100][i];if(d.gold>=cost){d.gold-=cost;d[id==="dmg"?"dmg":id]+=1;p();draw();}}});$("#prest",m).onclick=()=>{if(d.level>=50){d.prestige++;Object.assign(d,{gold:0,level:1,xp:0,dmg:1,auto:0,crit:0,hp:25,mhp:25,monster:1});p();draw();}};},tick:d=>{d.hp-=d.auto*d.dmg*.5;if(d.hp<=0){d.gold+=10*d.monster;d.monster++;d.mhp=20+d.monster*8;d.hp=d.mhp;}},interval:2000});
-    launchers.dungeon=(g,m)=>{let map,p,hp,floor=1,best=readSave(g)?.best||1; const gen=()=>{map=Array.from({length:18},(_,y)=>Array.from({length:38},(_,x)=>x===0||y===0||x===37||y===17?"#":".")); for(let i=0;i<45;i++)map[1+Math.floor(Math.random()*16)][1+Math.floor(Math.random()*36)]="M"; for(let i=0;i<8;i++)map[1+Math.floor(Math.random()*16)][1+Math.floor(Math.random()*36)]="!"; map[16][36]=">"; p={x:2,y:2};}; const draw=()=>{map[p.y][p.x]="@";m.innerHTML=`<div class="terminal game-panel"><pre style="font-size:18px;line-height:1.05">${map.map(r=>r.join("")).join("\n")}</pre><p>HP ${hp} ATK ${2+floor} DEF ${floor} Floor ${floor} Best ${best}</p></div>`;map[p.y][p.x]=".";setScore(`Floor ${floor} HP ${hp}`);}; const key=e=>{const d={w:[0,-1],s:[0,1],a:[-1,0],d:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key]; if(!d)return; const nx=p.x+d[0],ny=p.y+d[1],c=map[ny][nx]; if(c==="#")return; if(c==="M"){hp-=Math.max(1,4-floor);map[ny][nx]=Math.random()<.25?"!":"."; if(hp<=0){saveScore(g,best,{progress:"Death on floor "+floor});floor=1;hp=30;gen();}} else if(c==="!"){hp=Math.min(40,hp+10);p={x:nx,y:ny};map[ny][nx]=".";} else if(c===">"){floor++;best=Math.max(best,floor);saveScore(g,best);gen();} else p={x:nx,y:ny};draw();}; hp=30;gen();addEventListener("keydown",key);draw();return()=>removeEventListener("keydown",key);};
-    launchers.breeder=(g,m)=>collectionGame(g,m,"creature");
-    launchers.fish=(g,m)=>collectionGame(g,m,"fish");
-    launchers.cards=(g,m)=>collectionGame(g,m,"card");
-    function collectionGame(game,mount,type){const names=["Nova","Pyra","Aqua","Volt","Shade","Moss","Rune","Echo","Cinder","Glint"];let data=readSave(game)||{coins:100,items:[]}; if(!data.items.length)for(let i=0;i<(type==="fish"?2:3);i++)data.items.push(make()); function make(){const rarity=["Common","Common","Rare","Epic","Legendary"][Math.floor(Math.random()*5)], stat=20+Math.floor(Math.random()*80); return {name:names[Math.floor(Math.random()*names.length)]+Math.floor(Math.random()*99),rarity,stat,color:["#7c3aed","#06b6d4","#f59e0b","#22c55e","#fb7185"][Math.floor(Math.random()*5)]};} const draw=()=>{mount.innerHTML=`<div class="row"><button class="btn primary" id="add">${type==="card"?"Open Pack":type==="fish"?"Breed Fish":"Breed / Catch"}</button><span class="mono">Coins ${data.coins} | Slots ${data.items.length}/60</span></div><div class="grid">${data.items.map((it,i)=>`<div class="mini-card"><canvas width="120" height="80" data-art="${i}"></canvas><h3 class="mono">${it.name}</h3><p>${it.rarity} ${"★".repeat(["Common","Rare","Epic","Legendary"].indexOf(it.rarity)+1)} | Power ${it.stat}</p></div>`).join("")}</div>`; $$("canvas",mount).forEach((c,i)=>{const ctx=c.getContext("2d"),it=data.items[i];ctx.fillStyle="#050816";ctx.fillRect(0,0,120,80);ctx.fillStyle=it.color;ctx.beginPath();ctx.arc(60,40,20+it.stat/8,0,7);ctx.fill();ctx.strokeStyle=it.rarity==="Legendary"?"#f59e0b":"#e2e8f0";ctx.strokeRect(4,4,112,72);}); $("#add",mount).onclick=()=>{const n=type==="card"?5:1;for(let i=0;i<n&&data.items.length<60;i++)data.items.push(make());data.coins+=10;writeSave(game,{...data,best:data.items.length,progress:`${data.items.length} collected`});draw();};setScore(`${data.items.length} collected`);};draw();return()=>writeSave(game,{...data,best:data.items.length,progress:`${data.items.length} collected`});}
-    launchers.kingdom=(g,m)=>simScreen(g,m,{seed:()=>({gold:50,wood:30,stone:20,food:20,farm:1,mill:1,quarry:1,market:0,blacksmith:0,castle:0,last:Date.now()}),score:d=>Math.floor(d.gold+d.wood+d.stone+d.food+d.castle*1000),progress:d=>`Gold ${Math.floor(d.gold)} Castle ${d.castle}`,render:d=>`<div class="stat-grid">${["gold","wood","stone","food"].map(k=>`<div class="stat"><span class="mono">${k.toUpperCase()}</span><h3>${Math.floor(d[k])}</h3></div>`).join("")}</div><div class="grid">${["farm","mill","quarry","market","blacksmith","castle"].map(k=>`<div class="mini-card"><h3 class="mono">${k}</h3><p>Level ${d[k]}</p><button class="btn small" data-up="${k}">Upgrade</button></div>`).join("")}</div>`,bind:(m,d,draw,p)=>{$$("[data-up]",m).forEach(b=>b.onclick=()=>{const k=b.dataset.up,cost=20+d[k]*15;if(d.gold>=cost){d.gold-=cost;d[k]++;p();draw();}});},tick:d=>{d.food+=d.farm*2;d.wood+=d.mill*1.7;d.stone+=d.quarry*1.4;d.gold+=d.market*2+d.food*.01;d.last=Date.now();},interval:3000});
-    launchers.youtuber=(g,m)=>simScreen(g,m,{seed:()=>({subs:0,views:0,money:0,energy:100,rep:50,gear:1}),score:d=>Math.floor(d.subs),progress:d=>`${Math.floor(d.subs)} subs ${Math.floor(d.views)} views`,render:d=>`<div class="stat-grid">${["subs","views","money","energy","rep"].map(k=>`<div class="stat"><span class="mono">${k}</span><h3>${Math.floor(d[k])}</h3></div>`).join("")}</div><div class="row">${["Film Video","Edit Video","Upload","Rest","Buy Gear","Sponsor"].map(a=>`<button class="btn" data-a="${a}">${a}</button>`).join("")}</div>`,bind:(m,d,draw,p)=>{$$("[data-a]",m).forEach(b=>b.onclick=()=>{const a=b.dataset.a;if(a==="Film Video"&&d.energy>=15){d.energy-=15;d.views+=100*d.gear;d.subs+=5;}if(a==="Edit Video")d.views*=1.15;if(a==="Upload"){d.subs+=d.views*.015;d.money+=d.views*.002;if(Math.random()<.18){d.views*=2;d.rep+=3;}}if(a==="Rest")d.energy=100;if(a==="Buy Gear"&&d.money>=100){d.money-=100;d.gear*=1.35;}if(a==="Sponsor"&&d.subs>=10000)d.money+=500; p();draw();});},tick:d=>{d.views+=d.subs*.05;d.money+=d.subs*.001;d.energy=Math.min(100,d.energy+5);},interval:5000});
-    launchers.scp=(g,m)=>simScreen(g,m,{seed:()=>({day:1,mtf:20,research:0,risk:18,contained:3,status:"CONTAINMENT NOMINAL"}),score:d=>d.day*10+d.research,progress:d=>`Day ${d.day} Risk ${d.risk}%`,render:d=>`<div class="terminal game-panel"><h3>SITE DIRECTOR TERMINAL <span style="animation:blink 1s infinite">_</span></h3><p>DAY ${d.day} | MTF ${d.mtf} | RESEARCH ${d.research}% | BREACH RISK ${d.risk}%</p><p>${d.status}</p><div class="row"><button class="btn small" id="res">Assign Researchers</button><button class="btn small" id="mtf">Train MTF</button><button class="btn small" id="day">Advance Day</button></div><pre>SCP-184 SAFE\nSCP-409 EUCLID\nSCP-682 KETER</pre></div>`,bind:(m,d,draw,p)=>{$("#res",m).onclick=()=>{d.research+=10;d.risk=Math.max(2,d.risk-3);p();draw();};$("#mtf",m).onclick=()=>{d.mtf+=2;p();draw();};$("#day",m).onclick=()=>{d.day++;if(Math.random()<d.risk/100){d.status="BREACH ATTEMPT REPELLED";d.mtf-=2;} if(d.day>=100)d.status="SUCCESSFUL 100 DAY CONTAINMENT";p();draw();};}});
-    launchers.pet=(g,m)=>simScreen(g,m,{seed:()=>({name:"Byte",species:"Dragon",happy:75,hunger:70,energy:80,str:0,coins:0,stage:0}),score:d=>d.str+d.coins,progress:d=>`${d.name} STR ${d.str}`,render:d=>`<div class="stat-grid"><div class="mini-card"><canvas id="petc" width="320" height="220"></canvas></div><div class="mini-card"><input id="petname" value="${d.name}" style="width:100%;padding:.6rem;background:#0f172a;color:white;border:1px solid var(--line)"><p>Species ${d.species} Stage ${Math.floor(d.str/25)+1}</p>${["happy","hunger","energy"].map(k=>`<p>${k}</p><div class="bar"><span style="width:${d[k]}%"></span></div>`).join("")}</div></div><div class="row">${["Feed","Play","Sleep","Bathe","Train","Hat","Cape"].map(a=>`<button class="btn" data-a="${a}">${a}</button>`).join("")}</div>`,bind:(m,d,draw,p)=>{const c=$("#petc",m),ctx=c.getContext("2d");ctx.fillStyle="#050816";ctx.fillRect(0,0,320,220);ctx.fillStyle="#7c3aed";ctx.beginPath();ctx.arc(160,110,45+Math.min(45,d.str/2),0,7);ctx.fill();ctx.fillStyle="#06b6d4";ctx.fillRect(130,55,60,22);$("#petname",m).onchange=e=>{d.name=e.target.value;p();};$$("[data-a]",m).forEach(b=>b.onclick=()=>{const a=b.dataset.a;if(a==="Feed")d.hunger=100;if(a==="Play")d.happy=100;if(a==="Sleep")d.energy=100;if(a==="Train"&&d.energy>=10){d.str++;d.coins+=5;d.energy-=10;}if(["Hat","Cape"].includes(a)&&d.coins>=20)d.coins-=20;p();draw();});},tick:d=>{d.hunger=Math.max(0,d.hunger-1);d.happy=Math.max(0,d.happy-1);d.energy=Math.max(0,d.energy-1);},interval:6000});
-    launchers.football=(g,m)=>simScreen(g,m,{seed:()=>({season:1,wins:0,losses:0,trophies:0,cap:88,roster:Array.from({length:22},(_,i)=>({name:"Player "+(i+1),pos:["QB","RB","WR","OL","DL","LB","DB"][i%7],ovr:55+Math.floor(Math.random()*35),age:21+Math.floor(Math.random()*12)}))}),score:d=>d.trophies*1000+d.wins*25,progress:d=>`Season ${d.season} ${d.wins}-${d.losses}`,render:d=>`<div class="row"><button class="btn primary" id="game">Sim Game</button><button class="btn" id="season">Offseason</button><span class="mono">Trophies ${d.trophies} Cap $${d.cap}M</span></div><div class="grid">${d.roster.map(p=>`<div class="mini-card"><b>${p.name}</b><p>${p.pos} OVR ${p.ovr} Age ${p.age}</p></div>`).join("")}</div>`,bind:(m,d,draw,p)=>{$("#game",m).onclick=()=>{const avg=d.roster.reduce((a,p)=>a+p.ovr,0)/22;if(Math.random()<avg/115)d.wins++;else d.losses++;if(d.wins+d.losses>=16){if(d.wins>=10&&Math.random()<.45)d.trophies++;d.season++;d.wins=0;d.losses=0;d.roster.forEach(p=>{p.age++;p.ovr+=p.age<28?2:-1;});}p();draw();};$("#season",m).onclick=()=>{d.roster.sort((a,b)=>a.ovr-b.ovr)[0].ovr=65+Math.floor(Math.random()*30);p();draw();};}});
-    launchers.civ=(g,m)=>{let civs,tiles,year=0,speed=1,raf=0; m.innerHTML=`<canvas class="game-canvas" width="800" height="600"></canvas><div class="row" style="justify-content:center;margin-top:1rem"><button class="btn small" data-s="0">Pause</button><button class="btn small" data-s="1">1x</button><button class="btn small" data-s="2">2x</button><button class="btn small" data-s="5">5x</button><button class="btn small" id="meteor">Meteor</button></div><div class="mono" id="log"></div>`; const ctx=$("canvas",m).getContext("2d");tiles=Array.from({length:30},()=>Array.from({length:40},()=>["#22c55e","#14532d","#64748b","#06b6d4","#f59e0b"][Math.floor(Math.random()*5)]));civs=Array.from({length:5},(_,i)=>({x:Math.floor(Math.random()*40),y:Math.floor(Math.random()*30),c:["#7c3aed","#06b6d4","#f59e0b","#fb7185","#a3e635"][i],pop:20,tech:1,name:["Rome","Egypt","Carthage","Minoa","Orion"][i]}));$$("[data-s]",m).forEach(b=>b.onclick=()=>speed=+b.dataset.s);$("#meteor",m).onclick=()=>{const c=civs[Math.floor(Math.random()*civs.length)];c.pop=Math.max(0,c.pop-15);$("#log",m).textContent="Meteor strikes "+c.name;}; const loop=()=>{raf=requestAnimationFrame(loop);for(let n=0;n<speed;n++){year++;civs.forEach(c=>{c.pop+=Math.random()*3;c.tech+=.01;c.x=Math.max(0,Math.min(39,c.x+Math.floor(Math.random()*3)-1));c.y=Math.max(0,Math.min(29,c.y+Math.floor(Math.random()*3)-1));});if(year%120===0)$("#log",m).textContent=civs[Math.floor(Math.random()*civs.length)].name+" discovers a new age";} tiles.forEach((r,y)=>r.forEach((col,x)=>{ctx.fillStyle=col;ctx.fillRect(x*20,y*20,20,20);}));civs.forEach(c=>{ctx.fillStyle=c.c;ctx.fillRect(c.x*20,c.y*20,20,20);});setScore("Year "+year); if(year%300===0)saveScore(g,year);};loop();return()=>{cancelAnimationFrame(raf);saveScore(g,year);};};
-    launchers.hacker=(g,m)=>terminalGame(g,m,["scan","ls","cat truth.txt","crack amber","connect node-7","download","logout"],"MISSION");
-    launchers.arg=(g,m)=>terminalGame(g,m,["open /chapter1","solve violet","open /chapter2","morse .- .-. -.-.","solve arcadia","open /final"],"CHAPTER");
-    function terminalGame(game,mount,script,label){let step=readSave(game)?.step||0; mount.innerHTML=`<div class="terminal game-panel"><pre id="term">ARCADIA SECURE TERMINAL\nType commands. Current ${label}: ${step+1}\nExpected: ${script[step]||"complete"}\n</pre><div class="row"><span>&gt;</span><input id="cmd" style="flex:1;background:#020403;color:#7cff9b;border:1px solid #166534;padding:.7rem;font-family:JetBrains Mono"></div></div>`; const term=$("#term",mount),cmd=$("#cmd",mount);cmd.focus();cmd.onkeydown=e=>{if(e.key==="Enter"){const v=cmd.value.trim().toLowerCase();term.textContent+=`\n> ${v}`; if(v===script[step]){term.textContent+="\nACCESS GRANTED";step++;writeSave(game,{step,best:step,progress:`${label} ${step}/${script.length}`}); if(game.id==="arg"&&step>=script.length){term.textContent+="\nDEVELOPER MESSAGE: you found the static heart of ARCADIA.\nSECRET GAME CARD UNLOCKED";renderFilters();renderGrid();}} else term.textContent+="\nDENIED - scan logs and try again"; if(step>=script.length)term.textContent+="\nSECRET ENDING UNLOCKED";cmd.value="";setScore(`${label} ${step}/${script.length}`);}}; setScore(`${label} ${step}/${script.length}`); return()=>writeSave(game,{step,best:step,progress:`${label} ${step}/${script.length}`});}
-    launchers.backrooms=(g,m)=>{let p={x:400,y:300},rooms=0,sanity=100,floor=readSave(g)?.best||1,raf;return canvasShell(g,m,{help:"WASD moves. Collect keys, avoid entities, descend nine flickering levels.", reset(){p={x:400,y:300};rooms=0;sanity=100;}, step({ctx,keys,t,end}){if(keys.w)p.y-=3;if(keys.s)p.y+=3;if(keys.a)p.x-=3;if(keys.d)p.x+=3;p.x=Math.max(10,Math.min(790,p.x));p.y=Math.max(10,Math.min(490,p.y));if(t%100===0)rooms++;if(t%420===0){floor=Math.min(9,floor+1);saveScore(g,floor,{progress:`Floor ${floor}, ${rooms} rooms`});}sanity-=.01*floor;if(sanity<=0)end(floor*100+rooms);ctx.fillStyle=`rgba(245,158,11,.${.12+floor*.025})`;ctx.fillRect(0,0,800,500);ctx.strokeStyle="#f59e0b";for(let x=0;x<800;x+=80)for(let y=0;y<500;y+=70)ctx.strokeRect(x,y,80,70);ctx.fillStyle="#06b6d4";ctx.beginPath();ctx.arc(p.x,p.y,8,0,7);ctx.fill();ctx.fillStyle="rgba(0,0,0,.35)";ctx.fillRect(0,0,800,500);return floor*100+rooms;}});};
-    launchers.blocks=(g,m)=>{let world,px=100,py=150,inv=0;const cleanup=canvasShell(g,m,{help:"A/D move, W jumps, click mines, right-click places blocks, E opens inventory count.", reset(){world=Array.from({length:60},(_,y)=>Array.from({length:200},(_,x)=>y<25?0:y===25?1:y<38?2:3));}, step({ctx,keys,t}){if(keys.a)px-=3;if(keys.d)px+=3;if(keys.w||keys[" "])py-=4;py=Math.min(360,py+2);const cam=Math.max(0,px-400);for(let y=0;y<60;y++)for(let x=Math.floor(cam/16);x<Math.floor(cam/16)+52;x++){const v=world[y]?.[x]; if(v){ctx.fillStyle=["","#22c55e","#854d0e","#64748b"][v];ctx.fillRect(x*16-cam,y*16,16,16);}}ctx.fillStyle="#7c3aed";ctx.fillRect(100,py,18,28);ctx.fillStyle="rgba(10,14,26,"+(t%900>600?.5:0)+")";ctx.fillRect(0,0,800,500);setScore(`Blocks ${inv} X ${Math.floor(px/16)}`);return inv+Math.floor(px/16);}}); const c=$("canvas",m);c.onclick=e=>{if(!world)return;const r=c.getBoundingClientRect(),x=Math.floor(((e.clientX-r.left)/r.width*800+Math.max(0,px-400))/16),y=Math.floor((e.clientY-r.top)/r.height*500/16); if(world[y]?.[x]){world[y][x]=0;inv++;saveScore(g,inv,{progress:`${inv} blocks mined`});}};c.oncontextmenu=e=>{e.preventDefault();if(!world||inv<=0)return;const r=c.getBoundingClientRect(),x=Math.floor(((e.clientX-r.left)/r.width*800+Math.max(0,px-400))/16),y=Math.floor((e.clientY-r.top)/r.height*500/16);world[y][x]=2;inv--;};return cleanup;};
-    launchers.lucky=(game,mount)=>{
-      const rarityMeta={
-        Common:{color:"#94a3b8",chance:.50,freq:220,score:1},
-        Uncommon:{color:"#22c55e",chance:.24,freq:277,score:2},
-        Rare:{color:"#06b6d4",chance:.12,freq:330,score:4},
-        Epic:{color:"#a855f7",chance:.07,freq:392,score:7},
-        Legendary:{color:"#f59e0b",chance:.035,freq:523,score:12},
-        Mythic:{color:"#fb7185",chance:.018,freq:659,score:20},
-        Divine:{color:"#fef08a",chance:.007,freq:880,score:35}
-      };
-      const items=[
-        ["Diamond","Common"],["Emerald","Common"],["Lucky Coin Cache","Common"],["Oak Cosmetic Block","Common"],["Iron Pet Collar","Common"],
-        ["Redstone Title","Uncommon"],["Enchanted Book: Fortune","Uncommon"],["Golden Apple","Uncommon"],["Amethyst Block Skin","Uncommon"],["Village Cat Pet","Uncommon"],
-        ["Netherite Scrap","Rare"],["Totem Fragment","Rare"],["Axolotl Pet","Rare"],["Prismarine Cosmetic Block","Rare"],["Title: Block Breaker","Rare"],
-        ["Netherite Ingot","Epic"],["Totem of Saving","Epic"],["Foxfire Pet","Epic"],["Ancient Debris Block","Epic"],["Title: Luck Smith","Epic"],
-        ["Dragon Egg Shard","Legendary"],["Enchanted Book: Infinity Luck","Legendary"],["Golden Creeper Pet","Legendary"],["Beacon Core","Legendary"],
-        ["Mythic Nether Star","Mythic"],["Wither Rose Crown","Mythic"],["Void Wolf Pet","Mythic"],["Secret Collectible: Herobrine Sigil","Mythic"],
-        ["Divine Lucky Relic","Divine"],["Celestial Block Skin","Divine"],["Title: Chosen By Luck","Divine"],["Secret Collectible: Notch Apple Core","Divine"]
-      ].map(([name,rarity])=>({name,rarity}));
-      const negatives=["Creeper Explosion","Lightning Strike","TNT Rain","Lava Flood","Zombie Horde","Skeleton Ambush","Item Loss","Bad Luck Curse"];
-      const blockTypes={
-        Basic:{cost:1,mult:1,neg:.18,color:"#facc15"},
-        Super:{cost:5,mult:1.45,neg:.15,color:"#22c55e"},
-        Mythic:{cost:18,mult:2.2,neg:.12,color:"#fb7185"},
-        Chaos:{cost:30,mult:3.0,neg:.30,color:"#f97316"},
-        Nether:{cost:42,mult:3.8,neg:.20,color:"#dc2626"},
-        End:{cost:64,mult:5.0,neg:.10,color:"#a855f7"}
-      };
-      const upgradeDefs=[
-        ["luck","Increase luck",120,"Raises all rare drop weights."],
-        ["rare","Increase rare drop rates",180,"Boosts Epic, Legendary, Mythic, and Divine rolls."],
-        ["shield","Reduce negative outcomes",160,"Adds bad-luck protection."],
-        ["coins","Increase coin gain",140,"Multiplies Lucky Coin payouts."],
-        ["unlock","Unlock new Lucky Block types",300,"Opens the next block type tier."]
-      ];
-      const fresh=()=>({coins:25,totalCoins:25,blocks:0,bestItem:"None",rarestItem:"None",luck:1,rare:1,shield:0,coinsUp:1,unlock:0,selected:"Basic",collection:{},achievements:{},events:[],mute:false,playTime:0,lastSeen:Date.now()});
-      let data={...fresh(),...(readSave(game)||{})};
-      data.collection=data.collection||{}; data.achievements=data.achievements||{}; data.events=data.events||[];
-      let activeTab="stats", opening=false, audio, scene, camera, renderer, blockGroup, glow, particles=[], raf=0, resizeObs, saveTimer, playTimer, orbit={x:.7,y:.55,d:6,drag:false,lx:0,ly:0};
-      mount.innerHTML=`<div class="lucky-wrap">
-        <div class="lucky-scene" id="luckyScene"><div class="lucky-hud"><div class="reward-pop" id="rewardPop">Ready</div></div></div>
-        <aside class="lucky-panel">
-          <div class="stat-grid">
-            <div class="stat"><span class="mono">COINS</span><h3 id="lCoins">0</h3></div>
-            <div class="stat"><span class="mono">BLOCKS</span><h3 id="lBlocks">0</h3></div>
-            <div class="stat"><span class="mono">COLLECTION</span><h3 id="lComplete">0%</h3></div>
-            <div class="stat"><span class="mono">LUCK</span><h3 id="lLuck">1</h3></div>
+
+    function renderCategories() {
+      $("#categoryTabs").innerHTML = categories.map(category => `
+        <button class="tab ${state.category === category ? "active" : ""}" data-category="${category}">${category}</button>
+      `).join("");
+      $$("[data-category]").forEach(button => {
+        button.onclick = () => {
+          state.category = button.dataset.category;
+          renderCategories();
+          renderGameGrid();
+        };
+      });
+    }
+
+    function renderGameGrid() {
+      const visible = state.category === "All" ? games : games.filter(game => game.category === state.category);
+      $("#gameGrid").innerHTML = visible.map(game => `
+        <article class="card">
+          <div class="card-row">
+            <div class="visual">${game.icon}</div>
+            <span class="badge demo">Demo Only</span>
           </div>
-          <div class="mini-card">
-            <label class="mono" for="blockType">Lucky Block Type</label>
-            <select id="blockType" style="width:100%;margin-top:.45rem;padding:.65rem;background:#0f172a;color:#e2e8f0;border:1px solid rgba(124,58,237,.35);border-radius:8px"></select>
+          <h3>${game.title}</h3>
+          <p>${game.desc}</p>
+          <div class="card-actions">
+            <span class="badge soft">${game.category}</span>
+            <button class="btn primary small" data-card-game="${game.id}">Play Demo</button>
           </div>
-          <div class="lucky-actions">
-            <button class="btn primary lucky-open" id="openLucky">Open Lucky Block</button>
-            <button class="btn small" id="saveLucky">Save</button>
-            <button class="btn small" id="muteLucky">Mute</button>
-            <button class="btn small" id="exportLucky">Export</button>
-            <button class="btn small" id="importLucky">Import</button>
-          </div>
-          <textarea id="saveBox" class="mini-card mono" rows="4" placeholder="Exported save JSON appears here. Paste JSON here before Import." style="width:100%;background:#020617;color:#e2e8f0"></textarea>
-          <div class="lucky-tabs">${["stats","collection","upgrades","log"].map(t=>`<button class="btn small lucky-tab" data-tab="${t}">${t[0].toUpperCase()+t.slice(1)}</button>`).join("")}</div>
-          <div class="mini-card" id="luckyContent"></div>
-        </aside>
-      </div>`;
-      const sceneEl=$("#luckyScene",mount), pop=$("#rewardPop",mount), content=$("#luckyContent",mount), saveBox=$("#saveBox",mount);
-      function score(){return data.blocks*10+Math.floor(data.totalCoins/10)+(rarityMeta[data.rarestItem]?.score||0)*100;}
-      function persist(){data.lastSeen=Date.now();writeSave(game,{...data,best:score(),progress:`${data.blocks} blocks, ${Math.floor(data.coins)} coins`});}
-      function unlockedTypes(){return Object.keys(blockTypes).slice(0,1+Math.min(data.unlock,5));}
-      function completion(){return Math.round(Object.keys(data.collection).length/items.length*100);}
-      function rarityRank(r){return Object.keys(rarityMeta).indexOf(r);}
-      function canAffordSelected(){return data.coins>=blockTypes[data.selected].cost;}
-      function sound(kind,rarity="Common"){
-        if(data.mute)return;
-        audio=audio||new AudioContext();
-        const base=rarityMeta[rarity]?.freq||220, gain=audio.createGain();
-        gain.connect(audio.destination); gain.gain.value=.08;
-        [0,kind==="negative"?6:kind==="ui"?12:19].forEach((off,i)=>{
-          const o=audio.createOscillator(); o.type=kind==="negative"?"sawtooth":"square"; o.frequency.value=base*Math.pow(2,off/12); o.connect(gain); o.start(audio.currentTime+i*.05); o.stop(audio.currentTime+.16+i*.05);
+        </article>
+      `).join("");
+      $$("[data-card-game]").forEach(button => {
+        button.onclick = () => routeGame(button.dataset.cardGame);
+      });
+    }
+
+    function routeGame(id) {
+      if (id === "sports") {
+        location.hash = "#sports";
+        $("#slipStake").focus();
+      } else if (id === "promo") {
+        location.hash = "#promotions";
+      } else if (id === "live-blackjack") {
+        openGame("blackjack");
+      } else if (id === "live-roulette") {
+        openGame("roulette");
+      } else if (id.endsWith("-preview")) {
+        toast("Demo table preview only — no real stream or real wager exists.");
+      } else {
+        openGame(id);
+      }
+    }
+
+    function openStore() {
+      openModal("Add Demo Balance", `
+        <div class="notice">
+          <strong>All purchases are simulated.</strong>
+          <span>No payment info is collected, and no real payment will be made.</span>
+        </div>
+        <div class="package-grid">
+          ${packages.map(pack => `
+            <article class="card">
+              <div class="card-row">
+                <div class="visual">${pack.currency.toUpperCase()}</div>
+                <span class="badge demo">Fake price ${pack.price}</span>
+              </div>
+              <h3>${pack.name}</h3>
+              <p>${pack.label} added instantly after confirmation. No cash value.</p>
+              <button class="btn primary" data-buy="${pack.name}">Buy</button>
+            </article>
+          `).join("")}
+        </div>
+      `, () => {
+        $$("[data-buy]").forEach(button => {
+          button.onclick = () => confirmPackage(packages.find(pack => pack.name === button.dataset.buy));
         });
-        gain.gain.exponentialRampToValueAtTime(.001,audio.currentTime+.34);
-      }
-      function notify(text, rarity="Common"){
-        pop.innerHTML=text; pop.style.borderColor=rarityMeta[rarity]?.color||"#e2e8f0"; pop.style.boxShadow=`0 0 40px ${rarityMeta[rarity]?.color||"#7c3aed"}`;
-        pop.classList.add("show"); setTimeout(()=>pop.classList.remove("show"),2600);
-      }
-      function awardAchievement(id,label){
-        if(data.achievements[id])return;
-        data.achievements[id]={label,date:nowDate()}; data.coins+=75; data.totalCoins+=75;
-        notify(`Achievement unlocked: ${label}<br><span class="muted">+75 Lucky Coins</span>`,"Legendary"); sound("rare","Legendary");
-      }
-      function checkAchievements(lastRarity){
-        if(data.blocks>=1)awardAchievement("first","First Block Opened");
-        if(data.blocks>=100)awardAchievement("hundred","100 Blocks Opened");
-        if(lastRarity==="Legendary")awardAchievement("legendary","First Legendary");
-        if(lastRarity==="Mythic")awardAchievement("mythic","First Mythic");
-        if(completion()>=25)awardAchievement("coll25","Collection Milestone 25%");
-        if(completion()>=50)awardAchievement("coll50","Collection Milestone 50%");
-        if(completion()>=100)awardAchievement("coll100","Secret Achievement: Complete Collection");
-      }
-      function weightedRarity(type){
-        const mult=blockTypes[type].mult, luck=1+data.luck*.06, rare=1+data.rare*.08;
-        const weights=Object.entries(rarityMeta).map(([r,v])=>{
-          let w=v.chance;
-          if(rarityRank(r)>=2)w*=mult*luck;
-          if(rarityRank(r)>=3)w*=rare;
-          if(r==="Divine")w*=1+data.blocks/3000;
-          return [r,w];
-        });
-        const total=weights.reduce((a,x)=>a+x[1],0); let roll=Math.random()*total;
-        for(const [r,w] of weights){roll-=w;if(roll<=0)return r;} return "Common";
-      }
-      function chooseReward(rarity){
-        const pool=items.filter(i=>i.rarity===rarity);
-        return pool[Math.floor(Math.random()*pool.length)]||items[0];
-      }
-      function openBlock(){
-        if(opening)return;
-        const type=data.selected;
-        const cfg=blockTypes[type];
-        if(!canAffordSelected()){notify(`Need ${cfg.cost} coins for ${type}`,"Common");sound("ui");return;}
-        opening=true; data.coins-=cfg.cost; data.blocks++;
-        const negChance=Math.max(.02,cfg.neg-data.shield*.018);
-        const negative=Math.random()<negChance;
-        animateOpen(negative?"negative":"reward");
-        setTimeout(()=>{
-          if(negative){
-            const event=negatives[Math.floor(Math.random()*negatives.length)];
-            const loss=event==="Item Loss"?Math.min(data.coins,Math.ceil(20+Math.random()*80)):Math.ceil(cfg.cost*2);
-            if(event==="Item Loss"||event==="Bad Luck Curse")data.coins=Math.max(0,data.coins-loss);
-            data.events.unshift(`${event}: lost ${loss} coins`);
-            data.events=data.events.slice(0,24);
-            notify(`${event}<br><span class="muted">-${loss} coins</span>`,"Epic");
-            sceneEl.classList.add("shake"); setTimeout(()=>sceneEl.classList.remove("shake"),450);
-            sound("negative","Epic"); spawnParticles("#ef4444",70,true);
-          } else {
-            const rarity=weightedRarity(type), reward=chooseReward(rarity);
-            const coins=Math.ceil((12+Math.random()*35)*rarityMeta[rarity].score*data.coinsUp*cfg.mult);
-            data.coins+=coins; data.totalCoins+=coins; data.collection[reward.name]=(data.collection[reward.name]||0)+1;
-            data.bestItem=reward.name;
-            if(rarityRank(rarity)>rarityRank(data.rarestItem||"Common"))data.rarestItem=rarity;
-            data.events.unshift(`${rarity}: ${reward.name} +${coins} coins`);
-            data.events=data.events.slice(0,24);
-            notify(`<span style="color:${rarityMeta[rarity].color}">${rarity} reward</span><br>${reward.name}<br><span class="muted">+${coins} coins</span>`,rarity);
-            sound(rarityRank(rarity)>=4?"rare":"reward",rarity); spawnParticles(rarityMeta[rarity].color,rarityRank(rarity)>=4?110:55,rarityRank(rarity)>=4);
-            checkAchievements(rarity);
+      });
+    }
+
+    function confirmPackage(pack) {
+      openModal("Confirm Simulated Purchase", `
+        <div class="notice">
+          <strong>This is a simulated purchase. No real payment will be made.</strong>
+          <span>${pack.name} adds ${pack.label}. Listed fake price: ${pack.price}.</span>
+        </div>
+        <div class="action-stack">
+          <button class="btn primary" id="confirmAdd">Add Demo Balance</button>
+          <button class="btn" id="cancelAdd">Cancel</button>
+        </div>
+      `, () => {
+        $("#confirmAdd").onclick = () => {
+          adjustBalance(pack.currency, pack.amount);
+          state.stats.simulatedPurchases += 1;
+          save(KEYS.stats, state.stats);
+          addHistory("Simulated purchase", pack.name, "Added " + pack.label + ". No real payment was made.", pack.amount, pack.currency);
+          renderStats();
+          closeModal();
+          toast("Demo balance added — no real payment was made.");
+        };
+        $("#cancelAdd").onclick = openStore;
+      });
+    }
+
+    function openHistory() {
+      openModal("Transaction History", `
+        <div class="action-stack" style="margin-bottom:1rem">
+          <button class="btn danger" id="clearHistory">Clear History</button>
+          <button class="btn danger" id="resetFromHistory">Reset Balance</button>
+        </div>
+        <div class="history-list" id="historyList"></div>
+      `, () => {
+        renderHistoryList();
+        $("#clearHistory").onclick = () => {
+          if (!confirm("Clear simulated transaction history?")) return;
+          state.history = [];
+          save(KEYS.history, state.history);
+          renderHistoryList();
+          toast("History cleared.");
+        };
+        $("#resetFromHistory").onclick = resetBalances;
+      });
+    }
+
+    function renderHistoryList() {
+      const node = $("#historyList");
+      if (!node) return;
+      node.innerHTML = state.history.length ? state.history.map(item => `
+        <article class="history-item">
+          <div class="card-row">
+            <strong>${escapeHTML(item.title)}</strong>
+            <span class="badge soft">${escapeHTML(item.kind)}</span>
+          </div>
+          <p class="muted tight">${escapeHTML(item.detail)}</p>
+          <small class="mono">${new Date(item.time).toLocaleString()}</small>
+        </article>
+      `).join("") : `<div class="empty">No simulated transactions yet.</div>`;
+    }
+
+    function resetBalances() {
+      if (!confirm("Reset simulated balances to the TabbyBet defaults?")) return;
+      state.balances = JSON.parse(JSON.stringify(DEFAULT_BALANCES));
+      save(KEYS.balances, state.balances);
+      addHistory("Reset", "Balances reset", "TabbyBet demo balances returned to defaults.");
+      renderBalances();
+      toast("Demo balances reset.");
+    }
+
+    function fullReset() {
+      if (!confirm("Full reset clears balances, history, stats, and daily promo claims for this browser.")) return;
+      state.balances = JSON.parse(JSON.stringify(DEFAULT_BALANCES));
+      state.history = [];
+      state.stats = JSON.parse(JSON.stringify(DEFAULT_STATS));
+      state.daily = {};
+      saveAll();
+      renderAll();
+      toast("Full demo reset complete.");
+    }
+
+    function openGame(id) {
+      const map = {
+        crash: renderCrash,
+        dice: renderDice,
+        roulette: renderRoulette,
+        blackjack: renderBlackjack,
+        slots: renderSlots,
+        mines: renderMines
+      };
+      if (map[id]) map[id]();
+    }
+
+    function betControls(prefix, defaultAmount = 100, currency = "tc") {
+      return `
+        <label>Amount
+          <input id="${prefix}Amount" type="number" min="1" step="1" value="${defaultAmount}">
+        </label>
+        <label>Currency
+          <select id="${prefix}Currency">
+            <option value="tc" ${currency === "tc" ? "selected" : ""}>Tabby Coins (TC)</option>
+            <option value="dd" ${currency === "dd" ? "selected" : ""}>Demo Dollars (D$)</option>
+          </select>
+        </label>`;
+    }
+
+    function readBet(prefix) {
+      const currency = $("#" + prefix + "Currency").value;
+      return { currency, amount: normalizeAmount(currency, $("#" + prefix + "Amount").value) };
+    }
+
+    function renderCrash() {
+      openModal("Turbo Tabby Crash", `
+        <div class="game-layout">
+          <aside class="control-card">
+            ${betControls("crash", 250, "tc")}
+            <button class="btn primary" id="crashStart">Start Demo Round</button>
+            <button class="btn gold" id="crashCash" disabled>Demo Cash Out</button>
+            <div class="status" id="crashStatus">Multiplier waits at 1.00x.</div>
+          </aside>
+          <section class="game-stage">
+            <div class="meter" id="crashMeter">1.00x</div>
+            <h3>Recent crash history</h3>
+            <div class="mini-grid" id="crashHistory"></div>
+          </section>
+        </div>
+      `, () => {
+        let active = false;
+        let bet = 0;
+        let currency = "tc";
+        let multiplier = 1;
+        let crashPoint = 2;
+        let timer = 0;
+        const meter = $("#crashMeter");
+        const status = $("#crashStatus");
+        const drawHistory = () => {
+          $("#crashHistory").innerHTML = state.crashHistory.length
+            ? state.crashHistory.map(point => `<div class="result-chip">${point.toFixed(2)}x</div>`).join("")
+            : `<div class="empty">No crash rounds yet.</div>`;
+        };
+        const finishCrash = () => {
+          active = false;
+          clearInterval(timer);
+          timer = 0;
+          meter.classList.add("danger");
+          $("#crashStart").disabled = false;
+          $("#crashCash").disabled = true;
+          status.className = "status loss";
+          status.textContent = "Crashed at " + crashPoint.toFixed(2) + "x. Fake bet lost.";
+          state.crashHistory.unshift(crashPoint);
+          state.crashHistory = state.crashHistory.slice(0, 8);
+          drawHistory();
+          settleBet("Crash", false, 0, currency, "Crashed before demo cash out.");
+        };
+        $("#crashStart").onclick = () => {
+          const next = readBet("crash");
+          const placed = placeBet("Crash", next.currency, next.amount);
+          if (!placed) return;
+          bet = placed;
+          currency = next.currency;
+          multiplier = 1;
+          crashPoint = Math.max(1.08, Math.round((1.08 + Math.pow(Math.random(), 1.75) * 8.5) * 100) / 100);
+          active = true;
+          meter.classList.remove("danger");
+          $("#crashStart").disabled = true;
+          $("#crashCash").disabled = false;
+          status.className = "status";
+          status.textContent = "Round live. Demo cash out is available before the crash.";
+          timer = setInterval(() => {
+            multiplier = Math.round((multiplier + .025 + multiplier * .014) * 100) / 100;
+            meter.textContent = multiplier.toFixed(2) + "x";
+            if (multiplier >= crashPoint) finishCrash();
+          }, 90);
+        };
+        $("#crashCash").onclick = () => {
+          if (!active) return;
+          active = false;
+          clearInterval(timer);
+          timer = 0;
+          const payout = bet * multiplier;
+          $("#crashStart").disabled = false;
+          $("#crashCash").disabled = true;
+          status.className = "status win";
+          status.textContent = "Demo cashed out at " + multiplier.toFixed(2) + "x.";
+          settleBet("Crash", true, payout, currency, "Cashed out before the simulated crash.");
+        };
+        drawHistory();
+        state.activeCleanup = () => clearInterval(timer);
+      });
+    }
+
+    function renderDice() {
+      openModal("Over Under Dice", `
+        <div class="game-layout">
+          <aside class="control-card">
+            ${betControls("dice", 100, "tc")}
+            <label>Target number
+              <input id="diceTarget" type="number" min="2" max="98" step="1" value="50">
+            </label>
+            <div class="mini-grid">
+              <button class="btn primary" data-dice-side="over">Over</button>
+              <button class="btn" data-dice-side="under">Under</button>
+            </div>
+            <button class="btn gold" id="diceRoll">Roll Demo Dice</button>
+            <div class="status" id="diceStatus">Choose over or under.</div>
+          </aside>
+          <section class="game-stage">
+            <div class="meter" id="diceResult">--</div>
+            <div class="mini-grid" id="diceFacts"></div>
+          </section>
+        </div>
+      `, () => {
+        let side = "over";
+        const setSide = next => {
+          side = next;
+          $$("[data-dice-side]").forEach(button => {
+            button.classList.toggle("primary", button.dataset.diceSide === side);
+          });
+          updateFacts();
+        };
+        const updateFacts = () => {
+          const target = Math.max(2, Math.min(98, Math.floor(Number($("#diceTarget").value) || 50)));
+          $("#diceTarget").value = target;
+          const wins = side === "over" ? 100 - target : target - 1;
+          const mult = Math.max(1.01, (96 / wins));
+          $("#diceFacts").innerHTML = `
+            <div class="result-chip">Side: ${side.toUpperCase()}</div>
+            <div class="result-chip">Win numbers: ${wins}</div>
+            <div class="result-chip">Payout: ${mult.toFixed(2)}x</div>`;
+          return { target, mult };
+        };
+        $$("[data-dice-side]").forEach(button => button.onclick = () => setSide(button.dataset.diceSide));
+        $("#diceTarget").oninput = updateFacts;
+        $("#diceRoll").onclick = () => {
+          const next = readBet("dice");
+          const bet = placeBet("Dice", next.currency, next.amount);
+          if (!bet) return;
+          const { target, mult } = updateFacts();
+          const roll = 1 + Math.floor(Math.random() * 100);
+          const won = side === "over" ? roll > target : roll < target;
+          $("#diceResult").textContent = roll;
+          $("#diceStatus").className = won ? "status win" : "status loss";
+          $("#diceStatus").textContent = won
+            ? "Roll hit " + side + " " + target + "."
+            : "Roll missed " + side + " " + target + ".";
+          settleBet("Dice", won, won ? bet * mult : 0, next.currency, "Rolled " + roll + " against target " + target + ".");
+        };
+        setSide("over");
+      });
+    }
+
+    function renderRoulette() {
+      openModal("Neon Roulette", `
+        <div class="game-layout">
+          <aside class="control-card">
+            ${betControls("roulette", 50, "tc")}
+            <label>Bet option
+              <select id="rouletteChoice">
+                <option value="red">Red pays 2x</option>
+                <option value="black">Black pays 2x</option>
+                <option value="green">Green pays 18x</option>
+                <option value="odd">Odd pays 2x</option>
+                <option value="even">Even pays 2x</option>
+                <option value="exact">Exact number pays 36x</option>
+              </select>
+            </label>
+            <label>Exact number
+              <input id="rouletteExact" type="number" min="0" max="36" value="7">
+            </label>
+            <button class="btn primary" id="rouletteSpin">Spin Demo Wheel</button>
+            <div class="status" id="rouletteStatus">Wheel is ready.</div>
+          </aside>
+          <section class="game-stage">
+            <div class="wheel" id="rouletteWheel"><div class="wheel-number" id="rouletteNumber">--</div></div>
+            <h3>Recent results</h3>
+            <div class="mini-grid" id="rouletteHistory"></div>
+          </section>
+        </div>
+      `, () => {
+        const redNumbers = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+        const drawHistory = () => {
+          $("#rouletteHistory").innerHTML = state.rouletteHistory.length
+            ? state.rouletteHistory.map(n => `<div class="result-chip">${n}</div>`).join("")
+            : `<div class="empty">No roulette spins yet.</div>`;
+        };
+        const colorOf = n => n === 0 ? "green" : redNumbers.has(n) ? "red" : "black";
+        const choiceWins = (choice, n) => {
+          if (choice === "red" || choice === "black" || choice === "green") return colorOf(n) === choice;
+          if (choice === "odd") return n > 0 && n % 2 === 1;
+          if (choice === "even") return n > 0 && n % 2 === 0;
+          const exact = Math.max(0, Math.min(36, Math.floor(Number($("#rouletteExact").value) || 0)));
+          $("#rouletteExact").value = exact;
+          return n === exact;
+        };
+        const multiplierFor = choice => choice === "exact" ? 36 : choice === "green" ? 18 : 2;
+        $("#rouletteSpin").onclick = () => {
+          const next = readBet("roulette");
+          const bet = placeBet("Roulette", next.currency, next.amount);
+          if (!bet) return;
+          const choice = $("#rouletteChoice").value;
+          $("#rouletteSpin").disabled = true;
+          $("#rouletteWheel").classList.add("spin");
+          $("#rouletteStatus").className = "status";
+          $("#rouletteStatus").textContent = "Demo wheel spinning.";
+          let ticks = 0;
+          const ticker = setInterval(() => {
+            ticks += 1;
+            $("#rouletteNumber").textContent = Math.floor(Math.random() * 37);
+            if (ticks >= 18) {
+              clearInterval(ticker);
+              const result = Math.floor(Math.random() * 37);
+              const won = choiceWins(choice, result);
+              $("#rouletteWheel").classList.remove("spin");
+              $("#rouletteNumber").textContent = result;
+              $("#rouletteSpin").disabled = false;
+              $("#rouletteStatus").className = won ? "status win" : "status loss";
+              $("#rouletteStatus").textContent = won ? "Result " + result + " wins for " + choice + "." : "Result " + result + " misses " + choice + ".";
+              state.rouletteHistory.unshift(result);
+              state.rouletteHistory = state.rouletteHistory.slice(0, 10);
+              drawHistory();
+              settleBet("Roulette", won, won ? bet * multiplierFor(choice) : 0, next.currency, "Roulette result " + result + ".");
+            }
+          }, 70);
+          state.activeCleanup = () => clearInterval(ticker);
+        };
+        drawHistory();
+      });
+    }
+
+    function renderBlackjack() {
+      openModal("Blackjack Room", `
+        <div class="game-layout">
+          <aside class="control-card">
+            ${betControls("blackjack", 100, "tc")}
+            <button class="btn primary" id="blackjackDeal">Deal Demo Hand</button>
+            <div class="mini-grid">
+              <button class="btn gold" id="blackjackHit" disabled>Hit</button>
+              <button class="btn" id="blackjackStand" disabled>Stand</button>
+            </div>
+            <button class="btn danger" id="blackjackReset">Reset Hand</button>
+            <div class="status" id="blackjackStatus">Place a fake bet to deal.</div>
+          </aside>
+          <section class="game-stage">
+            <h3>Dealer <span class="mono" id="dealerValue"></span></h3>
+            <div class="cards" id="dealerCards"></div>
+            <h3 style="margin-top:1rem">Player <span class="mono" id="playerValue"></span></h3>
+            <div class="cards" id="playerCards"></div>
+          </section>
+        </div>
+      `, () => {
+        let deck = [];
+        let player = [];
+        let dealer = [];
+        let currentBet = 0;
+        let currency = "tc";
+        let roundActive = false;
+        let revealDealer = false;
+        const ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+        const suits = ["S", "H", "D", "C"];
+        const newDeck = () => {
+          const cards = [];
+          suits.forEach(suit => ranks.forEach(rank => cards.push({ rank, suit })));
+          for (let i = cards.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [cards[i], cards[j]] = [cards[j], cards[i]];
           }
-          opening=false; renderUI(); persist();
-        },760);
-      }
-      function buyUpgrade(k){
-        const map={luck:"luck",rare:"rare",shield:"shield",coins:"coinsUp",unlock:"unlock"}, prop=map[k], level=data[prop]||0, cost=Math.floor((upgradeDefs.find(u=>u[0]===k)[2])*(1+level*.75));
-        if(k==="unlock"&&data.unlock>=5){notify("All Lucky Block types unlocked.","Rare");return;}
-        if(data.coins<cost){notify(`Need ${cost} coins for that upgrade.`,"Common");sound("ui");return;}
-        data.coins-=cost; data[prop]=level+1; sound("ui","Rare"); renderUI(); persist();
-      }
-      function renderUI(){
-        $("#lCoins",mount).textContent=Math.floor(data.coins); $("#lBlocks",mount).textContent=data.blocks; $("#lComplete",mount).textContent=completion()+"%"; $("#lLuck",mount).textContent=data.luck;
-        setScore(`Blocks ${data.blocks} | Coins ${Math.floor(data.coins)} | Best ${data.rarestItem||"None"}`);
-        const select=$("#blockType",mount), current=data.selected;
-        select.innerHTML=unlockedTypes().map(t=>`<option value="${t}">${t} - ${blockTypes[t].cost} coins</option>`).join("");
-        data.selected=unlockedTypes().includes(current)?current:"Basic"; select.value=data.selected; select.onchange=e=>{data.selected=e.target.value; updateBlockMaterial(); renderUI();};
-        $("#muteLucky",mount).textContent=data.mute?"Unmute":"Mute";
-        $$(".lucky-tab",mount).forEach(b=>b.classList.toggle("active",b.dataset.tab===activeTab));
-        const discovered=Object.keys(data.collection).length;
-        if(activeTab==="stats"){
-          content.innerHTML=`<div class="stat-grid"><div><b>Total Blocks Opened</b><p class="mono">${data.blocks}</p></div><div><b>Total Coins Earned</b><p class="mono">${Math.floor(data.totalCoins)}</p></div><div><b>Best Item Found</b><p>${data.bestItem}</p></div><div><b>Rarest Item Found</b><p>${data.rarestItem}</p></div><div><b>Luck Level</b><p class="mono">${data.luck}</p></div><div><b>Play Time</b><p class="mono">${Math.floor(data.playTime/60)}m ${data.playTime%60}s</p></div></div>`;
-        } else if(activeTab==="collection"){
-          content.innerHTML=`<div class="lucky-meter"><b>Collection ${discovered}/${items.length}</b><div class="bar"><span style="width:${completion()}%"></span></div></div><div class="lucky-list">${items.map(it=>`<div class="lucky-item" style="opacity:${data.collection[it.name]?1:.45}"><span>${data.collection[it.name]?it.name:"Undiscovered Item"}</span><span class="rarity-chip" style="background:${rarityMeta[it.rarity].color}">${it.rarity}${data.collection[it.name]?` x${data.collection[it.name]}`:""}</span></div>`).join("")}</div>`;
-        } else if(activeTab==="upgrades"){
-          content.innerHTML=`<div class="lucky-list">${upgradeDefs.map(([k,n,base,desc])=>{const prop={luck:"luck",rare:"rare",shield:"shield",coins:"coinsUp",unlock:"unlock"}[k],lvl=data[prop]||0,cost=Math.floor(base*(1+lvl*.75));return `<div class="lucky-item"><div><b>${n}</b><p class="muted">${desc}</p><span class="mono">Level ${lvl}</span></div><button class="btn small" data-up="${k}">${k==="unlock"&&lvl>=5?"Max":cost+" coins"}</button></div>`}).join("")}</div>`;
-          $$("[data-up]",content).forEach(b=>b.onclick=()=>buyUpgrade(b.dataset.up));
-        } else {
-          content.innerHTML=`<div class="lucky-list">${Object.values(data.achievements).map(a=>`<div class="lucky-item"><b>${a.label}</b><span class="muted">${a.date}</span></div>`).join("")||"<p class='muted'>No achievements yet.</p>"}${data.events.map(e=>`<div class="lucky-item"><span>${e}</span></div>`).join("")}</div>`;
-        }
-      }
-      function makeTexture(color){
-        const cn=document.createElement("canvas"); cn.width=128; cn.height=128; const c=cn.getContext("2d");
-        c.fillStyle=color; c.fillRect(0,0,128,128); c.fillStyle="rgba(255,255,255,.18)"; for(let y=0;y<128;y+=16)for(let x=0;x<128;x+=16)if((x+y)%32===0)c.fillRect(x,y,16,16);
-        c.fillStyle="#281500"; c.font="900 86px JetBrains Mono, monospace"; c.textAlign="center"; c.textBaseline="middle"; c.fillText("?",64,66);
-        const tex=new THREE.CanvasTexture(cn); tex.magFilter=THREE.NearestFilter; return tex;
-      }
-      function cube(size,color,x,y,z,group=scene){
-        const mesh=new THREE.Mesh(new THREE.BoxGeometry(size,size,size),new THREE.MeshStandardMaterial({color,roughness:.55,metalness:.05}));
-        mesh.position.set(x,y,z); mesh.castShadow=true; mesh.receiveShadow=true; group.add(mesh); return mesh;
-      }
-      function init3d(){
-        if(!window.THREE){sceneEl.innerHTML="<div class='mini-card'>Three.js did not load. Check your internet connection and reload.</div>";return;}
-        scene=new THREE.Scene(); scene.fog=new THREE.Fog(0x07101f,8,24);
-        camera=new THREE.PerspectiveCamera(50,1,.1,100);
-        renderer=new THREE.WebGLRenderer({antialias:true,alpha:true}); renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.shadowMap.enabled=true; sceneEl.prepend(renderer.domElement);
-        const hemi=new THREE.HemisphereLight(0xdbeafe,0x14532d,1.5); scene.add(hemi);
-        const sun=new THREE.DirectionalLight(0xffffff,2.2); sun.position.set(4,7,5); sun.castShadow=true; scene.add(sun);
-        glow=new THREE.PointLight(0xfacc15,1.5,8); glow.position.set(0,1.5,1.5); scene.add(glow);
-        const ground=new THREE.Mesh(new THREE.BoxGeometry(18,.35,18),new THREE.MeshStandardMaterial({color:0x1f7a35,roughness:.9})); ground.position.y=-1.3; ground.receiveShadow=true; scene.add(ground);
-        for(let i=0;i<70;i++)cube(.25,Math.random()<.55?0x166534:0x854d0e,(Math.random()-.5)*16,-1.05,(Math.random()-.5)*16);
-        for(let i=0;i<8;i++){const x=(Math.random()-.5)*14,z=(Math.random()-.5)*14;cube(.42,0x7c4a20,x,-.55,z);cube(.85,0x166534,x,.1,z);cube(.65,0x15803d,x,.7,z);}
-        blockGroup=new THREE.Group(); scene.add(blockGroup); updateBlockMaterial();
-        resizeObs=new ResizeObserver(()=>{const r=sceneEl.getBoundingClientRect(); renderer.setSize(Math.max(320,r.width),Math.max(320,r.height),false); camera.aspect=r.width/r.height; camera.updateProjectionMatrix();}); resizeObs.observe(sceneEl);
-        sceneEl.onpointerdown=e=>{orbit.drag=true; orbit.lx=e.clientX; orbit.ly=e.clientY;};
-        window.addEventListener("pointerup",stopDrag); window.addEventListener("pointermove",dragCam);
-        renderer.domElement.onwheel=e=>{e.preventDefault(); orbit.d=Math.max(3.6,Math.min(9,orbit.d+e.deltaY*.006));};
-        animate();
-      }
-      function updateBlockMaterial(){
-        if(!blockGroup||!window.THREE)return;
-        blockGroup.clear();
-        const mat=new THREE.MeshStandardMaterial({map:makeTexture(blockTypes[data.selected]?.color||"#facc15"),emissive:new THREE.Color(blockTypes[data.selected]?.color||"#facc15"),emissiveIntensity:.12,roughness:.45});
-        const block=new THREE.Mesh(new THREE.BoxGeometry(1.8,1.8,1.8),mat); block.castShadow=true; block.receiveShadow=true; blockGroup.add(block);
-        for(let i=0;i<14;i++){const s=.18+Math.random()*.08;cube(s,0x3b2600,(Math.random()-.5)*2.4,(Math.random()-.5)*2.4,(Math.random()-.5)*2.4,blockGroup);}
-      }
-      function stopDrag(){orbit.drag=false;}
-      function dragCam(e){if(!orbit.drag)return; orbit.x+=(e.clientX-orbit.lx)*.008; orbit.y=Math.max(.18,Math.min(1.18,orbit.y+(e.clientY-orbit.ly)*.006)); orbit.lx=e.clientX; orbit.ly=e.clientY;}
-      function animateOpen(kind){
-        const start=performance.now(), base=blockGroup.rotation.y;
-        const spin=()=>{const p=Math.min(1,(performance.now()-start)/720); blockGroup.rotation.y=base+p*Math.PI*2.7; blockGroup.scale.setScalar(1+Math.sin(p*Math.PI)*.32); glow.intensity=kind==="negative"?5:3.5; if(p<1)requestAnimationFrame(spin); else {blockGroup.scale.setScalar(1);glow.intensity=1.5;}};
-        spin();
-      }
-      function spawnParticles(color,count,big){
-        if(!window.THREE)return;
-        for(let i=0;i<count;i++){
-          const mesh=new THREE.Mesh(new THREE.BoxGeometry(big?.12:.08,big?.12:.08,big?.12:.08),new THREE.MeshBasicMaterial({color}));
-          mesh.position.set(0,0,0); mesh.userData={v:new THREE.Vector3((Math.random()-.5)*.16,Math.random()*.12+.04,(Math.random()-.5)*.16),life:70+Math.random()*35};
-          particles.push(mesh); scene.add(mesh);
-        }
-      }
-      function animate(){
-        raf=requestAnimationFrame(animate);
-        if(blockGroup&&!opening)blockGroup.rotation.y+=.009;
-        if(glow){glow.color.set(blockTypes[data.selected]?.color||"#facc15"); glow.intensity+=Math.sin(Date.now()/230)*.015;}
-        particles=particles.filter(p=>{p.position.add(p.userData.v); p.userData.v.y-=.003; p.userData.life--; if(p.userData.life<=0){scene.remove(p);return false;} return true;});
-        const cy=Math.sin(orbit.y)*orbit.d, flat=Math.cos(orbit.y)*orbit.d; camera.position.set(Math.sin(orbit.x)*flat,cy,Math.cos(orbit.x)*flat); camera.lookAt(0,0,0);
-        renderer&&renderer.render(scene,camera);
-      }
-      $("#openLucky",mount).onclick=openBlock;
-      $("#saveLucky",mount).onclick=()=>{persist();notify("Manual save complete.","Rare");sound("ui","Rare");};
-      $("#muteLucky",mount).onclick=()=>{data.mute=!data.mute;renderUI();persist();};
-      $("#exportLucky",mount).onclick=()=>{saveBox.value=JSON.stringify(data,null,2);saveBox.select();notify("Save exported to the text box.","Uncommon");};
-      $("#importLucky",mount).onclick=()=>{try{const incoming=JSON.parse(saveBox.value);data={...fresh(),...incoming};data.collection=data.collection||{};data.achievements=data.achievements||{};data.events=data.events||[];renderUI();updateBlockMaterial();persist();notify("Save imported.","Rare");}catch{notify("Import failed: invalid JSON.","Epic");}};
-      $$(".lucky-tab",mount).forEach(b=>b.onclick=()=>{activeTab=b.dataset.tab;renderUI();sound("ui");});
-      saveTimer=setInterval(persist,5000); playTimer=setInterval(()=>{data.playTime++; if(activeTab==="stats")renderUI();},1000);
-      init3d(); renderUI(); persist();
-      return()=>{clearInterval(saveTimer);clearInterval(playTimer);persist();cancelAnimationFrame(raf);resizeObs&&resizeObs.disconnect();window.removeEventListener("pointerup",stopDrag);window.removeEventListener("pointermove",dragCam);renderer&&renderer.dispose();};
-    };
-    launchers.secret=(g,m)=>canvasShell(g,m,{help:"Hidden diagnostic mode. Move with arrows and collect amber packets.", reset(){}, step:({ctx,keys,t})=>{const x=400+Math.sin(t/18)*220,y=250+Math.cos(t/22)*120;ctx.strokeStyle="#06b6d4";ctx.strokeRect(80,70,640,360);ctx.fillStyle="#f59e0b";ctx.beginPath();ctx.arc(x,y,18,0,7);ctx.fill();ctx.fillStyle="#7c3aed";ctx.fillRect(380,235,40,40);ctx.fillStyle="#e2e8f0";ctx.fillText("STATIC CORE ONLINE",270,40);return t;}});
-    launchers.generic=(g,m)=>canvasShell(g,m,{help:"Prototype arcade mode.",step:({ctx,t})=>{ctx.fillStyle="#7c3aed";ctx.fillRect(350+Math.sin(t/20)*120,220,60,60);return t;}});
+          return cards;
+        };
+        const value = hand => {
+          let total = 0;
+          let aces = 0;
+          hand.forEach(card => {
+            if (card.rank === "A") { total += 11; aces += 1; }
+            else if (["J", "Q", "K"].includes(card.rank)) total += 10;
+            else total += Number(card.rank);
+          });
+          while (total > 21 && aces) { total -= 10; aces -= 1; }
+          return total;
+        };
+        const draw = () => {
+          $("#playerCards").innerHTML = player.map(card => `<div class="playing-card">${card.rank}${card.suit}</div>`).join("");
+          $("#dealerCards").innerHTML = dealer.map((card, i) => !revealDealer && i === 1 ? `<div class="playing-card hidden">TB</div>` : `<div class="playing-card">${card.rank}${card.suit}</div>`).join("");
+          $("#playerValue").textContent = player.length ? value(player) : "";
+          $("#dealerValue").textContent = dealer.length ? (revealDealer ? value(dealer) : value([dealer[0]])) : "";
+        };
+        const controls = active => {
+          roundActive = active;
+          $("#blackjackDeal").disabled = active;
+          $("#blackjackHit").disabled = !active;
+          $("#blackjackStand").disabled = !active;
+        };
+        const endRound = (didWin, payout, detail, className) => {
+          revealDealer = true;
+          controls(false);
+          draw();
+          $("#blackjackStatus").className = "status " + className;
+          $("#blackjackStatus").textContent = detail;
+          if (didWin === "push") {
+            adjustBalance(currency, currentBet);
+            addHistory("Push", "Blackjack push", "Stake returned in a simulated push.", currentBet, currency);
+          } else {
+            settleBet("Blackjack", didWin, payout, currency, detail);
+          }
+        };
+        $("#blackjackDeal").onclick = () => {
+          const next = readBet("blackjack");
+          const bet = placeBet("Blackjack", next.currency, next.amount);
+          if (!bet) return;
+          currentBet = bet;
+          currency = next.currency;
+          deck = newDeck();
+          player = [deck.pop(), deck.pop()];
+          dealer = [deck.pop(), deck.pop()];
+          revealDealer = false;
+          controls(true);
+          $("#blackjackStatus").className = "status";
+          $("#blackjackStatus").textContent = "Demo hand live.";
+          draw();
+          if (value(player) === 21) {
+            if (value(dealer) === 21) endRound("push", 0, "Both hands have blackjack. Fake stake returned.", "");
+            else endRound(true, currentBet * 2.5, "Blackjack pays a simulated bonus.", "win");
+          }
+        };
+        $("#blackjackHit").onclick = () => {
+          if (!roundActive) return;
+          player.push(deck.pop());
+          draw();
+          if (value(player) > 21) endRound(false, 0, "Player busts. Fake bet lost.", "loss");
+        };
+        $("#blackjackStand").onclick = () => {
+          if (!roundActive) return;
+          revealDealer = true;
+          while (value(dealer) < 17) dealer.push(deck.pop());
+          const pv = value(player);
+          const dv = value(dealer);
+          if (dv > 21 || pv > dv) endRound(true, currentBet * 2, "Player beats dealer.", "win");
+          else if (pv === dv) endRound("push", 0, "Push. Fake stake returned.", "");
+          else endRound(false, 0, "Dealer wins this simulated hand.", "loss");
+        };
+        $("#blackjackReset").onclick = () => {
+          player = [];
+          dealer = [];
+          revealDealer = false;
+          controls(false);
+          $("#blackjackStatus").className = "status";
+          $("#blackjackStatus").textContent = "Hand reset.";
+          draw();
+        };
+        draw();
+      });
+    }
 
-    renderFilters();
-    renderGrid();
-    renderLeaderboard();
-    bootParticles();
-    bootType();
+    function renderSlots() {
+      openModal("Tabby Reels", `
+        <div class="game-layout">
+          <aside class="control-card">
+            ${betControls("slots", 80, "tc")}
+            <button class="btn primary" id="slotSpin">Spin Demo Reels</button>
+            <div class="status" id="slotStatus">Payout table: 3 match 2.5x, 4 match 8x, 5 match 25x. Three or more 7s pay at least 5x.</div>
+          </aside>
+          <section class="game-stage">
+            <div class="reels" id="reels"></div>
+            <div class="mini-grid">
+              <div class="result-chip">PAW</div><div class="result-chip">CROWN</div><div class="result-chip">BELL</div><div class="result-chip">GEM</div><div class="result-chip">7</div>
+            </div>
+          </section>
+        </div>
+      `, () => {
+        const symbols = ["PAW", "CROWN", "BELL", "GEM", "7", "BOLT", "FISH", "YARN"];
+        const drawReels = values => {
+          $("#reels").innerHTML = values.map(v => `<div class="reel">${v}</div>`).join("");
+        };
+        drawReels(["PAW", "GEM", "7", "BELL", "PAW"]);
+        $("#slotSpin").onclick = () => {
+          const next = readBet("slots");
+          const bet = placeBet("Slots", next.currency, next.amount);
+          if (!bet) return;
+          $("#slotSpin").disabled = true;
+          let ticks = 0;
+          const timer = setInterval(() => {
+            ticks += 1;
+            drawReels(Array.from({ length: 5 }, () => symbols[Math.floor(Math.random() * symbols.length)]));
+            $$(".reel").forEach(reel => reel.classList.add("spin"));
+            if (ticks >= 16) {
+              clearInterval(timer);
+              const result = Array.from({ length: 5 }, () => symbols[Math.floor(Math.random() * symbols.length)]);
+              drawReels(result);
+              const counts = result.reduce((acc, symbol) => {
+                acc[symbol] = (acc[symbol] || 0) + 1;
+                return acc;
+              }, {});
+              const best = Math.max(...Object.values(counts));
+              const sevens = counts["7"] || 0;
+              let mult = 0;
+              if (best >= 5) mult = 25;
+              else if (best >= 4) mult = 8;
+              else if (best >= 3) mult = 2.5;
+              if (sevens >= 3) mult = Math.max(mult, 5);
+              const won = mult > 0;
+              $("#slotSpin").disabled = false;
+              $("#slotStatus").className = won ? "status win" : "status loss";
+              $("#slotStatus").textContent = won ? "Demo win: matched reels for " + mult + "x." : "Demo loss: no matching payout this spin.";
+              settleBet("Slots", won, won ? bet * mult : 0, next.currency, "Reels landed " + result.join(" / ") + ".");
+            }
+          }, 90);
+          state.activeCleanup = () => clearInterval(timer);
+        };
+      });
+    }
+
+    function renderMines() {
+      openModal("Catwalk Mines", `
+        <div class="game-layout">
+          <aside class="control-card">
+            ${betControls("mines", 100, "tc")}
+            <label>Mines
+              <input id="mineCount" type="number" min="3" max="10" step="1" value="5">
+            </label>
+            <button class="btn primary" id="minesStart">Start Demo Grid</button>
+            <button class="btn gold" id="minesCash" disabled>Demo Cash Out</button>
+            <div class="status" id="minesStatus">Reveal safe tiles to build a simulated cash out.</div>
+          </aside>
+          <section class="game-stage">
+            <div class="mine-grid" id="mineGrid"></div>
+            <div class="mini-grid" id="minesFacts"></div>
+          </section>
+        </div>
+      `, () => {
+        let active = false;
+        let mines = new Set();
+        let revealed = new Set();
+        let bet = 0;
+        let currency = "tc";
+        let mineCount = 5;
+        const payout = () => bet * (1 + revealed.size * (.18 + mineCount * .07));
+        const drawGrid = (showAll = false) => {
+          $("#mineGrid").innerHTML = Array.from({ length: 25 }, (_, i) => {
+            const isMine = mines.has(i);
+            const safe = revealed.has(i);
+            const cls = showAll && isMine ? "mine" : safe ? "safe" : "";
+            const text = showAll && isMine ? "MINE" : safe ? "SAFE" : "";
+            return `<button class="mine-tile ${cls}" data-tile="${i}" ${!active || safe || (showAll && isMine) ? "disabled" : ""}>${text}</button>`;
+          }).join("");
+          $$("[data-tile]").forEach(button => button.onclick = () => chooseTile(Number(button.dataset.tile)));
+          $("#minesFacts").innerHTML = `
+            <div class="result-chip">Safe picks: ${revealed.size}</div>
+            <div class="result-chip">Mines: ${mineCount}</div>
+            <div class="result-chip">Current: ${formatCurrency(currency, active ? payout() : 0)}</div>`;
+        };
+        const end = didWin => {
+          active = false;
+          $("#minesStart").disabled = false;
+          $("#minesCash").disabled = true;
+          drawGrid(true);
+          if (didWin) settleBet("Mines", true, payout(), currency, "Cashed out after " + revealed.size + " safe tiles.");
+          else settleBet("Mines", false, 0, currency, "A mine was revealed.");
+        };
+        const chooseTile = i => {
+          if (!active) return;
+          if (mines.has(i)) {
+            $("#minesStatus").className = "status loss";
+            $("#minesStatus").textContent = "Mine hit. Fake bet lost.";
+            end(false);
+            return;
+          }
+          revealed.add(i);
+          $("#minesCash").disabled = false;
+          $("#minesStatus").className = "status win";
+          $("#minesStatus").textContent = "Safe tile. Current simulated cash out: " + formatCurrency(currency, payout()) + ".";
+          drawGrid();
+        };
+        $("#minesStart").onclick = () => {
+          const count = Math.max(3, Math.min(10, Math.floor(Number($("#mineCount").value) || 5)));
+          $("#mineCount").value = count;
+          const next = readBet("mines");
+          const placed = placeBet("Mines", next.currency, next.amount);
+          if (!placed) return;
+          bet = placed;
+          currency = next.currency;
+          mineCount = count;
+          mines = new Set();
+          revealed = new Set();
+          while (mines.size < mineCount) mines.add(Math.floor(Math.random() * 25));
+          active = true;
+          $("#minesStart").disabled = true;
+          $("#minesCash").disabled = true;
+          $("#minesStatus").className = "status";
+          $("#minesStatus").textContent = "Grid live. Pick a tile.";
+          drawGrid();
+        };
+        $("#minesCash").onclick = () => {
+          if (!active || revealed.size < 1) return;
+          $("#minesStatus").className = "status win";
+          $("#minesStatus").textContent = "Demo cash out locked.";
+          end(true);
+        };
+        drawGrid();
+      });
+    }
+
+    function americanToDecimal(odds) {
+      return odds > 0 ? 1 + odds / 100 : 1 + 100 / Math.abs(odds);
+    }
+
+    function formatOdds(odds) {
+      return odds > 0 ? "+" + odds : String(odds);
+    }
+
+    function renderSports() {
+      $("#sportsTabs").innerHTML = sports.map(sport => `<button class="tab ${state.sportsFilter === sport ? "active" : ""}" data-sport="${sport}">${sport}</button>`).join("");
+      $$("[data-sport]").forEach(button => button.onclick = () => {
+        state.sportsFilter = button.dataset.sport;
+        renderSports();
+      });
+      const visible = state.sportsFilter === "All" ? matches : matches.filter(match => match.sport === state.sportsFilter);
+      $("#matchList").innerHTML = visible.map(match => `
+        <article class="match-card">
+          <div class="card-row">
+            <div><strong>${match.teams[0]} vs ${match.teams[1]}</strong><p class="muted tight">${match.league} | ${match.sport}</p></div>
+            <span class="badge demo">Fictional</span>
+          </div>
+          <div class="odds-row">
+            ${match.teams.map((team, i) => `
+              <button class="odds-btn" data-pick="${match.id}" data-outcome="${i}">
+                <span>${team}</span>
+                <small>${formatOdds(match.odds[i])}</small>
+              </button>
+            `).join("")}
+          </div>
+        </article>
+      `).join("");
+      $$("[data-pick]").forEach(button => button.onclick = () => addPick(button.dataset.pick, Number(button.dataset.outcome)));
+      renderSlip();
+    }
+
+    function addPick(matchId, outcomeIndex) {
+      const match = matches.find(item => item.id === matchId);
+      state.slip = state.slip.filter(pick => pick.matchId !== matchId);
+      state.slip.push({
+        matchId,
+        outcomeIndex,
+        label: match.teams[outcomeIndex],
+        matchup: match.teams.join(" vs "),
+        odds: match.odds[outcomeIndex]
+      });
+      renderSlip();
+      toast("Pick added to the fake slip.");
+    }
+
+    function potentialSlipPayout(stake) {
+      const decimal = state.slip.reduce((total, pick) => total * americanToDecimal(pick.odds), 1);
+      return stake * decimal;
+    }
+
+    function renderSlip() {
+      $("#slipList").innerHTML = state.slip.length ? state.slip.map((pick, index) => `
+        <div class="slip-item">
+          <div class="card-row">
+            <strong>${pick.label}</strong>
+            <button class="btn small danger" data-remove-pick="${index}" aria-label="Remove pick">Remove</button>
+          </div>
+          <p class="muted tight">${pick.matchup} | ${formatOdds(pick.odds)}</p>
+        </div>
+      `).join("") : `<div class="empty">No fake picks selected.</div>`;
+      $$("[data-remove-pick]").forEach(button => button.onclick = () => {
+        state.slip.splice(Number(button.dataset.removePick), 1);
+        renderSlip();
+      });
+      const stake = normalizeAmount("dd", $("#slipStake") ? $("#slipStake").value : 0);
+      $("#slipPayout").textContent = "Potential simulated payout: " + formatCurrency("dd", state.slip.length ? potentialSlipPayout(stake) : 0);
+      renderTickets();
+    }
+
+    function renderTickets() {
+      $("#ticketList").innerHTML = state.tickets.length ? state.tickets.map(ticket => `
+        <article class="ticket">
+          <div class="card-row">
+            <strong>${ticket.picks.length} pick ticket</strong>
+            <span class="badge soft">${formatCurrency("dd", ticket.stake)}</span>
+          </div>
+          <p class="muted">${ticket.picks.map(pick => pick.label).join(" + ")}</p>
+          <button class="btn primary small" data-resolve-ticket="${ticket.id}">Simulate Result</button>
+        </article>
+      `).join("") : `<div class="empty">No open fake tickets.</div>`;
+      $$("[data-resolve-ticket]").forEach(button => button.onclick = () => resolveTicket(button.dataset.resolveTicket));
+    }
+
+    function placeSlip() {
+      if (!state.slip.length) {
+        toast("Add at least one fictional pick first.");
+        return;
+      }
+      const stake = normalizeAmount("dd", $("#slipStake").value);
+      const placed = placeBet("Sports Picks Demo", "dd", stake);
+      if (!placed) return;
+      const ticket = {
+        id: String(Date.now() + Math.random()),
+        stake: placed,
+        payout: potentialSlipPayout(placed),
+        picks: JSON.parse(JSON.stringify(state.slip))
+      };
+      state.tickets.unshift(ticket);
+      state.slip = [];
+      renderSlip();
+      toast("Fake sports ticket placed.");
+    }
+
+    function resolveTicket(id) {
+      const ticket = state.tickets.find(item => item.id === id);
+      if (!ticket) return;
+      const won = ticket.picks.every(() => Math.random() > .47);
+      state.tickets = state.tickets.filter(item => item.id !== id);
+      settleBet("Sports Picks Demo", won, won ? ticket.payout : 0, "dd", won ? "All fictional picks won." : "At least one fictional pick lost.");
+      renderSlip();
+      toast(won ? "Sports demo ticket won." : "Sports demo ticket lost.");
+    }
+
+    function renderPromos() {
+      const today = todayKey();
+      $("#promoGrid").innerHTML = promos.map(promo => {
+        const claimed = state.daily[promo.id] === today;
+        const rewardText = Object.entries(promo.reward).map(([currency, amount]) => formatCurrency(currency, amount)).join(" + ");
+        return `
+          <article class="card">
+            <div class="card-row">
+              <div class="visual">${promo.id.slice(0, 2).toUpperCase()}</div>
+              <span class="badge ${claimed ? "soft" : "demo"}">${claimed ? "Claimed" : "Available"}</span>
+            </div>
+            <h3>${promo.title}</h3>
+            <p>${promo.desc}</p>
+            <p class="mono">${rewardText}</p>
+            <button class="btn primary" data-claim="${promo.id}" ${claimed ? "disabled" : ""}>Claim Demo Reward</button>
+          </article>`;
+      }).join("");
+      $$("[data-claim]").forEach(button => button.onclick = () => {
+        const promo = promos.find(item => item.id === button.dataset.claim);
+        Object.entries(promo.reward).forEach(([currency, amount]) => adjustBalance(currency, amount));
+        state.daily[promo.id] = today;
+        save(KEYS.daily, state.daily);
+        addHistory("Bonus", promo.title, "Claimed simulated reward: " + Object.entries(promo.reward).map(([currency, amount]) => formatCurrency(currency, amount)).join(" + ") + ".");
+        renderPromos();
+        toast("Demo promotion claimed.");
+      });
+    }
+
+    function renderLive() {
+      const tables = [
+        { title: "Demo Live Blackjack", game: "blackjack", dealer: "Mara K.", viewers: 128, status: "Simulated table" },
+        { title: "Demo Live Roulette", game: "roulette", dealer: "Jules R.", viewers: 94, status: "Simulated wheel" },
+        { title: "Demo Baccarat", game: "", dealer: "Nico V.", viewers: 73, status: "Preview only" },
+        { title: "Demo Game Show", game: "", dealer: "Val S.", viewers: 211, status: "Preview only" }
+      ];
+      $("#liveGrid").innerHTML = tables.map(table => `
+        <article class="card">
+          <div class="card-row">
+            <div class="visual">${table.title.split(" ").slice(-1)[0].slice(0, 2).toUpperCase()}</div>
+            <span class="badge demo">${table.status}</span>
+          </div>
+          <h3>${table.title}</h3>
+          <p>Fake dealer ${table.dealer}. Demo viewers: ${table.viewers}. No live stream is connected.</p>
+          <button class="btn primary" data-live-game="${table.game}" ${table.game ? "" : ""}>Open Demo Table</button>
+        </article>
+      `).join("");
+      $$("[data-live-game]").forEach(button => button.onclick = () => {
+        if (button.dataset.liveGame) openGame(button.dataset.liveGame);
+        else toast("Preview card only — no stream and no real wager.");
+      });
+    }
+
+    function bindGlobalActions() {
+      $("#addBalance").onclick = openStore;
+      $("#topAddBalance").onclick = openStore;
+      $("#openHistory").onclick = openHistory;
+      $("#topHistory").onclick = openHistory;
+      $("#resetBalances").onclick = resetBalances;
+      $("#fullReset").onclick = fullReset;
+      $("#placeSlip").onclick = placeSlip;
+      $("#clearSlip").onclick = () => { state.slip = []; renderSlip(); };
+      $("#slipStake").oninput = renderSlip;
+      $$("[data-open-game]").forEach(button => button.onclick = () => openGame(button.dataset.openGame));
+      window.addEventListener("keydown", event => {
+        if (event.key === "Escape" && $("#modalRoot").innerHTML) closeModal();
+      });
+    }
+
+    function renderAll() {
+      renderBalances();
+      renderStats();
+      renderCategories();
+      renderGameGrid();
+      renderSports();
+      renderPromos();
+      renderLive();
+    }
+
+    bindGlobalActions();
+    renderAll();
   </script>
 </body>
 </html>
