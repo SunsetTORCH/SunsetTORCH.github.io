@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TabbyBet - Simulated Casino and Sportsbook Demo</title>
+  <title>TabbyBet - Simulated Casino and Sportsbook</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
@@ -143,7 +143,7 @@
       text-transform: uppercase;
       white-space: nowrap;
     }
-    .badge.demo { border-color: rgba(245, 200, 76, .42); color: var(--gold); background: rgba(245, 200, 76, .11); }
+    .badge.accent { border-color: rgba(245, 200, 76, .42); color: var(--gold); background: rgba(245, 200, 76, .11); }
     .badge.soft { border-color: rgba(255, 255, 255, .14); color: #c8d5e6; background: rgba(255, 255, 255, .06); }
     .badge.loss { border-color: rgba(255, 98, 98, .35); color: #ffb4b4; background: rgba(255, 98, 98, .1); }
     .badge.win { border-color: rgba(70, 245, 165, .35); color: var(--green); background: rgba(70, 245, 165, .1); }
@@ -603,10 +603,10 @@
       <a href="#games">Games</a>
       <a href="#sports">Sports Picks</a>
       <a href="#promotions">Promotions</a>
-      <a href="#live">Live Demo</a>
+      <a href="#live">Live</a>
     </nav>
     <div class="top-actions">
-      <span class="badge demo">Demo Mode</span>
+      <span class="badge soft">Points Only</span>
       <button class="btn primary small" id="topAddBalance">Add Balance</button>
       <button class="btn small" id="topHistory">History</button>
     </div>
@@ -614,7 +614,7 @@
 
   <main class="app">
     <section class="section" id="dashboard">
-      <div class="notice" role="note" aria-label="Demo-only disclaimers">
+      <div class="notice" role="note" aria-label="Safety disclaimers">
         <strong>Demo only — no real money, no real gambling, no cash value.</strong>
         <span>All balances, purchases, bets, and winnings are simulated.</span>
       </div>
@@ -640,7 +640,7 @@
         <section class="panel" aria-labelledby="quickTitle">
           <div class="section-head">
             <div>
-              <h2 id="quickTitle">Demo Desk</h2>
+              <h2 id="quickTitle">Account Desk</h2>
               <p class="muted tight">Every control uses local browser storage and simulated points only.</p>
             </div>
           </div>
@@ -651,7 +651,7 @@
           <div class="section-head">
             <div>
               <h2 id="featuredTitle">Featured Tables</h2>
-              <p class="muted tight">Jump into the core playable demos.</p>
+              <p class="muted tight">Jump into the core games.</p>
             </div>
           </div>
           <div class="mini-grid">
@@ -670,7 +670,7 @@
           <h2>Game Lobby</h2>
           <p class="muted tight">Fake wagers, fake winnings, real UI state.</p>
         </div>
-        <span class="badge demo">Demo Only</span>
+        <span class="badge soft">Points Only</span>
       </div>
       <div class="tabs" id="categoryTabs" aria-label="Game categories"></div>
       <div class="game-grid" id="gameGrid" style="margin-top:.9rem"></div>
@@ -679,10 +679,10 @@
     <section class="section" id="sports">
       <div class="section-head">
         <div>
-          <h2>Sports Picks Demo</h2>
+          <h2>Sports Picks</h2>
           <p class="muted tight">Fictional matchups, fake odds, random simulated results.</p>
         </div>
-        <span class="badge demo">No real teams</span>
+        <span class="badge soft">No real teams</span>
       </div>
       <div class="sports-layout">
         <section class="panel">
@@ -717,7 +717,7 @@
           <h2>Promotions</h2>
           <p class="muted tight">Fake rewards with once-per-day local limits.</p>
         </div>
-        <span class="badge demo">Simulated rewards</span>
+        <span class="badge soft">Simulated rewards</span>
       </div>
       <div class="promo-grid" id="promoGrid"></div>
     </section>
@@ -725,17 +725,17 @@
     <section class="section" id="live">
       <div class="section-head">
         <div>
-          <h2>Live Casino Demo</h2>
+          <h2>Live Casino</h2>
           <p class="muted tight">Fake dealer cards and viewer counts. No streams are loaded.</p>
         </div>
-        <span class="badge demo">Preview only</span>
+        <span class="badge soft">Preview only</span>
       </div>
       <div class="live-grid" id="liveGrid"></div>
     </section>
   </main>
 
   <footer>
-    <span class="mono">TabbyBet://demo-static</span>
+    <span class="mono">TabbyBet://static</span>
     <span> | No backend, no payment collection, no cash value.</span>
   </footer>
 
@@ -755,8 +755,8 @@
     const DEFAULT_BALANCES = { tc: 25000, dd: 1000, bp: 250 };
     const DEFAULT_STATS = {
       totalBets: 0,
-      demoWins: 0,
-      demoLosses: 0,
+      wins: 0,
+      losses: 0,
       biggestWin: { amount: 0, currency: "tc" },
       simulatedPurchases: 0,
       favoriteCounts: {}
@@ -770,54 +770,54 @@
       "Crash Games",
       "Dice Games",
       "Card Games",
-      "Sports Picks Demo",
-      "Live Casino Demo",
+      "Sports Picks",
+      "Live Casino",
       "Promotions"
     ];
     const games = [
-      { id: "crash", category: "Crash Games", title: "Turbo Tabby Crash", icon: "1X", desc: "Multiplier climbs until the demo round crashes." },
+      { id: "crash", category: "Crash Games", title: "Turbo Tabby Crash", icon: "1X", desc: "Multiplier climbs until the round crashes." },
       { id: "dice", category: "Dice Games", title: "Over Under Dice", icon: "D6", desc: "Pick a side, set a target, and roll 1 to 100." },
       { id: "roulette", category: "Table Games", title: "Neon Roulette", icon: "00", desc: "Red, black, green, odd, even, or exact number." },
       { id: "blackjack", category: "Card Games", title: "Blackjack Room", icon: "21", desc: "Player versus dealer with simulated payouts." },
-      { id: "slots", category: "Slots", title: "Tabby Reels", icon: "777", desc: "Five reel slot demo with premium tabby styling." },
+      { id: "slots", category: "Slots", title: "Tabby Reels", icon: "777", desc: "Five reel slot game with premium tabby styling." },
       { id: "mines", category: "Originals", title: "Catwalk Mines", icon: "5x5", desc: "Reveal safe tiles and lock a fake cash out before a mine." },
-      { id: "sports", category: "Sports Picks Demo", title: "Sports Picks Desk", icon: "D$", desc: "Build a fake slip from fictional matchups." },
-      { id: "live-blackjack", category: "Live Casino Demo", title: "Demo Live Blackjack", icon: "LB", desc: "A staged live-table card for the blackjack demo." },
-      { id: "live-roulette", category: "Live Casino Demo", title: "Demo Live Roulette", icon: "LR", desc: "A fake live-table card for roulette." },
+      { id: "sports", category: "Sports Picks", title: "Sports Picks Desk", icon: "D$", desc: "Build a fake slip from fictional matchups." },
+      { id: "live-blackjack", category: "Live Casino", title: "Live Blackjack", icon: "LB", desc: "A staged live-table card for blackjack." },
+      { id: "live-roulette", category: "Live Casino", title: "Live Roulette", icon: "LR", desc: "A fake live-table card for roulette." },
       { id: "promo", category: "Promotions", title: "Daily Bonus Board", icon: "BP", desc: "Claim fake rewards with local daily limits." },
-      { id: "baccarat-preview", category: "Table Games", title: "Demo Baccarat", icon: "BC", desc: "Preview card for a simulated table game." },
-      { id: "game-show-preview", category: "Originals", title: "Demo Game Show", icon: "GS", desc: "Prize-wheel style preview with no real stakes." }
+      { id: "baccarat-preview", category: "Table Games", title: "Baccarat", icon: "BC", desc: "Preview card for a simulated table game." },
+      { id: "game-show-preview", category: "Originals", title: "Game Show", icon: "GS", desc: "Prize-wheel style preview with no real stakes." }
     ];
 
     const packages = [
       { name: "Kitten Pack", currency: "tc", amount: 5000, price: "$4.99", label: "5,000 TC" },
       { name: "Tabby Pack", currency: "tc", amount: 25000, price: "$19.99", label: "25,000 TC" },
       { name: "High Roller Cat Pack", currency: "tc", amount: 100000, price: "$49.99", label: "100,000 TC" },
-      { name: "Demo Dollars Pack", currency: "dd", amount: 1000, price: "$9.99", label: "D$1,000" },
+      { name: "Play Dollars Pack", currency: "dd", amount: 1000, price: "$9.99", label: "D$1,000" },
       { name: "Bonus Points Pack", currency: "bp", amount: 500, price: "$2.99", label: "500 BP" }
     ];
 
     const promos = [
       { id: "daily", title: "Daily Login Bonus", reward: { tc: 1500, bp: 25 }, desc: "A small fake stack for checking in." },
-      { id: "spins", title: "Free Demo Spins", reward: { tc: 3000 }, desc: "Adds simulated TC for slot spins." },
+      { id: "spins", title: "Free Spins", reward: { tc: 3000 }, desc: "Adds simulated TC for slot spins." },
       { id: "points", title: "Bonus Points Drop", reward: { bp: 100 }, desc: "A local BP reward with no cash value." },
-      { id: "weekend", title: "Weekend Demo Boost", reward: { tc: 2500, dd: 75 }, desc: "A fake boost package for the dashboard." },
+      { id: "weekend", title: "Weekend Boost", reward: { tc: 2500, dd: 75 }, desc: "A fake boost package for the dashboard." },
       { id: "sports", title: "Sports Pick Bonus", reward: { dd: 100, bp: 40 }, desc: "Adds pretend D$ for fictional picks." }
     ];
 
     const sports = ["All", "Football", "Basketball", "Soccer", "Esports"];
     const matches = [
-      { id: "fb-1", sport: "Football", league: "Metro Bowl Demo", teams: ["Miami Sharks", "Dallas Bulls"], odds: [-120, 105] },
-      { id: "bb-1", sport: "Basketball", league: "Night Court Demo", teams: ["Los Angeles Stars", "New York Knights"], odds: [135, -155] },
-      { id: "sc-1", sport: "Soccer", league: "Continental Demo", teams: ["London United", "Paris Royals"], odds: [118, -132] },
-      { id: "es-1", sport: "Esports", league: "Pixel Cup Demo", teams: ["Neon Panthers", "Cyber Wolves"], odds: [-105, -115] },
-      { id: "es-2", sport: "Esports", league: "Dragon Circuit Demo", teams: ["Tokyo Dragons", "Seoul Tigers"], odds: [142, -164] }
+      { id: "fb-1", sport: "Football", league: "Metro Bowl", teams: ["Miami Sharks", "Dallas Bulls"], odds: [-120, 105] },
+      { id: "bb-1", sport: "Basketball", league: "Night Court", teams: ["Los Angeles Stars", "New York Knights"], odds: [135, -155] },
+      { id: "sc-1", sport: "Soccer", league: "Continental League", teams: ["London United", "Paris Royals"], odds: [118, -132] },
+      { id: "es-1", sport: "Esports", league: "Pixel Cup", teams: ["Neon Panthers", "Cyber Wolves"], odds: [-105, -115] },
+      { id: "es-2", sport: "Esports", league: "Dragon Circuit", teams: ["Tokyo Dragons", "Seoul Tigers"], odds: [142, -164] }
     ];
 
     const state = {
       balances: loadJSON(KEYS.balances, DEFAULT_BALANCES),
       history: loadJSON(KEYS.history, []),
-      stats: loadJSON(KEYS.stats, DEFAULT_STATS),
+      stats: normalizeStats(loadJSON(KEYS.stats, DEFAULT_STATS)),
       daily: loadJSON(KEYS.daily, {}),
       category: "All",
       sportsFilter: "All",
@@ -835,6 +835,17 @@
       } catch {
         return JSON.parse(JSON.stringify(fallback));
       }
+    }
+
+    function normalizeStats(raw) {
+      const stats = { ...DEFAULT_STATS, ...(raw || {}) };
+      if (stats.wins === undefined && stats.demoWins !== undefined) stats.wins = stats.demoWins;
+      if (stats.losses === undefined && stats.demoLosses !== undefined) stats.losses = stats.demoLosses;
+      delete stats.demoWins;
+      delete stats.demoLosses;
+      stats.favoriteCounts = stats.favoriteCounts || {};
+      stats.biggestWin = stats.biggestWin || { amount: 0, currency: "tc" };
+      return stats;
     }
 
     function save(key, value) {
@@ -894,7 +905,7 @@
     }
 
     function noteWin(amount, currency) {
-      state.stats.demoWins += 1;
+      state.stats.wins += 1;
       const biggest = state.stats.biggestWin || { amount: 0, currency };
       if (Number(amount) > Number(biggest.amount || 0)) {
         state.stats.biggestWin = { amount: normalizeAmount(currency, amount), currency };
@@ -902,7 +913,7 @@
     }
 
     function noteLoss() {
-      state.stats.demoLosses += 1;
+      state.stats.losses += 1;
     }
 
     function placeBet(game, currency, amount) {
@@ -912,7 +923,7 @@
         return null;
       }
       if (bet > Number(state.balances[currency] || 0)) {
-        toast("Demo balance is too low for that fake bet.", "loss");
+        toast("Balance is too low for that fake bet.", "loss");
         return null;
       }
       adjustBalance(currency, -bet);
@@ -929,10 +940,10 @@
       if (didWin) {
         adjustBalance(currency, normalized);
         noteWin(normalized, currency);
-        addHistory("Win", game + " demo win", detail + " Payout " + formatCurrency(currency, normalized) + ".", normalized, currency);
+        addHistory("Win", game + " win", detail + " Payout " + formatCurrency(currency, normalized) + ".", normalized, currency);
       } else {
         noteLoss();
-        addHistory("Loss", game + " demo loss", detail, 0, currency);
+        addHistory("Loss", game + " loss", detail, 0, currency);
       }
       save(KEYS.stats, state.stats);
       renderStats();
@@ -963,7 +974,7 @@
             <div class="modal-head">
               <div>
                 <h2 id="modalTitle" class="tight">${title}</h2>
-                <p class="muted tight">Demo only — no real money, no real gambling, no cash value.</p>
+                <p class="muted tight">No real money, no gambling, no cash value.</p>
               </div>
               <button class="btn icon" id="closeModal" aria-label="Close modal">X</button>
             </div>
@@ -992,11 +1003,11 @@
     function renderBalances(changed) {
       $("#balanceList").innerHTML = `
         <div class="balance-card ${changed === "tc" ? "bump" : ""}">
-          <div><div class="balance-label">Tabby Coins</div><div class="balance-help">Casino demos</div></div>
+          <div><div class="balance-label">Tabby Coins</div><div class="balance-help">Casino games</div></div>
           <div class="balance-value">${formatCurrency("tc", state.balances.tc)}</div>
         </div>
         <div class="balance-card ${changed === "dd" ? "bump" : ""}">
-          <div><div class="balance-label">Demo Dollars</div><div class="balance-help">Sports picks and tables, fake only</div></div>
+          <div><div class="balance-label">Play Dollars</div><div class="balance-help">Sports picks and tables, fake only</div></div>
           <div class="balance-value dd">${formatCurrency("dd", state.balances.dd)}</div>
         </div>
         <div class="balance-card ${changed === "bp" ? "bump" : ""}">
@@ -1008,10 +1019,10 @@
     function renderStats() {
       const biggest = state.stats.biggestWin || { amount: 0, currency: "tc" };
       $("#statsMini").innerHTML = `
-        <div class="stat-tile"><span>Total demo bets</span><strong>${state.stats.totalBets}</strong></div>
-        <div class="stat-tile"><span>Demo wins</span><strong>${state.stats.demoWins}</strong></div>
-        <div class="stat-tile"><span>Demo losses</span><strong>${state.stats.demoLosses}</strong></div>
-        <div class="stat-tile"><span>Biggest demo win</span><strong>${formatCurrency(biggest.currency, biggest.amount)}</strong></div>
+        <div class="stat-tile"><span>Total bets</span><strong>${state.stats.totalBets}</strong></div>
+        <div class="stat-tile"><span>Wins</span><strong>${state.stats.wins}</strong></div>
+        <div class="stat-tile"><span>Losses</span><strong>${state.stats.losses}</strong></div>
+        <div class="stat-tile"><span>Biggest win</span><strong>${formatCurrency(biggest.currency, biggest.amount)}</strong></div>
         <div class="stat-tile"><span>Simulated purchases</span><strong>${state.stats.simulatedPurchases}</strong></div>
         <div class="stat-tile"><span>Favorite game</span><strong>${escapeHTML(favoriteGame())}</strong></div>`;
     }
@@ -1035,13 +1046,13 @@
         <article class="card">
           <div class="card-row">
             <div class="visual">${game.icon}</div>
-            <span class="badge demo">Demo Only</span>
+            <span class="badge soft">Points Only</span>
           </div>
           <h3>${game.title}</h3>
           <p>${game.desc}</p>
           <div class="card-actions">
             <span class="badge soft">${game.category}</span>
-            <button class="btn primary small" data-card-game="${game.id}">Play Demo</button>
+            <button class="btn primary small" data-card-game="${game.id}">Play</button>
           </div>
         </article>
       `).join("");
@@ -1061,14 +1072,14 @@
       } else if (id === "live-roulette") {
         openGame("roulette");
       } else if (id.endsWith("-preview")) {
-        toast("Demo table preview only — no real stream or real wager exists.");
+        toast("Preview only — no real stream or real wager exists.");
       } else {
         openGame(id);
       }
     }
 
     function openStore() {
-      openModal("Add Demo Balance", `
+      openModal("Add Balance", `
         <div class="notice">
           <strong>All purchases are simulated.</strong>
           <span>No payment info is collected, and no real payment will be made.</span>
@@ -1078,7 +1089,7 @@
             <article class="card">
               <div class="card-row">
                 <div class="visual">${pack.currency.toUpperCase()}</div>
-                <span class="badge demo">Fake price ${pack.price}</span>
+                <span class="badge accent">Fake price ${pack.price}</span>
               </div>
               <h3>${pack.name}</h3>
               <p>${pack.label} added instantly after confirmation. No cash value.</p>
@@ -1100,7 +1111,7 @@
           <span>${pack.name} adds ${pack.label}. Listed fake price: ${pack.price}.</span>
         </div>
         <div class="action-stack">
-          <button class="btn primary" id="confirmAdd">Add Demo Balance</button>
+          <button class="btn primary" id="confirmAdd">Add Balance</button>
           <button class="btn" id="cancelAdd">Cancel</button>
         </div>
       `, () => {
@@ -1111,7 +1122,7 @@
           addHistory("Simulated purchase", pack.name, "Added " + pack.label + ". No real payment was made.", pack.amount, pack.currency);
           renderStats();
           closeModal();
-          toast("Demo balance added — no real payment was made.");
+          toast("Balance added — no real payment was made.");
         };
         $("#cancelAdd").onclick = openStore;
       });
@@ -1156,9 +1167,9 @@
       if (!confirm("Reset simulated balances to the TabbyBet defaults?")) return;
       state.balances = JSON.parse(JSON.stringify(DEFAULT_BALANCES));
       save(KEYS.balances, state.balances);
-      addHistory("Reset", "Balances reset", "TabbyBet demo balances returned to defaults.");
+      addHistory("Reset", "Balances reset", "TabbyBet balances returned to defaults.");
       renderBalances();
-      toast("Demo balances reset.");
+      toast("Balances reset.");
     }
 
     function fullReset() {
@@ -1169,7 +1180,7 @@
       state.daily = {};
       saveAll();
       renderAll();
-      toast("Full demo reset complete.");
+      toast("Full reset complete.");
     }
 
     function openGame(id) {
@@ -1192,7 +1203,7 @@
         <label>Currency
           <select id="${prefix}Currency">
             <option value="tc" ${currency === "tc" ? "selected" : ""}>Tabby Coins (TC)</option>
-            <option value="dd" ${currency === "dd" ? "selected" : ""}>Demo Dollars (D$)</option>
+            <option value="dd" ${currency === "dd" ? "selected" : ""}>Play Dollars (D$)</option>
           </select>
         </label>`;
     }
@@ -1207,8 +1218,8 @@
         <div class="game-layout">
           <aside class="control-card">
             ${betControls("crash", 250, "tc")}
-            <button class="btn primary" id="crashStart">Start Demo Round</button>
-            <button class="btn gold" id="crashCash" disabled>Demo Cash Out</button>
+            <button class="btn primary" id="crashStart">Start Round</button>
+            <button class="btn gold" id="crashCash" disabled>Cash Out</button>
             <div class="status" id="crashStatus">Multiplier waits at 1.00x.</div>
           </aside>
           <section class="game-stage">
@@ -1243,7 +1254,7 @@
           state.crashHistory.unshift(crashPoint);
           state.crashHistory = state.crashHistory.slice(0, 8);
           drawHistory();
-          settleBet("Crash", false, 0, currency, "Crashed before demo cash out.");
+          settleBet("Crash", false, 0, currency, "Crashed before cash out.");
         };
         $("#crashStart").onclick = () => {
           const next = readBet("crash");
@@ -1258,7 +1269,7 @@
           $("#crashStart").disabled = true;
           $("#crashCash").disabled = false;
           status.className = "status";
-          status.textContent = "Round live. Demo cash out is available before the crash.";
+          status.textContent = "Round live. Cash out is available before the crash.";
           timer = setInterval(() => {
             multiplier = Math.round((multiplier + .025 + multiplier * .014) * 100) / 100;
             meter.textContent = multiplier.toFixed(2) + "x";
@@ -1274,7 +1285,7 @@
           $("#crashStart").disabled = false;
           $("#crashCash").disabled = true;
           status.className = "status win";
-          status.textContent = "Demo cashed out at " + multiplier.toFixed(2) + "x.";
+          status.textContent = "Cashed out at " + multiplier.toFixed(2) + "x.";
           settleBet("Crash", true, payout, currency, "Cashed out before the simulated crash.");
         };
         drawHistory();
@@ -1294,7 +1305,7 @@
               <button class="btn primary" data-dice-side="over">Over</button>
               <button class="btn" data-dice-side="under">Under</button>
             </div>
-            <button class="btn gold" id="diceRoll">Roll Demo Dice</button>
+            <button class="btn gold" id="diceRoll">Roll Dice</button>
             <div class="status" id="diceStatus">Choose over or under.</div>
           </aside>
           <section class="game-stage">
@@ -1360,7 +1371,7 @@
             <label>Exact number
               <input id="rouletteExact" type="number" min="0" max="36" value="7">
             </label>
-            <button class="btn primary" id="rouletteSpin">Spin Demo Wheel</button>
+            <button class="btn primary" id="rouletteSpin">Spin Wheel</button>
             <div class="status" id="rouletteStatus">Wheel is ready.</div>
           </aside>
           <section class="game-stage">
@@ -1394,7 +1405,7 @@
           $("#rouletteSpin").disabled = true;
           $("#rouletteWheel").classList.add("spin");
           $("#rouletteStatus").className = "status";
-          $("#rouletteStatus").textContent = "Demo wheel spinning.";
+          $("#rouletteStatus").textContent = "Wheel spinning.";
           let ticks = 0;
           const ticker = setInterval(() => {
             ticks += 1;
@@ -1425,7 +1436,7 @@
         <div class="game-layout">
           <aside class="control-card">
             ${betControls("blackjack", 100, "tc")}
-            <button class="btn primary" id="blackjackDeal">Deal Demo Hand</button>
+            <button class="btn primary" id="blackjackDeal">Deal Hand</button>
             <div class="mini-grid">
               <button class="btn gold" id="blackjackHit" disabled>Hit</button>
               <button class="btn" id="blackjackStand" disabled>Stand</button>
@@ -1507,7 +1518,7 @@
           revealDealer = false;
           controls(true);
           $("#blackjackStatus").className = "status";
-          $("#blackjackStatus").textContent = "Demo hand live.";
+          $("#blackjackStatus").textContent = "Hand live.";
           draw();
           if (value(player) === 21) {
             if (value(dealer) === 21) endRound("push", 0, "Both hands have blackjack. Fake stake returned.", "");
@@ -1548,7 +1559,7 @@
         <div class="game-layout">
           <aside class="control-card">
             ${betControls("slots", 80, "tc")}
-            <button class="btn primary" id="slotSpin">Spin Demo Reels</button>
+            <button class="btn primary" id="slotSpin">Spin Reels</button>
             <div class="status" id="slotStatus">Payout table: 3 match 2.5x, 4 match 8x, 5 match 25x. Three or more 7s pay at least 5x.</div>
           </aside>
           <section class="game-stage">
@@ -1592,7 +1603,7 @@
               const won = mult > 0;
               $("#slotSpin").disabled = false;
               $("#slotStatus").className = won ? "status win" : "status loss";
-              $("#slotStatus").textContent = won ? "Demo win: matched reels for " + mult + "x." : "Demo loss: no matching payout this spin.";
+              $("#slotStatus").textContent = won ? "Win: matched reels for " + mult + "x." : "Loss: no matching payout this spin.";
               settleBet("Slots", won, won ? bet * mult : 0, next.currency, "Reels landed " + result.join(" / ") + ".");
             }
           }, 90);
@@ -1609,8 +1620,8 @@
             <label>Mines
               <input id="mineCount" type="number" min="3" max="10" step="1" value="5">
             </label>
-            <button class="btn primary" id="minesStart">Start Demo Grid</button>
-            <button class="btn gold" id="minesCash" disabled>Demo Cash Out</button>
+            <button class="btn primary" id="minesStart">Start Grid</button>
+            <button class="btn gold" id="minesCash" disabled>Cash Out</button>
             <div class="status" id="minesStatus">Reveal safe tiles to build a simulated cash out.</div>
           </aside>
           <section class="game-stage">
@@ -1684,7 +1695,7 @@
         $("#minesCash").onclick = () => {
           if (!active || revealed.size < 1) return;
           $("#minesStatus").className = "status win";
-          $("#minesStatus").textContent = "Demo cash out locked.";
+          $("#minesStatus").textContent = "Cash out locked.";
           end(true);
         };
         drawGrid();
@@ -1710,7 +1721,7 @@
         <article class="match-card">
           <div class="card-row">
             <div><strong>${match.teams[0]} vs ${match.teams[1]}</strong><p class="muted tight">${match.league} | ${match.sport}</p></div>
-            <span class="badge demo">Fictional</span>
+            <span class="badge accent">Fictional</span>
           </div>
           <div class="odds-row">
             ${match.teams.map((team, i) => `
@@ -1784,7 +1795,7 @@
         return;
       }
       const stake = normalizeAmount("dd", $("#slipStake").value);
-      const placed = placeBet("Sports Picks Demo", "dd", stake);
+      const placed = placeBet("Sports Picks", "dd", stake);
       if (!placed) return;
       const ticket = {
         id: String(Date.now() + Math.random()),
@@ -1803,9 +1814,9 @@
       if (!ticket) return;
       const won = ticket.picks.every(() => Math.random() > .47);
       state.tickets = state.tickets.filter(item => item.id !== id);
-      settleBet("Sports Picks Demo", won, won ? ticket.payout : 0, "dd", won ? "All fictional picks won." : "At least one fictional pick lost.");
+      settleBet("Sports Picks", won, won ? ticket.payout : 0, "dd", won ? "All fictional picks won." : "At least one fictional pick lost.");
       renderSlip();
-      toast(won ? "Sports demo ticket won." : "Sports demo ticket lost.");
+      toast(won ? "Sports ticket won." : "Sports ticket lost.");
     }
 
     function renderPromos() {
@@ -1817,12 +1828,12 @@
           <article class="card">
             <div class="card-row">
               <div class="visual">${promo.id.slice(0, 2).toUpperCase()}</div>
-              <span class="badge ${claimed ? "soft" : "demo"}">${claimed ? "Claimed" : "Available"}</span>
+              <span class="badge ${claimed ? "soft" : "accent"}">${claimed ? "Claimed" : "Available"}</span>
             </div>
             <h3>${promo.title}</h3>
             <p>${promo.desc}</p>
             <p class="mono">${rewardText}</p>
-            <button class="btn primary" data-claim="${promo.id}" ${claimed ? "disabled" : ""}>Claim Demo Reward</button>
+            <button class="btn primary" data-claim="${promo.id}" ${claimed ? "disabled" : ""}>Claim Reward</button>
           </article>`;
       }).join("");
       $$("[data-claim]").forEach(button => button.onclick = () => {
@@ -1832,26 +1843,26 @@
         save(KEYS.daily, state.daily);
         addHistory("Bonus", promo.title, "Claimed simulated reward: " + Object.entries(promo.reward).map(([currency, amount]) => formatCurrency(currency, amount)).join(" + ") + ".");
         renderPromos();
-        toast("Demo promotion claimed.");
+        toast("Promotion claimed.");
       });
     }
 
     function renderLive() {
       const tables = [
-        { title: "Demo Live Blackjack", game: "blackjack", dealer: "Mara K.", viewers: 128, status: "Simulated table" },
-        { title: "Demo Live Roulette", game: "roulette", dealer: "Jules R.", viewers: 94, status: "Simulated wheel" },
-        { title: "Demo Baccarat", game: "", dealer: "Nico V.", viewers: 73, status: "Preview only" },
-        { title: "Demo Game Show", game: "", dealer: "Val S.", viewers: 211, status: "Preview only" }
+        { title: "Live Blackjack", game: "blackjack", dealer: "Mara K.", viewers: 128, status: "Simulated table" },
+        { title: "Live Roulette", game: "roulette", dealer: "Jules R.", viewers: 94, status: "Simulated wheel" },
+        { title: "Baccarat", game: "", dealer: "Nico V.", viewers: 73, status: "Preview only" },
+        { title: "Game Show", game: "", dealer: "Val S.", viewers: 211, status: "Preview only" }
       ];
       $("#liveGrid").innerHTML = tables.map(table => `
         <article class="card">
           <div class="card-row">
             <div class="visual">${table.title.split(" ").slice(-1)[0].slice(0, 2).toUpperCase()}</div>
-            <span class="badge demo">${table.status}</span>
+            <span class="badge accent">${table.status}</span>
           </div>
           <h3>${table.title}</h3>
-          <p>Fake dealer ${table.dealer}. Demo viewers: ${table.viewers}. No live stream is connected.</p>
-          <button class="btn primary" data-live-game="${table.game}" ${table.game ? "" : ""}>Open Demo Table</button>
+          <p>Fake dealer ${table.dealer}. Viewers: ${table.viewers}. No live stream is connected.</p>
+          <button class="btn primary" data-live-game="${table.game}" ${table.game ? "" : ""}>Open Table</button>
         </article>
       `).join("");
       $$("[data-live-game]").forEach(button => button.onclick = () => {
